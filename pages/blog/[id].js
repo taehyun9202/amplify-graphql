@@ -1,13 +1,16 @@
 import { useRouter } from "next/dist/client/router";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { API, graphqlOperation } from "aws-amplify";
 import { listPostsWithFilterAndDate } from "../../graphql/queries";
 import BlogHeader from "../../components/layouts/BlogHeader";
 import BlogSidebar from "../../components/layouts/BlogSidebar";
 import Link from "next/link";
 import BlogPost from "../../components/Blog/BlogPost";
+import { getPosts } from "../../store/actions/postAction";
+
 const Blog = () => {
+  const dispatch = useDispatch();
   const [myPosts, setMyPosts] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [numberOfPosts, setNumberOfPosts] = useState(5);
@@ -19,24 +22,37 @@ const Blog = () => {
 
   useEffect(() => {
     getAllPost();
-    setSelected(myPosts[myPosts.length - 1]);
-    myPosts.length >= numberOfPosts - 1
-      ? setFiltered(myPosts.slice(myPosts.length - parseInt(numberOfPosts)))
-      : setFiltered(myPosts);
-  }, [router, numberOfPosts, myPosts.length]);
+    //
+    // setFiltered(myPosts.slice(myPosts.length - 5));
+    // setSelected(myPosts[myPosts.length - 1]);
+  }, [router]);
+
+  // useEffect(() => {
+  //   myPosts.length >= numberOfPosts - 1
+  //     ? setFiltered(myPosts.slice(myPosts.length - parseInt(numberOfPosts)))
+  //     : setFiltered(myPosts);
+  // }, [numberOfPosts]);
+
+  console.log(myPosts);
 
   const getAllPost = async () => {
     try {
       const allPostData = API.graphql(
         graphqlOperation(listPostsWithFilterAndDate, {
           filter: {
+            // category: {
+            //   contains: link,
+            // },
             owner: {
               eq: username,
             },
           },
         })
       )
-        .then((res) => setMyPosts(res.data.postByDate.items))
+        .then((res) => {
+          setMyPosts(res.data.postByDate.items);
+          dispatch(getPosts(myPosts));
+        })
         .catch((err) => console.log(err));
     } catch (err) {
       console.log(JSON.stringify(err, null, 2));
@@ -55,7 +71,7 @@ const Blog = () => {
               onClick={() => setOpenCategory(!openCategory)}
               className="font-semibold cursor-pointer hover:underline"
             >
-              {link}
+              {link ? link : "All Posts"}
             </span>
           </p>
           {openCategory ? (
@@ -111,7 +127,7 @@ const Blog = () => {
                 <p className="col-span-1 text-right">Modified</p>
               </div>
               <div className="flex flex-col-reverse">
-                {filtered.map((post) => (
+                {myPosts.map((post) => (
                   // <Link
                   //   href={`/blog/${username}?post=${post.id}`}
                   //   key={post.id}

@@ -2,7 +2,7 @@ import { GET_USER, LOG_OUT, PUT_LINK } from "../types";
 
 const initialState = {
   profile: {},
-  link: "See All",
+  link: "",
   token: "",
   loading: false,
 };

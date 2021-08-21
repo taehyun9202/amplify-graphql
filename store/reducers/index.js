@@ -1,8 +1,8 @@
 import { combineReducers } from "redux";
 import { profileReducer } from "./profileReducer";
-import { listReducer } from "./listReducer";
+import { linkReducer } from "./linkReducer";
 
 export default combineReducers({
   profile: profileReducer,
-  list: listReducer,
+  link: linkReducer,
 });

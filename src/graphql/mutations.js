@@ -24,7 +24,6 @@ export const createPost = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -35,10 +34,14 @@ export const updatePost = /* GraphQL */ `
   ) {
     updatePost(input: $input, condition: $condition) {
       id
+      owner
       title
+      content
+      category
       comments {
         items {
           id
+          owner
           content
           createdAt
           updatedAt
@@ -47,7 +50,6 @@ export const updatePost = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -58,10 +60,14 @@ export const deletePost = /* GraphQL */ `
   ) {
     deletePost(input: $input, condition: $condition) {
       id
+      owner
       title
+      content
+      category
       comments {
         items {
           id
+          owner
           content
           createdAt
           updatedAt
@@ -70,7 +76,6 @@ export const deletePost = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -86,13 +91,15 @@ export const createComment = /* GraphQL */ `
       createdAt
       post {
         id
+        owner
         title
+        content
+        category
         comments {
           nextToken
         }
         createdAt
         updatedAt
-        owner
       }
       updatedAt
     }
@@ -105,17 +112,20 @@ export const updateComment = /* GraphQL */ `
   ) {
     updateComment(input: $input, condition: $condition) {
       id
+      owner
       content
       createdAt
       post {
         id
+        owner
         title
+        content
+        category
         comments {
           nextToken
         }
         createdAt
         updatedAt
-        owner
       }
       updatedAt
     }
@@ -128,17 +138,20 @@ export const deleteComment = /* GraphQL */ `
   ) {
     deleteComment(input: $input, condition: $condition) {
       id
+      owner
       content
       createdAt
       post {
         id
+        owner
         title
+        content
+        category
         comments {
           nextToken
         }
         createdAt
         updatedAt
-        owner
       }
       updatedAt
     }

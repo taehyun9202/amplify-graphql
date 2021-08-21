@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getProfile } from "../../store/actions/profileAction";
 import { Auth } from "aws-amplify";
 
-const Header = () => {
+const HomeHeader = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.profile.profile);
 
@@ -28,8 +28,8 @@ const Header = () => {
         <Link href="/">
           <a>Home</a>
         </Link>
-        <Link href="/blog">
-          <a>Blog</a>
+        <Link href={`/blog/${user.username}`}>
+          <a>My Blog</a>
         </Link>
         <Link href="/products">
           <a>Products</a>
@@ -45,4 +45,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default HomeHeader;

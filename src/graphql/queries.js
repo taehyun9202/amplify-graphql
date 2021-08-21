@@ -5,12 +5,14 @@ export const getPost = /* GraphQL */ `
   query GetPost($id: ID!) {
     getPost(id: $id) {
       id
+      owner
       title
       content
       category
       comments {
         items {
           id
+          owner
           content
           createdAt
           updatedAt
@@ -19,7 +21,6 @@ export const getPost = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -32,46 +33,15 @@ export const listPosts = /* GraphQL */ `
     listPosts(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        owner
         title
         content
         category
         comments {
-          items {
-            id
-            content
-            createdAt
-          }
+          nextToken
         }
         createdAt
         updatedAt
-        owner
-      }
-      nextToken
-    }
-  }
-`;
-export const listPostsWithFilter = /* GraphQL */ `
-  query listPostsWithFilter(
-    $filter: ModelPostFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listPosts(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        title
-        content
-        category
-        comments {
-          items {
-            id
-            content
-            createdAt
-          }
-        }
-        createdAt
-        updatedAt
-        owner
       }
       nextToken
     }
@@ -81,17 +51,20 @@ export const getComment = /* GraphQL */ `
   query GetComment($id: ID!) {
     getComment(id: $id) {
       id
+      owner
       content
       createdAt
       post {
         id
+        owner
         title
+        content
+        category
         comments {
           nextToken
         }
         createdAt
         updatedAt
-        owner
       }
       updatedAt
     }
@@ -106,14 +79,17 @@ export const listComments = /* GraphQL */ `
     listComments(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        owner
         content
         createdAt
         post {
           id
+          owner
           title
+          content
+          category
           createdAt
           updatedAt
-          owner
         }
         updatedAt
       }

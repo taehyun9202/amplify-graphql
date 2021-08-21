@@ -7,6 +7,7 @@ import ForgotPasswordSubmit from "../components/profile/ForgotPasswordSubmit";
 import VerifyForgotPassword from "../components/profile/VerifyForgotPassword";
 import { useDispatch, useSelector } from "react-redux";
 import { getProfile, logOut } from "../store/actions/profileAction";
+import { useRouter } from "next/dist/client/router";
 
 const initialState = { email: "", password: "", authCode: "" };
 
@@ -17,25 +18,26 @@ const Profile = () => {
     formState;
   const dispatch = useDispatch();
   const user = useSelector((state) => state.profile.profile);
+  const router = useRouter();
 
   console.log(user, uiState);
   useEffect(() => {
     getProfile();
-    if (user.username) {
+    if (user?.username) {
       setUiState("signedIn");
     }
   }, [user]);
 
-  // const checkUser = async () => {
-  //   try {
-  //     const user = await Auth.currentAuthenticatedUser();
-  //     dispatch(getProfile(user));
-  //     setUiState("signedIn");
-  //   } catch (err) {
-  //     console.log(err);
-  //     setUiState("signIn");
-  //   }
-  // };
+  const checkUser = async () => {
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+      dispatch(getProfile(user));
+      setUiState("signedIn");
+    } catch (err) {
+      console.log(err);
+      setUiState("signIn");
+    }
+  };
 
   const signUp = async () => {
     try {
@@ -63,8 +65,9 @@ const Profile = () => {
   const signIn = async () => {
     try {
       await Auth.signIn(email, password);
-      setUiState("signedIn");
       checkUser();
+      router.push("/");
+      setUiState("signedIn");
     } catch (err) {
       console.log(err);
     }
@@ -143,8 +146,8 @@ const Profile = () => {
           <button
             className="text-white w-80 mt-10 bg-pink-400 p-3 rounded"
             onClick={() => {
-              Auth.signOut();
               setUiState("signIn");
+              Auth.signOut();
               dispatch(logOut());
             }}
           >

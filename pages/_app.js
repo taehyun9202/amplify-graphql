@@ -5,13 +5,12 @@ import { createWrapper } from "next-redux-wrapper";
 import store from "../store/store";
 import Amplify from "aws-amplify";
 import config from "../aws-exports";
-import Header from "../components/layouts/Header";
+
 Amplify.configure(config);
 
 function MyApp({ Component, pageProps }) {
   return (
     <Provider store={store}>
-      <Header />
       <Component {...pageProps} />
     </Provider>
   );

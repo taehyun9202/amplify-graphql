@@ -10,6 +10,7 @@ import BlogPost from "../../components/Blog/BlogPost";
 import { getPosts } from "../../store/actions/postAction";
 
 const Blog = () => {
+  const posts = useSelector((state) => state.post.posts);
   const dispatch = useDispatch();
   const [myPosts, setMyPosts] = useState([]);
   const [filtered, setFiltered] = useState([]);
@@ -21,28 +22,57 @@ const Blog = () => {
   const [openCategory, setOpenCategory] = useState(true);
 
   useEffect(() => {
-    getAllPost();
-    //
-    // setFiltered(myPosts.slice(myPosts.length - 5));
-    // setSelected(myPosts[myPosts.length - 1]);
-  }, [router]);
+    if (myPosts.length < 1) {
+      console.log(
+        "fetching data!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+      );
+      fetchPosts();
+    }
+  }, [router, posts.length]);
 
-  // useEffect(() => {
-  //   myPosts.length >= numberOfPosts - 1
-  //     ? setFiltered(myPosts.slice(myPosts.length - parseInt(numberOfPosts)))
-  //     : setFiltered(myPosts);
-  // }, [numberOfPosts]);
+  useEffect(() => {
+    if (link) {
+      const filterByLink = myPosts.filter((post) =>
+        post.category.includes(link)
+      );
+      setFiltered(filterByLink);
+      if (filterByLink.length >= numberOfPosts) {
+        setFiltered(
+          filterByLink.slice(filterByLink.length - parseInt(numberOfPosts))
+        );
+      }
+    } else {
+      setFiltered(myPosts.slice(myPosts.length - parseInt(numberOfPosts)));
+    }
+  }, [link]);
 
-  console.log(myPosts);
+  useEffect(() => {
+    if (!link) {
+      if (myPosts.length >= numberOfPosts) {
+        setFiltered(myPosts.slice(myPosts.length - parseInt(numberOfPosts)));
+      } else {
+        setFiltered(myPosts);
+      }
+    } else {
+      const filterByLink = myPosts.filter((post) =>
+        post.category.includes(link)
+      );
 
-  const getAllPost = async () => {
+      if (filterByLink.length >= numberOfPosts) {
+        setFiltered(
+          filterByLink.slice(filterByLink.length - parseInt(numberOfPosts))
+        );
+      } else {
+        setFiltered(filterByLink);
+      }
+    }
+  }, [numberOfPosts]);
+
+  const fetchPosts = async () => {
     try {
-      const allPostData = API.graphql(
+      await API.graphql(
         graphqlOperation(listPostsWithFilterAndDate, {
           filter: {
-            // category: {
-            //   contains: link,
-            // },
             owner: {
               eq: username,
             },
@@ -50,8 +80,11 @@ const Blog = () => {
         })
       )
         .then((res) => {
-          setMyPosts(res.data.postByDate.items);
-          dispatch(getPosts(myPosts));
+          const data = res.data.postByDate.items;
+          setMyPosts(data);
+          setFiltered(data.slice(data.length - 5));
+          setSelected(data[data.length - 1]);
+          dispatch(getPosts(data));
         })
         .catch((err) => console.log(err));
     } catch (err) {
@@ -127,7 +160,7 @@ const Blog = () => {
                 <p className="col-span-1 text-right">Modified</p>
               </div>
               <div className="flex flex-col-reverse">
-                {myPosts.map((post) => (
+                {filtered.map((post) => (
                   // <Link
                   //   href={`/blog/${username}?post=${post.id}`}
                   //   key={post.id}

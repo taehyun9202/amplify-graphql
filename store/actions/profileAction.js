@@ -1,7 +1,6 @@
 import { GET_USER, LOG_OUT, PUT_LINK } from "../types";
 
 export const getProfile = (user) => async (dispatch) => {
-  console.log(user);
   const profile = { ...user.attributes, username: user.username };
   const token = user.signInUserSession.accessToken.jwtToken;
   dispatch({

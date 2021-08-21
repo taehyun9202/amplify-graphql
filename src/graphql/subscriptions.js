@@ -9,17 +9,22 @@ export const onCreatePost = /* GraphQL */ `
       title
       content
       category
+      createdAt
+      public
+      view
+      like
+      type
       comments {
         items {
           id
           owner
           content
+          like
           createdAt
           updatedAt
         }
         nextToken
       }
-      createdAt
       updatedAt
     }
   }
@@ -32,17 +37,22 @@ export const onUpdatePost = /* GraphQL */ `
       title
       content
       category
+      createdAt
+      public
+      view
+      like
+      type
       comments {
         items {
           id
           owner
           content
+          like
           createdAt
           updatedAt
         }
         nextToken
       }
-      createdAt
       updatedAt
     }
   }
@@ -55,17 +65,22 @@ export const onDeletePost = /* GraphQL */ `
       title
       content
       category
+      createdAt
+      public
+      view
+      like
+      type
       comments {
         items {
           id
           owner
           content
+          like
           createdAt
           updatedAt
         }
         nextToken
       }
-      createdAt
       updatedAt
     }
   }
@@ -76,6 +91,7 @@ export const onCreateComment = /* GraphQL */ `
       id
       owner
       content
+      like
       createdAt
       post {
         id
@@ -83,10 +99,14 @@ export const onCreateComment = /* GraphQL */ `
         title
         content
         category
+        createdAt
+        public
+        view
+        like
+        type
         comments {
           nextToken
         }
-        createdAt
         updatedAt
       }
       updatedAt
@@ -99,6 +119,7 @@ export const onUpdateComment = /* GraphQL */ `
       id
       owner
       content
+      like
       createdAt
       post {
         id
@@ -106,10 +127,14 @@ export const onUpdateComment = /* GraphQL */ `
         title
         content
         category
+        createdAt
+        public
+        view
+        like
+        type
         comments {
           nextToken
         }
-        createdAt
         updatedAt
       }
       updatedAt
@@ -122,6 +147,7 @@ export const onDeleteComment = /* GraphQL */ `
       id
       owner
       content
+      like
       createdAt
       post {
         id
@@ -129,45 +155,16 @@ export const onDeleteComment = /* GraphQL */ `
         title
         content
         category
+        createdAt
+        public
+        view
+        like
+        type
         comments {
           nextToken
         }
-        createdAt
         updatedAt
       }
-      updatedAt
-    }
-  }
-`;
-export const onCreateEvent = /* GraphQL */ `
-  subscription OnCreateEvent {
-    onCreateEvent {
-      id
-      name
-      createdAt
-      queryName
-      updatedAt
-    }
-  }
-`;
-export const onUpdateEvent = /* GraphQL */ `
-  subscription OnUpdateEvent {
-    onUpdateEvent {
-      id
-      name
-      createdAt
-      queryName
-      updatedAt
-    }
-  }
-`;
-export const onDeleteEvent = /* GraphQL */ `
-  subscription OnDeleteEvent {
-    onDeleteEvent {
-      id
-      name
-      createdAt
-      queryName
       updatedAt
     }
   }

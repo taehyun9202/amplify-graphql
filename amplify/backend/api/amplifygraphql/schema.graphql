@@ -1,19 +1,29 @@
 type Post
   @model
   @auth(rules: [{ allow: owner, queries: null }])
-  @key(name: "postByDate", fields ["type", "createdAt"], queryField: "postByDate") {
+  @key(
+    name: "postByDate"
+    fields: ["type", "createdAt"]
+    queryField: "postByDate"
+  ) {
   id: ID!
   owner: String!
   title: String!
   content: String!
   category: [String]
+  createdAt: String!
+  public: Boolean!
+  view: Int
+  like: Int
+  type: String!
   comments: [Comment] @connection(name: "PostComments", sortField: "createdAt")
 }
 
-type Comment @model @key(name: "commentByDate", fields ["type", "createdAt"], queryField: "commentByDate") {
+type Comment @model {
   id: ID!
   owner: String!
   content: String!
+  like: Int
   createdAt: String!
   post: Post @connection(name: "PostComments", sortField: "createdAt")
 }

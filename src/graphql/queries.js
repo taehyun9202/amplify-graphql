@@ -9,17 +9,22 @@ export const getPost = /* GraphQL */ `
       title
       content
       category
+      createdAt
+      public
+      view
+      like
+      type
       comments {
         items {
           id
           owner
           content
+          like
           createdAt
           updatedAt
         }
         nextToken
       }
-      createdAt
       updatedAt
     }
   }
@@ -37,10 +42,14 @@ export const listPosts = /* GraphQL */ `
         title
         content
         category
+        createdAt
+        public
+        view
+        like
+        type
         comments {
           nextToken
         }
-        createdAt
         updatedAt
       }
       nextToken
@@ -53,6 +62,7 @@ export const getComment = /* GraphQL */ `
       id
       owner
       content
+      like
       createdAt
       post {
         id
@@ -60,10 +70,14 @@ export const getComment = /* GraphQL */ `
         title
         content
         category
+        createdAt
+        public
+        view
+        like
+        type
         comments {
           nextToken
         }
-        createdAt
         updatedAt
       }
       updatedAt
@@ -81,6 +95,7 @@ export const listComments = /* GraphQL */ `
         id
         owner
         content
+        like
         createdAt
         post {
           id
@@ -89,6 +104,10 @@ export const listComments = /* GraphQL */ `
           content
           category
           createdAt
+          public
+          view
+          like
+          type
           updatedAt
         }
         updatedAt
@@ -97,46 +116,17 @@ export const listComments = /* GraphQL */ `
     }
   }
 `;
-export const getEvent = /* GraphQL */ `
-  query GetEvent($id: ID!) {
-    getEvent(id: $id) {
-      id
-      name
-      createdAt
-      queryName
-      updatedAt
-    }
-  }
-`;
-export const listEvents = /* GraphQL */ `
-  query ListEvents(
-    $filter: ModelEventFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listEvents(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        name
-        createdAt
-        queryName
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const itemsByDate = /* GraphQL */ `
-  query ItemsByDate(
-    $queryName: String
+export const postByDate = /* GraphQL */ `
+  query PostByDate(
+    $type: String
     $createdAt: ModelStringKeyConditionInput
     $sortDirection: ModelSortDirection
-    $filter: ModelEventFilterInput
+    $filter: ModelPostFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    itemsByDate(
-      queryName: $queryName
+    postByDate(
+      type: $type
       createdAt: $createdAt
       sortDirection: $sortDirection
       filter: $filter
@@ -145,9 +135,18 @@ export const itemsByDate = /* GraphQL */ `
     ) {
       items {
         id
-        name
+        owner
+        title
+        content
+        category
         createdAt
-        queryName
+        public
+        view
+        like
+        type
+        comments {
+          nextToken
+        }
         updatedAt
       }
       nextToken

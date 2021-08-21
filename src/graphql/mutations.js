@@ -12,17 +12,22 @@ export const createPost = /* GraphQL */ `
       title
       content
       category
+      createdAt
+      public
+      view
+      like
+      type
       comments {
         items {
           id
           owner
           content
+          like
           createdAt
           updatedAt
         }
         nextToken
       }
-      createdAt
       updatedAt
     }
   }
@@ -38,17 +43,22 @@ export const updatePost = /* GraphQL */ `
       title
       content
       category
+      createdAt
+      public
+      view
+      like
+      type
       comments {
         items {
           id
           owner
           content
+          like
           createdAt
           updatedAt
         }
         nextToken
       }
-      createdAt
       updatedAt
     }
   }
@@ -64,17 +74,22 @@ export const deletePost = /* GraphQL */ `
       title
       content
       category
+      createdAt
+      public
+      view
+      like
+      type
       comments {
         items {
           id
           owner
           content
+          like
           createdAt
           updatedAt
         }
         nextToken
       }
-      createdAt
       updatedAt
     }
   }
@@ -88,6 +103,7 @@ export const createComment = /* GraphQL */ `
       id
       owner
       content
+      like
       createdAt
       post {
         id
@@ -95,10 +111,14 @@ export const createComment = /* GraphQL */ `
         title
         content
         category
+        createdAt
+        public
+        view
+        like
+        type
         comments {
           nextToken
         }
-        createdAt
         updatedAt
       }
       updatedAt
@@ -114,6 +134,7 @@ export const updateComment = /* GraphQL */ `
       id
       owner
       content
+      like
       createdAt
       post {
         id
@@ -121,10 +142,14 @@ export const updateComment = /* GraphQL */ `
         title
         content
         category
+        createdAt
+        public
+        view
+        like
+        type
         comments {
           nextToken
         }
-        createdAt
         updatedAt
       }
       updatedAt
@@ -140,6 +165,7 @@ export const deleteComment = /* GraphQL */ `
       id
       owner
       content
+      like
       createdAt
       post {
         id
@@ -147,54 +173,16 @@ export const deleteComment = /* GraphQL */ `
         title
         content
         category
+        createdAt
+        public
+        view
+        like
+        type
         comments {
           nextToken
         }
-        createdAt
         updatedAt
       }
-      updatedAt
-    }
-  }
-`;
-export const createEvent = /* GraphQL */ `
-  mutation CreateEvent(
-    $input: CreateEventInput!
-    $condition: ModelEventConditionInput
-  ) {
-    createEvent(input: $input, condition: $condition) {
-      id
-      name
-      createdAt
-      queryName
-      updatedAt
-    }
-  }
-`;
-export const updateEvent = /* GraphQL */ `
-  mutation UpdateEvent(
-    $input: UpdateEventInput!
-    $condition: ModelEventConditionInput
-  ) {
-    updateEvent(input: $input, condition: $condition) {
-      id
-      name
-      createdAt
-      queryName
-      updatedAt
-    }
-  }
-`;
-export const deleteEvent = /* GraphQL */ `
-  mutation DeleteEvent(
-    $input: DeleteEventInput!
-    $condition: ModelEventConditionInput
-  ) {
-    deleteEvent(input: $input, condition: $condition) {
-      id
-      name
-      createdAt
-      queryName
       updatedAt
     }
   }

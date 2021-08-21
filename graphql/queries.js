@@ -8,6 +8,9 @@ export const getPost = /* GraphQL */ `
       title
       content
       category
+      view
+      like
+      public
       comments {
         items {
           id
@@ -35,6 +38,9 @@ export const listPosts = /* GraphQL */ `
         title
         content
         category
+        view
+        like
+        public
         comments {
           items {
             id
@@ -50,18 +56,26 @@ export const listPosts = /* GraphQL */ `
     }
   }
 `;
-export const listPostsWithFilter = /* GraphQL */ `
-  query listPostsWithFilter(
+export const listPostsWithFilterAndDate = /* GraphQL */ `
+  query postByDate(
     $filter: ModelPostFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listPosts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    postByDate(
+      type: "Post"
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
       items {
         id
         title
         content
         category
+        view
+        like
+        public
         comments {
           items {
             id

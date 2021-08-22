@@ -210,7 +210,7 @@ const Sidebar = () => {
             </div>
 
             <div
-              onClick={() => dispatch(putLink("Create Category"))}
+              // onClick={() => dispatch(putLink("Create Category"))}
               className="flex gap-2 items-center cursor-pointer"
             >
               <svg

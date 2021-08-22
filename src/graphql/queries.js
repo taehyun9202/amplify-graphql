@@ -5,24 +5,27 @@ export const getPost = /* GraphQL */ `
   query GetPost($id: ID!) {
     getPost(id: $id) {
       id
+      owner
       title
       content
       category
+      createdAt
+      public
       view
       like
-      public
+      type
       comments {
         items {
           id
+          owner
           content
+          like
           createdAt
           updatedAt
         }
         nextToken
       }
-      createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -35,68 +38,19 @@ export const listPosts = /* GraphQL */ `
     listPosts(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        owner
         title
         content
         category
+        createdAt
+        public
         view
         like
-        public
+        type
         comments {
-          items {
-            id
-            content
-            createdAt
-          }
+          nextToken
         }
-        createdAt
         updatedAt
-        owner
-      }
-      nextToken
-    }
-  }
-`;
-export const listPostsWithFilterAndDate = /* GraphQL */ `
-  query postByDate(
-    $filter: ModelPostFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    postByDate(
-      type: "Post"
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        title
-        content
-        category
-        view
-        like
-        public
-        comments {
-          items {
-            id
-            content
-            owner
-            like
-            reply {
-              items {
-                id
-                content
-                owner
-                like
-                updatedAt
-              }
-            }
-            updatedAt
-          }
-        }
-        createdAt
-        updatedAt
-        owner
       }
       nextToken
     }
@@ -106,17 +60,36 @@ export const getComment = /* GraphQL */ `
   query GetComment($id: ID!) {
     getComment(id: $id) {
       id
+      owner
       content
+      like
       createdAt
       post {
         id
+        owner
         title
+        content
+        category
+        createdAt
+        public
+        view
+        like
+        type
         comments {
           nextToken
         }
-        createdAt
         updatedAt
-        owner
+      }
+      reply {
+        items {
+          id
+          owner
+          content
+          like
+          createdAt
+          updatedAt
+        }
+        nextToken
       }
       updatedAt
     }
@@ -131,14 +104,25 @@ export const listComments = /* GraphQL */ `
     listComments(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        owner
         content
+        like
         createdAt
         post {
           id
-          title
-          createdAt
-          updatedAt
           owner
+          title
+          content
+          category
+          createdAt
+          public
+          view
+          like
+          type
+          updatedAt
+        }
+        reply {
+          nextToken
         }
         updatedAt
       }
@@ -153,8 +137,32 @@ export const getReply = /* GraphQL */ `
       owner
       content
       like
-      comment
       createdAt
+      comment {
+        id
+        owner
+        content
+        like
+        createdAt
+        post {
+          id
+          owner
+          title
+          content
+          category
+          createdAt
+          public
+          view
+          like
+          type
+          updatedAt
+        }
+        reply {
+          nextToken
+        }
+        updatedAt
+      }
+      updatedAt
     }
   }
 `;
@@ -170,25 +178,32 @@ export const listReplies = /* GraphQL */ `
         owner
         content
         like
-        comment
         createdAt
+        comment {
+          id
+          owner
+          content
+          like
+          createdAt
+          updatedAt
+        }
         updatedAt
       }
       nextToken
     }
   }
 `;
-export const itemsByDate = /* GraphQL */ `
-  query ItemsByDate(
-    $queryName: String
+export const postByDate = /* GraphQL */ `
+  query PostByDate(
+    $type: String
     $createdAt: ModelStringKeyConditionInput
     $sortDirection: ModelSortDirection
-    $filter: ModelEventFilterInput
+    $filter: ModelPostFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    itemsByDate(
-      queryName: $queryName
+    postByDate(
+      type: $type
       createdAt: $createdAt
       sortDirection: $sortDirection
       filter: $filter
@@ -197,9 +212,18 @@ export const itemsByDate = /* GraphQL */ `
     ) {
       items {
         id
-        name
+        owner
+        title
+        content
+        category
         createdAt
-        queryName
+        public
+        view
+        like
+        type
+        comments {
+          nextToken
+        }
         updatedAt
       }
       nextToken

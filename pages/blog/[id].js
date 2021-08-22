@@ -42,7 +42,11 @@ const Blog = () => {
         );
       }
     } else {
-      setFiltered(myPosts.slice(myPosts.length - parseInt(numberOfPosts)));
+      if (myPosts.length >= numberOfPosts) {
+        setFiltered(myPosts.slice(myPosts.length - parseInt(numberOfPosts)));
+      } else {
+        setFiltered(myPosts);
+      }
     }
   }, [link]);
 
@@ -194,7 +198,7 @@ const Blog = () => {
 
               <div className="flex justify-between items-center py-2">
                 <div>
-                  <p className="border px-2 py-1 rounded cursor-pointer">
+                  <p className="text-xs border px-2 py-1 rounded cursor-pointer">
                     Posts Manager
                   </p>
                 </div>
@@ -202,7 +206,7 @@ const Blog = () => {
                 <div>
                   <select
                     onChange={(e) => setNumberOfPosts(e.target.value)}
-                    className="flex justify-center items-center outline-none border px-2 h-7 rounded cursor-pointer"
+                    className="text-xs flex justify-center items-center outline-none border px-2 py-1 rounded cursor-pointer"
                   >
                     <option value={5}>5 Posts</option>
                     <option value={10}>10 Posts</option>

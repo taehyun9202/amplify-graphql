@@ -10,7 +10,6 @@ export const getProfile = (user) => async (dispatch) => {
 };
 
 export const putLink = (page) => async (dispatch) => {
-  console.log(page);
   dispatch({
     type: PUT_LINK,
     payload: page,

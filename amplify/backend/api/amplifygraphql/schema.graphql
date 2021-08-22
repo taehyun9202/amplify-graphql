@@ -26,6 +26,16 @@ type Comment @model {
   like: Int
   createdAt: String!
   post: Post @connection(name: "PostComments", sortField: "createdAt")
+  reply: [Reply] @connection(name: "CommentReply", sortField: "createdAt")
+}
+
+type Reply @model {
+  id: ID!
+  owner: String!
+  content: String!
+  like: Int
+  createdAt: String!
+  comment: Comment @connection(name: "CommentReply", sortField: "createdAt")
 }
 
 # type Event

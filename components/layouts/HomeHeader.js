@@ -31,9 +31,7 @@ const HomeHeader = () => {
         <Link href={`/blog/${user.username}`}>
           <a>My Blog</a>
         </Link>
-        <Link href="/products">
-          <a>Products</a>
-        </Link>
+
         <Link href="/profile">
           <a>Login / Register</a>
         </Link>

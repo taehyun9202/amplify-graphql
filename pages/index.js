@@ -58,7 +58,7 @@ export default function Home() {
               className="cursor-pointer bg-gray-100 px-4 py-1 hover:bg-gray-200"
               onClick={() => router.push("/blog/tyler")}
             >
-              - Tyler's Blog
+              - Tyler Blog
             </a>
           </div>
           {/* {posts.map((post) => (

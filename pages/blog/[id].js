@@ -176,14 +176,14 @@ const Blog = () => {
                     className="group grid grid-cols-4 md:grid-cols-12 border-b py-1 cursor-pointer text-gray-400"
                   >
                     <div className="flex gap-2 col-span-2 md:col-span-9">
+                      {!post.public && (
+                        <span className="group-hover:no-underline rounded-full text-red-600">
+                          [private]
+                        </span>
+                      )}
                       <p className="group-hover:underline group-hover:text-black">
                         {post.title}
                       </p>
-                      {!post.public && (
-                        <p className="group-hover:no-underline ring-1 ring-red-600 rounded-full px-2 text-red-600">
-                          private
-                        </p>
-                      )}
                     </div>
                     <p className="col-span-1 md:col-span-2 text-center group-hover:text-black">
                       {post.view}

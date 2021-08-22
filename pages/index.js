@@ -6,6 +6,7 @@ import { listPosts, getPost } from "../graphql/queries";
 import HomeHeader from "../components/layouts/HomeHeader";
 import { useSelector } from "react-redux";
 import Link from "next/link";
+import { useRouter } from "next/dist/client/router";
 
 export default function Home() {
   const user = useSelector((state) => state.profile.profile);
@@ -15,6 +16,8 @@ export default function Home() {
     getData();
     // getSinglePost();
   }, []);
+
+  const router = useRouter();
 
   const getData = async () => {
     try {
@@ -48,17 +51,22 @@ export default function Home() {
 
       <div>
         <HomeHeader />
-        <div className="max-w-7xl mx-auto">
-          <Link href={`blog/${user.username}`}>
-            <a>Hello {user.username}</a>
-          </Link>
-
-          {posts.map((post) => (
+        <div className="max-w-7xl mx-auto flex flex-col items-center justify-center min-h-screen -mt-16">
+          <div>
+            <p className="text-lg font-semibold my-2">Current Blogger</p>
+            <a
+              className="cursor-pointer bg-gray-100 px-4 py-1 hover:bg-gray-200"
+              onClick={() => router.push("/blog/tyler")}
+            >
+              - Tyler's Blog
+            </a>
+          </div>
+          {/* {posts.map((post) => (
             <div key={post.id}>
               <p>{post.title}</p>
               <p>{post.owner}</p>
             </div>
-          ))}
+          ))} */}
         </div>
       </div>
     </div>

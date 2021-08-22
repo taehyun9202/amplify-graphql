@@ -30,6 +30,7 @@ const Blog = () => {
     }
   }, [router, posts.length]);
 
+  console.log(router.query.id);
   useEffect(() => {
     if (link) {
       const filterByLink = myPosts.filter((post) =>
@@ -78,7 +79,7 @@ const Blog = () => {
         graphqlOperation(listPostsWithFilterAndDate, {
           filter: {
             owner: {
-              eq: username,
+              eq: router.query.id,
             },
           },
         })

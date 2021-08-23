@@ -12,19 +12,23 @@ export const createPost = /* GraphQL */ `
       title
       content
       category
+      createdAt
+      public
+      view
+      like
+      type
       comments {
         items {
           id
           owner
           content
+          like
           createdAt
           updatedAt
         }
         nextToken
       }
-      createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -35,19 +39,27 @@ export const updatePost = /* GraphQL */ `
   ) {
     updatePost(input: $input, condition: $condition) {
       id
+      owner
       title
+      content
+      category
+      createdAt
+      public
+      view
+      like
+      type
       comments {
         items {
           id
+          owner
           content
+          like
           createdAt
           updatedAt
         }
         nextToken
       }
-      createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -58,19 +70,27 @@ export const deletePost = /* GraphQL */ `
   ) {
     deletePost(input: $input, condition: $condition) {
       id
+      owner
       title
+      content
+      category
+      createdAt
+      public
+      view
+      like
+      type
       comments {
         items {
           id
+          owner
           content
+          like
           createdAt
           updatedAt
         }
         nextToken
       }
-      createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -83,16 +103,34 @@ export const createComment = /* GraphQL */ `
       id
       owner
       content
+      like
       createdAt
       post {
         id
+        owner
         title
+        content
+        category
+        createdAt
+        public
+        view
+        like
+        type
         comments {
           nextToken
         }
-        createdAt
         updatedAt
-        owner
+      }
+      reply {
+        items {
+          id
+          owner
+          content
+          like
+          createdAt
+          updatedAt
+        }
+        nextToken
       }
       updatedAt
     }
@@ -105,17 +143,36 @@ export const updateComment = /* GraphQL */ `
   ) {
     updateComment(input: $input, condition: $condition) {
       id
+      owner
       content
+      like
       createdAt
       post {
         id
+        owner
         title
+        content
+        category
+        createdAt
+        public
+        view
+        like
+        type
         comments {
           nextToken
         }
-        createdAt
         updatedAt
-        owner
+      }
+      reply {
+        items {
+          id
+          owner
+          content
+          like
+          createdAt
+          updatedAt
+        }
+        nextToken
       }
       updatedAt
     }
@@ -128,60 +185,196 @@ export const deleteComment = /* GraphQL */ `
   ) {
     deleteComment(input: $input, condition: $condition) {
       id
+      owner
       content
+      like
       createdAt
       post {
         id
+        owner
         title
+        content
+        category
+        createdAt
+        public
+        view
+        like
+        type
         comments {
           nextToken
         }
-        createdAt
         updatedAt
-        owner
+      }
+      reply {
+        items {
+          id
+          owner
+          content
+          like
+          createdAt
+          updatedAt
+        }
+        nextToken
       }
       updatedAt
     }
   }
 `;
-export const createEvent = /* GraphQL */ `
-  mutation CreateEvent(
-    $input: CreateEventInput!
-    $condition: ModelEventConditionInput
+export const createReply = /* GraphQL */ `
+  mutation CreateReply(
+    $input: CreateReplyInput!
+    $condition: ModelReplyConditionInput
   ) {
-    createEvent(input: $input, condition: $condition) {
+    createReply(input: $input, condition: $condition) {
       id
-      name
+      owner
+      content
+      like
       createdAt
-      queryName
+      comment {
+        id
+        owner
+        content
+        like
+        createdAt
+        post {
+          id
+          owner
+          title
+          content
+          category
+          createdAt
+          public
+          view
+          like
+          type
+          updatedAt
+        }
+        reply {
+          nextToken
+        }
+        updatedAt
+      }
       updatedAt
     }
   }
 `;
-export const updateEvent = /* GraphQL */ `
-  mutation UpdateEvent(
-    $input: UpdateEventInput!
-    $condition: ModelEventConditionInput
+export const updateReply = /* GraphQL */ `
+  mutation UpdateReply(
+    $input: UpdateReplyInput!
+    $condition: ModelReplyConditionInput
   ) {
-    updateEvent(input: $input, condition: $condition) {
+    updateReply(input: $input, condition: $condition) {
       id
-      name
+      owner
+      content
+      like
       createdAt
-      queryName
+      comment {
+        id
+        owner
+        content
+        like
+        createdAt
+        post {
+          id
+          owner
+          title
+          content
+          category
+          createdAt
+          public
+          view
+          like
+          type
+          updatedAt
+        }
+        reply {
+          nextToken
+        }
+        updatedAt
+      }
       updatedAt
     }
   }
 `;
-export const deleteEvent = /* GraphQL */ `
-  mutation DeleteEvent(
-    $input: DeleteEventInput!
-    $condition: ModelEventConditionInput
+export const deleteReply = /* GraphQL */ `
+  mutation DeleteReply(
+    $input: DeleteReplyInput!
+    $condition: ModelReplyConditionInput
   ) {
-    deleteEvent(input: $input, condition: $condition) {
+    deleteReply(input: $input, condition: $condition) {
       id
-      name
+      owner
+      content
+      like
       createdAt
-      queryName
+      comment {
+        id
+        owner
+        content
+        like
+        createdAt
+        post {
+          id
+          owner
+          title
+          content
+          category
+          createdAt
+          public
+          view
+          like
+          type
+          updatedAt
+        }
+        reply {
+          nextToken
+        }
+        updatedAt
+      }
+      updatedAt
+    }
+  }
+`;
+export const createCategory = /* GraphQL */ `
+  mutation CreateCategory(
+    $input: CreateCategoryInput!
+    $condition: ModelCategoryConditionInput
+  ) {
+    createCategory(input: $input, condition: $condition) {
+      id
+      owner
+      list
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateCategory = /* GraphQL */ `
+  mutation UpdateCategory(
+    $input: UpdateCategoryInput!
+    $condition: ModelCategoryConditionInput
+  ) {
+    updateCategory(input: $input, condition: $condition) {
+      id
+      owner
+      list
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteCategory = /* GraphQL */ `
+  mutation DeleteCategory(
+    $input: DeleteCategoryInput!
+    $condition: ModelCategoryConditionInput
+  ) {
+    deleteCategory(input: $input, condition: $condition) {
+      id
+      owner
+      list
+      createdAt
       updatedAt
     }
   }

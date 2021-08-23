@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
+import CommentInput from "../Input/CommentInput";
 
 const Comment = ({ comment, type, lastComment }) => {
   const [openReply, setOpenReply] = useState(false);
@@ -9,7 +10,7 @@ const Comment = ({ comment, type, lastComment }) => {
       key={comment.id}
       className={`${!lastComment && "border-b"} ${
         type === "reply" && "border-gray-300"
-      } py-4 `}
+      } py-4`}
     >
       <div className="flex justify-between items-center">
         <div className="flex gap-4 items-center">
@@ -24,7 +25,9 @@ const Comment = ({ comment, type, lastComment }) => {
         </div>
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-4 w-4 cursor-pointer"
+          className={`h-5 w-5 cursor-pointer p-0.5 rounded-full hover:${
+            type === "comment" ? "bg-gray-200" : "bg-gray-100"
+          }`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -78,6 +81,9 @@ const Comment = ({ comment, type, lastComment }) => {
             </div>
           ))}
       </div>
+      {type === "comment" && openReply && (
+        <CommentInput type={"reply"} id={comment.id} />
+      )}
     </div>
   );
 };

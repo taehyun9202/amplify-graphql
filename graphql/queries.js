@@ -178,6 +178,24 @@ export const listReplies = /* GraphQL */ `
     }
   }
 `;
+export const listCategories = /* GraphQL */ `
+  query listCategories(
+    $filter: ModelCategoryFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listCategories(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        list
+        owner
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const itemsByDate = /* GraphQL */ `
   query ItemsByDate(
     $queryName: String

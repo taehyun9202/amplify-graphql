@@ -38,6 +38,13 @@ type Reply @model {
   comment: Comment @connection(name: "CommentReply", sortField: "createdAt")
 }
 
+type Category @model {
+  id: ID!
+  owner: String!
+  list: [String!]
+  createdAt: String!
+}
+
 # type Event
 #   @model
 #   @key(

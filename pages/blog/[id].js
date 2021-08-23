@@ -2,15 +2,18 @@ import { useRouter } from "next/dist/client/router";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { API, graphqlOperation } from "aws-amplify";
-import { listPostsWithFilterAndDate } from "../../graphql/queries";
+import {
+  listCategories,
+  listPostsWithFilterAndDate,
+} from "../../graphql/queries";
 import BlogHeader from "../../components/layouts/BlogHeader";
 import BlogSidebar from "../../components/layouts/BlogSidebar";
 import Link from "next/link";
 import BlogPost from "../../components/Blog/BlogPost";
-import { getPosts } from "../../store/actions/postAction";
+import { getCategories, getPosts } from "../../store/actions/blogAction";
 
 const Blog = () => {
-  const posts = useSelector((state) => state.post.posts);
+  const posts = useSelector((state) => state.blog.posts);
   const dispatch = useDispatch();
   const [myPosts, setMyPosts] = useState([]);
   const [filtered, setFiltered] = useState([]);
@@ -24,13 +27,12 @@ const Blog = () => {
   useEffect(() => {
     if (myPosts.length < 1) {
       console.log(
-        "fetching data!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        "fetching blog data!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
       );
-      fetchPosts();
+      fetchBlogData();
     }
-  }, [router, posts.length]);
+  }, [router]);
 
-  console.log(router.query.id);
   useEffect(() => {
     if (link) {
       const filterByLink = myPosts.filter((post) =>
@@ -73,7 +75,7 @@ const Blog = () => {
     }
   }, [numberOfPosts]);
 
-  const fetchPosts = async () => {
+  const fetchBlogData = async () => {
     try {
       await API.graphql(
         graphqlOperation(listPostsWithFilterAndDate, {
@@ -90,6 +92,22 @@ const Blog = () => {
           setFiltered(data.slice(data.length - 5));
           setSelected(data[data.length - 1]);
           dispatch(getPosts(data));
+        })
+        .catch((err) => console.log(err));
+
+      await API.graphql(
+        graphqlOperation(listCategories, {
+          filter: {
+            owner: {
+              eq: router.query.id,
+            },
+          },
+        })
+      )
+        .then((res) => {
+          const data = res.data.listCategories.items[0].list;
+          console.log(data);
+          dispatch(getCategories(data));
         })
         .catch((err) => console.log(err));
     } catch (err) {
@@ -161,7 +179,7 @@ const Blog = () => {
             <>
               <div className="grid grid-cols-4 md:grid-cols-12 border-b-2 border-gray-400 pb-1 pt-6">
                 <p className="col-span-2 md:col-span-9">Post Title</p>
-                <p className="col-span-1 md:col-span-2 text-center">Views</p>
+                <p className="col-span-1 md:col-span-2 text-center">Likes</p>
                 <p className="col-span-1 text-right">Modified</p>
               </div>
               <div className="flex flex-col-reverse">
@@ -187,7 +205,7 @@ const Blog = () => {
                       </p>
                     </div>
                     <p className="col-span-1 md:col-span-2 text-center group-hover:text-black">
-                      {post.view}
+                      {post.like}
                     </p>
                     <p className="col-span-1 text-right group-hover:text-black">
                       {post.updatedAt.split("T")[0]}
@@ -220,6 +238,8 @@ const Blog = () => {
           )}
         </div>
         <BlogPost post={selected} />
+
+        <p>Other posts from this category</p>
       </div>
     </div>
   );

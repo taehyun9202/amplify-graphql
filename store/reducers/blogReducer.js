@@ -1,10 +1,11 @@
-import { GET_POSTS, LOADING_POSTS } from "../types";
+import { GET_CATEGORIES, GET_POSTS, LOADING_POSTS } from "../types";
 
 const initialState = {
   posts: [],
+  categories: [],
   loading: false,
 };
-export const postReducer = (state = initialState, action) => {
+export const blogReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOADING_POSTS:
       return {
@@ -15,6 +16,13 @@ export const postReducer = (state = initialState, action) => {
       return {
         ...state,
         posts: action.payload.posts,
+        loading: false,
+      };
+
+    case GET_CATEGORIES:
+      return {
+        ...state,
+        categories: action.payload.categories,
         loading: false,
       };
     default:

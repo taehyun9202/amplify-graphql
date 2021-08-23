@@ -1,8 +1,8 @@
 import { combineReducers } from "redux";
 import { profileReducer } from "./profileReducer";
-import { postReducer } from "./postReducer";
+import { blogReducer } from "./blogReducer";
 
 export default combineReducers({
   profile: profileReducer,
-  post: postReducer,
+  blog: blogReducer,
 });

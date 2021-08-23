@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { useSelector } from "react-redux";
 import remarkGfm from "remark-gfm";
@@ -10,12 +10,15 @@ import Blog from "../../pages/blog/[id]";
 const BlogPost = ({ post }) => {
   const user = useSelector((state) => state.profile.profile);
   const link = useSelector((state) => state.profile.link);
-
   const [openComment, setOpenComment] = useState(false);
   const router = useRouter();
 
+  useEffect(() => {
+    setOpenComment(false);
+  }, [post]);
+
   return (
-    <div>
+    <div className="pb-40">
       <p className="text-lg text-gray-200">{link}</p>
       <p className="text-4xl py-4">{post?.title}</p>
       <div className="flex justify-between pt-4 pb-2 mb-6 border-b">
@@ -134,7 +137,9 @@ const BlogPost = ({ post }) => {
         </div>
       </div>
 
-      {openComment && <PostComment comments={post.comments.items} />}
+      {openComment && (
+        <PostComment comments={post.comments.items} id={post.id} />
+      )}
     </div>
   );
 };

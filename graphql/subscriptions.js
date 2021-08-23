@@ -5,19 +5,27 @@ export const onCreatePost = /* GraphQL */ `
   subscription OnCreatePost {
     onCreatePost {
       id
+      owner
       title
+      content
+      category
+      createdAt
+      public
+      view
+      like
+      type
       comments {
         items {
           id
+          owner
           content
+          like
           createdAt
           updatedAt
         }
         nextToken
       }
-      createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -25,19 +33,27 @@ export const onUpdatePost = /* GraphQL */ `
   subscription OnUpdatePost {
     onUpdatePost {
       id
+      owner
       title
+      content
+      category
+      createdAt
+      public
+      view
+      like
+      type
       comments {
         items {
           id
+          owner
           content
+          like
           createdAt
           updatedAt
         }
         nextToken
       }
-      createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -45,19 +61,27 @@ export const onDeletePost = /* GraphQL */ `
   subscription OnDeletePost {
     onDeletePost {
       id
+      owner
       title
+      content
+      category
+      createdAt
+      public
+      view
+      like
+      type
       comments {
         items {
           id
+          owner
           content
+          like
           createdAt
           updatedAt
         }
         nextToken
       }
-      createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -65,17 +89,36 @@ export const onCreateComment = /* GraphQL */ `
   subscription OnCreateComment {
     onCreateComment {
       id
+      owner
       content
+      like
       createdAt
       post {
         id
+        owner
         title
+        content
+        category
+        createdAt
+        public
+        view
+        like
+        type
         comments {
           nextToken
         }
-        createdAt
         updatedAt
-        owner
+      }
+      reply {
+        items {
+          id
+          owner
+          content
+          like
+          createdAt
+          updatedAt
+        }
+        nextToken
       }
       updatedAt
     }
@@ -85,17 +128,36 @@ export const onUpdateComment = /* GraphQL */ `
   subscription OnUpdateComment {
     onUpdateComment {
       id
+      owner
       content
+      like
       createdAt
       post {
         id
+        owner
         title
+        content
+        category
+        createdAt
+        public
+        view
+        like
+        type
         comments {
           nextToken
         }
-        createdAt
         updatedAt
-        owner
+      }
+      reply {
+        items {
+          id
+          owner
+          content
+          like
+          createdAt
+          updatedAt
+        }
+        nextToken
       }
       updatedAt
     }
@@ -105,51 +167,178 @@ export const onDeleteComment = /* GraphQL */ `
   subscription OnDeleteComment {
     onDeleteComment {
       id
+      owner
       content
+      like
       createdAt
       post {
         id
+        owner
         title
+        content
+        category
+        createdAt
+        public
+        view
+        like
+        type
         comments {
           nextToken
         }
-        createdAt
         updatedAt
-        owner
+      }
+      reply {
+        items {
+          id
+          owner
+          content
+          like
+          createdAt
+          updatedAt
+        }
+        nextToken
       }
       updatedAt
     }
   }
 `;
-export const onCreateEvent = /* GraphQL */ `
-  subscription OnCreateEvent {
-    onCreateEvent {
+export const onCreateReply = /* GraphQL */ `
+  subscription OnCreateReply {
+    onCreateReply {
       id
-      name
+      owner
+      content
+      like
       createdAt
-      queryName
+      comment {
+        id
+        owner
+        content
+        like
+        createdAt
+        post {
+          id
+          owner
+          title
+          content
+          category
+          createdAt
+          public
+          view
+          like
+          type
+          updatedAt
+        }
+        reply {
+          nextToken
+        }
+        updatedAt
+      }
       updatedAt
     }
   }
 `;
-export const onUpdateEvent = /* GraphQL */ `
-  subscription OnUpdateEvent {
-    onUpdateEvent {
+export const onUpdateReply = /* GraphQL */ `
+  subscription OnUpdateReply {
+    onUpdateReply {
       id
-      name
+      owner
+      content
+      like
       createdAt
-      queryName
+      comment {
+        id
+        owner
+        content
+        like
+        createdAt
+        post {
+          id
+          owner
+          title
+          content
+          category
+          createdAt
+          public
+          view
+          like
+          type
+          updatedAt
+        }
+        reply {
+          nextToken
+        }
+        updatedAt
+      }
       updatedAt
     }
   }
 `;
-export const onDeleteEvent = /* GraphQL */ `
-  subscription OnDeleteEvent {
-    onDeleteEvent {
+export const onDeleteReply = /* GraphQL */ `
+  subscription OnDeleteReply {
+    onDeleteReply {
       id
-      name
+      owner
+      content
+      like
       createdAt
-      queryName
+      comment {
+        id
+        owner
+        content
+        like
+        createdAt
+        post {
+          id
+          owner
+          title
+          content
+          category
+          createdAt
+          public
+          view
+          like
+          type
+          updatedAt
+        }
+        reply {
+          nextToken
+        }
+        updatedAt
+      }
+      updatedAt
+    }
+  }
+`;
+export const onCreateCategory = /* GraphQL */ `
+  subscription OnCreateCategory {
+    onCreateCategory {
+      id
+      owner
+      list
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateCategory = /* GraphQL */ `
+  subscription OnUpdateCategory {
+    onUpdateCategory {
+      id
+      owner
+      list
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteCategory = /* GraphQL */ `
+  subscription OnDeleteCategory {
+    onDeleteCategory {
+      id
+      owner
+      list
+      createdAt
       updatedAt
     }
   }

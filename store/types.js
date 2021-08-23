@@ -6,3 +6,4 @@ export const GET_POSTS = "GET_POSTS";
 export const GET_BLOGGER = "GET_BLOGGER";
 export const PUT_BLOGGER = "PUT_BLOGGER";
 export const CLEAR_BLOGGER = "CLEAR_BLOGGER";
+export const CURRENT_POST = "CURRENT_POST";

@@ -37,7 +37,6 @@ const CategoryInput = ({ id, open, setOpen }) => {
   }, [blog.category]);
 
   const createCategoryData = async () => {
-    console.log(categoryData);
     try {
       await API.graphql(
         graphqlOperation(createCategory, {

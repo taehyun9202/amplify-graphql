@@ -1,5 +1,6 @@
 import {
   CLEAR_BLOGGER,
+  CURRENT_POST,
   GET_BLOGGER,
   GET_POSTS,
   LOADING_POSTS,
@@ -9,8 +10,7 @@ import {
 const initialState = {
   posts: [],
   profile: {},
-  // categoryId: "",
-  // category: [],
+  current: {},
   loading: false,
 };
 export const blogReducer = (state = initialState, action) => {
@@ -27,18 +27,21 @@ export const blogReducer = (state = initialState, action) => {
         loading: false,
       };
     case GET_BLOGGER:
+      return {
+        ...state,
+        profile: action.payload.profile,
+        loading: false,
+      };
+    case CURRENT_POST:
+      return {
+        ...state,
+        current: action.payload.current,
+      };
     case CLEAR_BLOGGER:
       return {
         ...state,
         profile: action.payload.profile,
-        // category: action.payload.category,
-        // categoryId: action.payload.categoryId,
-        loading: false,
-      };
-    case PUT_BLOGGER:
-      return {
-        ...state,
-        category: action.payload.category,
+        current: action.payload.current,
         loading: false,
       };
     default:

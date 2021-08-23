@@ -37,7 +37,10 @@ const Blog = () => {
       );
       fetchBlogData();
     }
-  }, [router]);
+    setMyPosts(posts);
+    setFiltered(posts.slice(posts.length - 5));
+    setSelected(posts[posts.length - 1]);
+  }, [router, posts]);
 
   useEffect(() => {
     if (link) {
@@ -83,45 +86,7 @@ const Blog = () => {
 
   const fetchBlogData = async () => {
     try {
-      // post data
-      await API.graphql(
-        graphqlOperation(listPostsWithFilterAndDate, {
-          filter: {
-            owner: {
-              eq: router.query.id,
-            },
-          },
-        })
-      )
-        .then((res) => {
-          const data = res.data.postByDate.items;
-          setMyPosts(data);
-          setFiltered(data.slice(data.length - 5));
-          setSelected(data[data.length - 1]);
-          dispatch(getPosts(data));
-        })
-        .catch((err) => console.log(err));
-
-      // category data
-      // console.log("getting category data");
-      // await API.graphql(
-      //   graphqlOperation(listCategories, {
-      //     filter: {
-      //       owner: {
-      //         eq: router.query.id,
-      //       },
-      //     },
-      //   })
-      // )
-      //   .then((res) => {
-      //     const list = res.data.listCategories.items[0].list;
-      //     const Id = res.data.listCategories.items[0].id;
-      //     dispatch(getBlogger(list, Id));
-      //   })
-      //   .catch((err) => {
-      //     dispatch(clearBlogger());
-      //     console.log(err);
-      //   });
+      dispatch(getPosts(router.query.id));
 
       // user data
       console.log("getting user data");
@@ -136,8 +101,6 @@ const Blog = () => {
       )
         .then((res) => {
           const user = res.data.listUsers.items[0];
-          console.log(user);
-          // const Id = res.data.listUsers.items[0].id;
           dispatch(getBlogger(user));
         })
         .catch((err) => {
@@ -146,7 +109,6 @@ const Blog = () => {
         });
     } catch (err) {
       dispatch(clearBlogger());
-      // console.log(JSON.stringify(err, null, 2));
       console.log(err);
     }
   };

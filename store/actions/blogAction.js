@@ -1,17 +1,36 @@
-import CategoryInput from "../../components/Input/CategoryInput";
+import { API, graphqlOperation } from "aws-amplify";
+import { listPostsWithFilterAndDate } from "../../graphql/queries";
+
 import {
   CLEAR_BLOGGER,
+  CURRENT_POST,
   GET_BLOGGER,
   GET_POSTS,
   LOADING_POSTS,
-  PUT_BLOGGER,
 } from "../types";
 
-export const getPosts = (posts) => async (dispatch) => {
-  dispatch({
-    type: GET_POSTS,
-    payload: { posts },
-  });
+export const getPosts = (username) => async (dispatch) => {
+  try {
+    await API.graphql(
+      graphqlOperation(listPostsWithFilterAndDate, {
+        filter: {
+          owner: {
+            eq: username,
+          },
+        },
+      })
+    )
+      .then((res) => {
+        const posts = res.data.postByDate.items;
+        dispatch({
+          type: GET_POSTS,
+          payload: { posts },
+        });
+      })
+      .catch((err) => console.log(JSON.stringify(err, null, 2)));
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const loadingPosts = () => async (dispatch) => {
@@ -30,14 +49,14 @@ export const getBlogger = (profile) => async (dispatch) => {
 export const clearBlogger = () => async (dispatch) => {
   dispatch({
     type: CLEAR_BLOGGER,
-    payload: { profile: {} },
+    payload: { profile: {}, current: {} },
   });
 };
 
-// export const putBlogger = (category) => async (dispatch) => {
-//   console.log(category);
-//   dispatch({
-//     type: PUT_BLOGGER,
-//     payload: { category },
-//   });
-// };
+export const getCurrentPost = (id) => async (dispatch) => {
+  console.log(id);
+  dispatch({
+    type: CURRENT_POST,
+    payload: { current },
+  });
+};

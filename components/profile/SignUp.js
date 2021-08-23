@@ -5,7 +5,7 @@ const SignUp = ({ onChangeHandler, setUiState, signUp }) => {
   const [showPW, setShowPW] = useState(false);
   return (
     <div className="max-w-7xl mx-auto flex flex-col justify-center items-center min-h-screen">
-      <div className="shadow-lg px-10 md:px-20 py-10">
+      <div className="shadow-lg px-10 w-96 md:w-4/6 md:px-20  py-10">
         <p className="text-2xl font-bold">Sign up today!</p>
         <div>
           <div className="grid grid-cols-2 my-6">
@@ -18,7 +18,7 @@ const SignUp = ({ onChangeHandler, setUiState, signUp }) => {
                 className="h-8 border-b-2 outline-none px-2"
               />
             </div>
-            <div className="col-span-1 flex flex-col my-2 mr-5">
+            {/* <div className="col-span-1 flex flex-col my-2 mr-5">
               <label className="text-sm font-semibold">First Name</label>
               <input
                 onChange={onChangeHandler}
@@ -35,7 +35,7 @@ const SignUp = ({ onChangeHandler, setUiState, signUp }) => {
                 name="family_name"
                 className="h-8 border-b-2 outline-none px-2"
               />
-            </div>
+            </div> */}
             <div className="col-span-2 flex flex-col my-2">
               <label className="text-sm font-semibold">Email Address</label>
               <input

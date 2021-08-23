@@ -2,22 +2,22 @@ import Head from "next/head";
 import Image from "next/image";
 import { API, graphqlOperation } from "aws-amplify";
 import { useEffect, useState } from "react";
-import { listPosts, getPost } from "../graphql/queries";
+import { listPosts, getPost, listUsers } from "../graphql/queries";
 import HomeHeader from "../components/layouts/HomeHeader";
 import { useSelector } from "react-redux";
 import Link from "next/link";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const user = useSelector((state) => state.profile.profile);
+  const [allUser, setAllUser] = useState([]);
   const [posts, setPosts] = useState([]);
-  // const [post, setPost] = useState({});
+  const router = useRouter();
+
   useEffect(() => {
     getData();
-    // getSinglePost();
-  }, []);
-
-  const router = useRouter();
+    getAllUser();
+  }, [user]);
 
   const getData = async () => {
     try {
@@ -40,7 +40,23 @@ export default function Home() {
   //   }
   // };
 
-  // console.log(post);
+  const getAllUser = async () => {
+    try {
+      await API.graphql(
+        graphqlOperation(listUsers, {
+          filter: { id: { ne: user.id } },
+        })
+      )
+        .then((res) => {
+          setAllUser(res.data.listUsers.items);
+        })
+        .catch((err) => console.log(err));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  console.log(allUser);
   return (
     <div>
       <Head>
@@ -53,33 +69,14 @@ export default function Home() {
         <HomeHeader />
         <div className="max-w-7xl mx-auto flex flex-col items-center justify-center min-h-screen -mt-16">
           <div className="flex flex-col gap-2">
-            <p className="text-lg font-semibold my-2">Current Blogger</p>
-            <a
-              className="cursor-pointer bg-gray-100 px-4 py-1 hover:bg-gray-200"
-              onClick={() => router.push("/blog/tyler")}
-            >
-              - Tyler Blog
-            </a>
-            <a
-              className="cursor-pointer bg-gray-100 px-4 py-1 hover:bg-gray-200"
-              onClick={() => router.push("/blog/ntt9202")}
-            >
-              - ntt9202 Blog
-            </a>
-
-            <a
-              className="cursor-pointer bg-gray-100 px-4 py-1 hover:bg-gray-200"
-              onClick={() => router.push("/blog/tyler2")}
-            >
-              - tyler2 Blog
-            </a>
-
-            <a
-              className="cursor-pointer bg-gray-100 px-4 py-1 hover:bg-gray-200"
-              onClick={() => router.push("/blog/woojung.lee")}
-            >
-              - woojung.lee Blog
-            </a>
+            <p className="text-lg font-semibold my-2">Other Bloggers</p>
+            {allUser.map((user) => (
+              <Link key={user.id} href={`/blog/${user.username}`}>
+                <a className="cursor-pointer bg-gray-100 px-4 py-1 hover:bg-gray-200 capitalize">
+                  - {user.username} Blog
+                </a>
+              </Link>
+            ))}
           </div>
           {/* {posts.map((post) => (
             <div key={post.id}>

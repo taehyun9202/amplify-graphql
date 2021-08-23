@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { API, graphqlOperation } from "aws-amplify";
 import {
   listCategories,
+  listUsers,
   listPostsWithFilterAndDate,
 } from "../../graphql/queries";
 import BlogHeader from "../../components/layouts/BlogHeader";
@@ -11,8 +12,8 @@ import BlogSidebar from "../../components/layouts/BlogSidebar";
 import Link from "next/link";
 import BlogPost from "../../components/Blog/BlogPost";
 import {
-  clearCategories,
-  getCategories,
+  clearBlogger,
+  getBlogger,
   getPosts,
 } from "../../store/actions/blogAction";
 
@@ -100,29 +101,53 @@ const Blog = () => {
           dispatch(getPosts(data));
         })
         .catch((err) => console.log(err));
+
       // category data
-      console.log("getting category data");
+      // console.log("getting category data");
+      // await API.graphql(
+      //   graphqlOperation(listCategories, {
+      //     filter: {
+      //       owner: {
+      //         eq: router.query.id,
+      //       },
+      //     },
+      //   })
+      // )
+      //   .then((res) => {
+      //     const list = res.data.listCategories.items[0].list;
+      //     const Id = res.data.listCategories.items[0].id;
+      //     dispatch(getBlogger(list, Id));
+      //   })
+      //   .catch((err) => {
+      //     dispatch(clearBlogger());
+      //     console.log(err);
+      //   });
+
+      // user data
+      console.log("getting user data");
       await API.graphql(
-        graphqlOperation(listCategories, {
+        graphqlOperation(listUsers, {
           filter: {
-            owner: {
+            username: {
               eq: router.query.id,
             },
           },
         })
       )
         .then((res) => {
-          const list = res.data.listCategories.items[0].list;
-          const Id = res.data.listCategories.items[0].id;
-          dispatch(getCategories(list, Id));
+          const user = res.data.listUsers.items[0];
+          console.log(user);
+          // const Id = res.data.listUsers.items[0].id;
+          dispatch(getBlogger(user));
         })
         .catch((err) => {
-          dispatch(clearCategories());
-          // console.log(err);
+          dispatch(clearBlogger());
+          console.log(err);
         });
     } catch (err) {
-      dispatch(clearCategories());
+      dispatch(clearBlogger());
       // console.log(JSON.stringify(err, null, 2));
+      console.log(err);
     }
   };
 

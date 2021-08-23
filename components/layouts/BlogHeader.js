@@ -3,6 +3,8 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getProfile } from "../../store/actions/profileAction";
 import { Auth } from "aws-amplify";
+import { API, graphqlOperation } from "aws-amplify";
+import { getUser } from "../../graphql/queries";
 
 const BlogHeader = () => {
   const dispatch = useDispatch();
@@ -14,10 +16,27 @@ const BlogHeader = () => {
     }
   }, [user]);
 
+  // const checkUser = async () => {
+  //   try {
+  //     const user = await Auth.currentAuthenticatedUser();
+  //     dispatch(getProfile(user));
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+
   const checkUser = async () => {
     try {
       const user = await Auth.currentAuthenticatedUser();
-      dispatch(getProfile(user));
+      const userData = await API.graphql(
+        graphqlOperation(getUser, { id: user.attributes.sub })
+      );
+      dispatch(
+        getProfile(
+          userData.data.getUser,
+          user.signInUserSession.accessToken.jwtToken
+        )
+      );
     } catch (err) {
       console.log(err);
     }

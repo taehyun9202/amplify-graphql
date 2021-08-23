@@ -1,15 +1,16 @@
 import {
-  CLEAR_CATEGORIES,
-  GET_CATEGORIES,
+  CLEAR_BLOGGER,
+  GET_BLOGGER,
   GET_POSTS,
   LOADING_POSTS,
-  PUT_CATEGORIES,
+  PUT_BLOGGER,
 } from "../types";
 
 const initialState = {
   posts: [],
-  categoryId: "",
-  category: [],
+  profile: {},
+  // categoryId: "",
+  // category: [],
   loading: false,
 };
 export const blogReducer = (state = initialState, action) => {
@@ -25,15 +26,16 @@ export const blogReducer = (state = initialState, action) => {
         posts: action.payload.posts,
         loading: false,
       };
-    case GET_CATEGORIES:
-    case CLEAR_CATEGORIES:
+    case GET_BLOGGER:
+    case CLEAR_BLOGGER:
       return {
         ...state,
-        category: action.payload.category,
-        categoryId: action.payload.categoryId,
+        profile: action.payload.profile,
+        // category: action.payload.category,
+        // categoryId: action.payload.categoryId,
         loading: false,
       };
-    case PUT_CATEGORIES:
+    case PUT_BLOGGER:
       return {
         ...state,
         category: action.payload.category,

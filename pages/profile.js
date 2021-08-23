@@ -9,19 +9,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { getProfile, logOut } from "../store/actions/profileAction";
 import { useRouter } from "next/dist/client/router";
 import HomeHeader from "../components/layouts/HomeHeader";
+import { API, graphqlOperation } from "aws-amplify";
+import { createUser } from "../graphql/mutations";
+import { getUser } from "../graphql/queries";
+// import { getCategories } from "../../store/actions/blogAction";
 
 const initialState = { email: "", password: "", authCode: "" };
 
 const Profile = () => {
   const [uiState, setUiState] = useState("signIn");
   const [formState, setFormState] = useState(initialState);
-  const { email, password, authCode, username, family_name, given_name } =
-    formState;
+  const { email, password, authCode, username } = formState;
   const dispatch = useDispatch();
   const user = useSelector((state) => state.profile.profile);
   const router = useRouter();
 
-  console.log(user, uiState);
   useEffect(() => {
     getProfile();
     if (user?.username) {
@@ -32,7 +34,15 @@ const Profile = () => {
   const checkUser = async () => {
     try {
       const user = await Auth.currentAuthenticatedUser();
-      dispatch(getProfile(user));
+      const userData = await API.graphql(
+        graphqlOperation(getUser, { id: user.attributes.sub })
+      );
+      dispatch(
+        getProfile(
+          userData.data.getUser,
+          user.signInUserSession.accessToken.jwtToken
+        )
+      );
       setUiState("signedIn");
     } catch (err) {
       console.log(err);
@@ -45,7 +55,7 @@ const Profile = () => {
       await Auth.signUp({
         username,
         password,
-        attributes: { email, family_name, given_name },
+        attributes: { email },
       });
       setUiState("confirmSignUp");
     } catch (err) {
@@ -56,7 +66,6 @@ const Profile = () => {
   const confirmSignUp = async () => {
     try {
       await Auth.confirmSignUp(username, authCode);
-      setUiState("signedIn");
       signIn();
     } catch (err) {
       console.log(err);
@@ -65,12 +74,30 @@ const Profile = () => {
 
   const signIn = async () => {
     try {
-      await Auth.signIn(email, password);
+      const user = await Auth.signIn(email, password);
+      createUserData(user.attributes.sub, user.username, user.attributes.email);
       checkUser();
       router.push("/");
       setUiState("signedIn");
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const createUserData = async (id, username, email) => {
+    try {
+      await API.graphql(
+        graphqlOperation(createUser, {
+          input: {
+            id: id,
+            username: username,
+            email: email,
+          },
+        })
+      );
+    } catch (err) {
+      // console.log(err);
+      // console.log("user exists");
     }
   };
 
@@ -99,6 +126,7 @@ const Profile = () => {
   return (
     <>
       <HomeHeader />
+
       <div className="-mt-16 max-w-7xl mx-auto">
         {uiState === "signUp" && (
           <SignUp

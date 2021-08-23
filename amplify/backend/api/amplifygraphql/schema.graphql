@@ -10,13 +10,13 @@ type Post
   owner: String!
   title: String!
   content: String!
-  category: [String]
-  createdAt: String!
   public: Boolean!
   view: Int
   like: Int
   type: String!
   comments: [Comment] @connection(name: "PostComments", sortField: "createdAt")
+  category: [String]
+  createdAt: String!
 }
 
 type Comment @model {
@@ -42,6 +42,19 @@ type Category @model {
   id: ID!
   owner: String!
   list: [String!]
+  createdAt: String!
+}
+
+type User @model {
+  id: ID!
+  username: String!
+  image: String
+  blogname: String
+  description: String
+  category: [String!]
+  following: [String!]
+  follower: [String!]
+  email: String!
   createdAt: String!
 }
 

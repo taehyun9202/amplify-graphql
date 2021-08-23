@@ -12,7 +12,7 @@ const Sidebar = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.profile.profile);
   const posts = useSelector((state) => state.blog.posts);
-  const category = useSelector((state) => state.blog.category);
+  const blog = useSelector((state) => state.blog.profile);
   const link = useSelector((state) => state.profile.link);
   const [proOrBlog, setProOrBlog] = useState("blog");
   const [openCategory, setOpenCategory] = useState(true);
@@ -111,11 +111,12 @@ const Sidebar = () => {
                 See All ({posts.length})
               </p>
             </div>
-            {category &&
-              category.map((category, idx) => (
+
+            {blog.category &&
+              blog.category.map((item, idx) => (
                 <div
-                  key={user.username + idx + category}
-                  onClick={() => dispatch(putLink(category))}
+                  key={user.username + idx + item}
+                  onClick={() => dispatch(putLink(item))}
                   className="flex gap-2 items-center cursor-pointer pl-2"
                 >
                   <svg
@@ -134,14 +135,12 @@ const Sidebar = () => {
                   </svg>
                   <p
                     className={
-                      category === link
-                        ? "font-semibold underline"
-                        : "font-normal"
+                      item === link ? "font-semibold underline" : "font-normal"
                     }
                   >
-                    {category} (
+                    {item} (
                     {
-                      posts.filter((post) => post.category.includes(category))
+                      posts.filter((post) => post.category.includes(item))
                         .length
                     }
                     )

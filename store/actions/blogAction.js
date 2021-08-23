@@ -1,10 +1,10 @@
 import CategoryInput from "../../components/Input/CategoryInput";
 import {
-  CLEAR_CATEGORIES,
-  GET_CATEGORIES,
+  CLEAR_BLOGGER,
+  GET_BLOGGER,
   GET_POSTS,
   LOADING_POSTS,
-  PUT_CATEGORIES,
+  PUT_BLOGGER,
 } from "../types";
 
 export const getPosts = (posts) => async (dispatch) => {
@@ -20,26 +20,24 @@ export const loadingPosts = () => async (dispatch) => {
   });
 };
 
-export const getCategories = (category, id) => async (dispatch) => {
-  console.log(category, id);
+export const getBlogger = (profile) => async (dispatch) => {
   dispatch({
-    type: GET_CATEGORIES,
-    payload: { category: category, categoryId: id },
+    type: GET_BLOGGER,
+    payload: { profile: profile },
   });
 };
 
-export const clearCategories = () => async (dispatch) => {
-  console.log("clearing category");
+export const clearBlogger = () => async (dispatch) => {
   dispatch({
-    type: CLEAR_CATEGORIES,
-    payload: { category: [], categoryId: [] },
+    type: CLEAR_BLOGGER,
+    payload: { profile: {} },
   });
 };
 
-// export const putCategories = (category) => async (dispatch) => {
+// export const putBlogger = (category) => async (dispatch) => {
 //   console.log(category);
 //   dispatch({
-//     type: PUT_CATEGORIES,
+//     type: PUT_BLOGGER,
 //     payload: { category },
 //   });
 // };

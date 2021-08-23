@@ -11,8 +11,6 @@ export const createPost = /* GraphQL */ `
       owner
       title
       content
-      category
-      createdAt
       public
       view
       like
@@ -28,6 +26,8 @@ export const createPost = /* GraphQL */ `
         }
         nextToken
       }
+      category
+      createdAt
       updatedAt
     }
   }
@@ -42,8 +42,6 @@ export const updatePost = /* GraphQL */ `
       owner
       title
       content
-      category
-      createdAt
       public
       view
       like
@@ -59,6 +57,8 @@ export const updatePost = /* GraphQL */ `
         }
         nextToken
       }
+      category
+      createdAt
       updatedAt
     }
   }
@@ -73,8 +73,6 @@ export const deletePost = /* GraphQL */ `
       owner
       title
       content
-      category
-      createdAt
       public
       view
       like
@@ -90,6 +88,8 @@ export const deletePost = /* GraphQL */ `
         }
         nextToken
       }
+      category
+      createdAt
       updatedAt
     }
   }
@@ -110,8 +110,6 @@ export const createComment = /* GraphQL */ `
         owner
         title
         content
-        category
-        createdAt
         public
         view
         like
@@ -119,6 +117,8 @@ export const createComment = /* GraphQL */ `
         comments {
           nextToken
         }
+        category
+        createdAt
         updatedAt
       }
       reply {
@@ -152,8 +152,6 @@ export const updateComment = /* GraphQL */ `
         owner
         title
         content
-        category
-        createdAt
         public
         view
         like
@@ -161,6 +159,8 @@ export const updateComment = /* GraphQL */ `
         comments {
           nextToken
         }
+        category
+        createdAt
         updatedAt
       }
       reply {
@@ -194,8 +194,6 @@ export const deleteComment = /* GraphQL */ `
         owner
         title
         content
-        category
-        createdAt
         public
         view
         like
@@ -203,6 +201,8 @@ export const deleteComment = /* GraphQL */ `
         comments {
           nextToken
         }
+        category
+        createdAt
         updatedAt
       }
       reply {
@@ -242,12 +242,12 @@ export const createReply = /* GraphQL */ `
           owner
           title
           content
-          category
-          createdAt
           public
           view
           like
           type
+          category
+          createdAt
           updatedAt
         }
         reply {
@@ -281,12 +281,12 @@ export const updateReply = /* GraphQL */ `
           owner
           title
           content
-          category
-          createdAt
           public
           view
           like
           type
+          category
+          createdAt
           updatedAt
         }
         reply {
@@ -320,12 +320,12 @@ export const deleteReply = /* GraphQL */ `
           owner
           title
           content
-          category
-          createdAt
           public
           view
           like
           type
+          category
+          createdAt
           updatedAt
         }
         reply {
@@ -374,6 +374,66 @@ export const deleteCategory = /* GraphQL */ `
       id
       owner
       list
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createUser = /* GraphQL */ `
+  mutation CreateUser(
+    $input: CreateUserInput!
+    $condition: ModelUserConditionInput
+  ) {
+    createUser(input: $input, condition: $condition) {
+      id
+      username
+      image
+      blogname
+      description
+      category
+      following
+      follower
+      email
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateUser = /* GraphQL */ `
+  mutation UpdateUser(
+    $input: UpdateUserInput!
+    $condition: ModelUserConditionInput
+  ) {
+    updateUser(input: $input, condition: $condition) {
+      id
+      username
+      image
+      blogname
+      description
+      category
+      following
+      follower
+      email
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteUser = /* GraphQL */ `
+  mutation DeleteUser(
+    $input: DeleteUserInput!
+    $condition: ModelUserConditionInput
+  ) {
+    deleteUser(input: $input, condition: $condition) {
+      id
+      username
+      image
+      blogname
+      description
+      category
+      following
+      follower
+      email
       createdAt
       updatedAt
     }

@@ -8,8 +8,6 @@ export const onCreatePost = /* GraphQL */ `
       owner
       title
       content
-      category
-      createdAt
       public
       view
       like
@@ -25,6 +23,8 @@ export const onCreatePost = /* GraphQL */ `
         }
         nextToken
       }
+      category
+      createdAt
       updatedAt
     }
   }
@@ -36,8 +36,6 @@ export const onUpdatePost = /* GraphQL */ `
       owner
       title
       content
-      category
-      createdAt
       public
       view
       like
@@ -53,6 +51,8 @@ export const onUpdatePost = /* GraphQL */ `
         }
         nextToken
       }
+      category
+      createdAt
       updatedAt
     }
   }
@@ -64,8 +64,6 @@ export const onDeletePost = /* GraphQL */ `
       owner
       title
       content
-      category
-      createdAt
       public
       view
       like
@@ -81,6 +79,8 @@ export const onDeletePost = /* GraphQL */ `
         }
         nextToken
       }
+      category
+      createdAt
       updatedAt
     }
   }
@@ -98,8 +98,6 @@ export const onCreateComment = /* GraphQL */ `
         owner
         title
         content
-        category
-        createdAt
         public
         view
         like
@@ -107,6 +105,8 @@ export const onCreateComment = /* GraphQL */ `
         comments {
           nextToken
         }
+        category
+        createdAt
         updatedAt
       }
       reply {
@@ -137,8 +137,6 @@ export const onUpdateComment = /* GraphQL */ `
         owner
         title
         content
-        category
-        createdAt
         public
         view
         like
@@ -146,6 +144,8 @@ export const onUpdateComment = /* GraphQL */ `
         comments {
           nextToken
         }
+        category
+        createdAt
         updatedAt
       }
       reply {
@@ -176,8 +176,6 @@ export const onDeleteComment = /* GraphQL */ `
         owner
         title
         content
-        category
-        createdAt
         public
         view
         like
@@ -185,6 +183,8 @@ export const onDeleteComment = /* GraphQL */ `
         comments {
           nextToken
         }
+        category
+        createdAt
         updatedAt
       }
       reply {
@@ -221,12 +221,12 @@ export const onCreateReply = /* GraphQL */ `
           owner
           title
           content
-          category
-          createdAt
           public
           view
           like
           type
+          category
+          createdAt
           updatedAt
         }
         reply {
@@ -257,12 +257,12 @@ export const onUpdateReply = /* GraphQL */ `
           owner
           title
           content
-          category
-          createdAt
           public
           view
           like
           type
+          category
+          createdAt
           updatedAt
         }
         reply {
@@ -293,12 +293,12 @@ export const onDeleteReply = /* GraphQL */ `
           owner
           title
           content
-          category
-          createdAt
           public
           view
           like
           type
+          category
+          createdAt
           updatedAt
         }
         reply {
@@ -338,6 +338,57 @@ export const onDeleteCategory = /* GraphQL */ `
       id
       owner
       list
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateUser = /* GraphQL */ `
+  subscription OnCreateUser {
+    onCreateUser {
+      id
+      username
+      image
+      blogname
+      description
+      category
+      following
+      follower
+      email
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateUser = /* GraphQL */ `
+  subscription OnUpdateUser {
+    onUpdateUser {
+      id
+      username
+      image
+      blogname
+      description
+      category
+      following
+      follower
+      email
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteUser = /* GraphQL */ `
+  subscription OnDeleteUser {
+    onDeleteUser {
+      id
+      username
+      image
+      blogname
+      description
+      category
+      following
+      follower
+      email
       createdAt
       updatedAt
     }

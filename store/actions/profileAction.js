@@ -1,8 +1,7 @@
 import { GET_USER, LOG_OUT, PUT_LINK } from "../types";
 
-export const getProfile = (user) => async (dispatch) => {
-  const profile = { ...user.attributes, username: user.username };
-  const token = user.signInUserSession.accessToken.jwtToken;
+export const getProfile = (user, token) => async (dispatch) => {
+  const profile = user;
   dispatch({
     type: GET_USER,
     payload: { profile, token },

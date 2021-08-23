@@ -3,15 +3,14 @@ import { API, graphqlOperation } from "aws-amplify";
 import { createCategory, updateCategory } from "../../graphql/mutations";
 import { useDispatch, useSelector } from "react-redux";
 import { listCategories } from "../../graphql/queries";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import { getCategories } from "../../store/actions/blogAction";
 
 const CategoryInput = ({ id, open, setOpen }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const category = useSelector((state) => state.blog.category);
-  const categoryId = useSelector((state) => state.blog.categoryId);
-  const username = useSelector((state) => state.profile.profile.username);
+  const blog = useSelector((state) => state.blog.profile);
+  const user = useSelector((state) => state.profile.profile);
   const [input, setInput] = useState("");
   const [categoryData, setCategoryData] = useState([]);
   const handleSubmit = (e) => {
@@ -23,26 +22,36 @@ const CategoryInput = ({ id, open, setOpen }) => {
   };
 
   const handleSave = (e) => {
-    if (category.length < 1) {
+    if (blog.category.length < 1) {
+      console.log("creating category");
       createCategoryData();
     } else {
+      console.log("updating category");
       updateCategoryData();
     }
     setOpen(false);
   };
 
   useEffect(() => {
-    setCategoryData(category);
-  }, [category]);
+    setCategoryData(blog.category);
+  }, [blog.category]);
 
   const createCategoryData = async () => {
     console.log(categoryData);
     try {
       await API.graphql(
         graphqlOperation(createCategory, {
-          input: { owner: username, list: categoryData },
+          input: { id: user.id, owner: user.username, list: categoryData },
         })
-      );
+      )
+        .then((res) => {
+          const data = res.data.createCategory;
+          dispatch(getCategories(data.list, data.id));
+        })
+        .catch((err) => {
+          updateCategoryData();
+          // console.log(err);
+        });
     } catch (err) {
       console.log(err);
     }
@@ -52,8 +61,8 @@ const CategoryInput = ({ id, open, setOpen }) => {
     try {
       await API.graphql(
         graphqlOperation(updateCategory, {
-          condition: { owner: { eq: username } },
-          input: { id: categoryId, list: categoryData },
+          condition: { owner: { eq: user.username } },
+          input: { id: user.id, list: categoryData },
         })
       )
         .then((res) => {

@@ -1,8 +1,14 @@
-import { GET_CATEGORIES, GET_POSTS, LOADING_POSTS } from "../types";
+import {
+  GET_CATEGORIES,
+  GET_POSTS,
+  LOADING_POSTS,
+  PUT_CATEGORIES,
+} from "../types";
 
 const initialState = {
   posts: [],
-  categories: [],
+  categoryId: "",
+  category: [],
   loading: false,
 };
 export const blogReducer = (state = initialState, action) => {
@@ -18,11 +24,17 @@ export const blogReducer = (state = initialState, action) => {
         posts: action.payload.posts,
         loading: false,
       };
-
     case GET_CATEGORIES:
       return {
         ...state,
-        categories: action.payload.categories,
+        category: action.payload.category,
+        categoryId: action.payload.categoryId,
+        loading: false,
+      };
+    case PUT_CATEGORIES:
+      return {
+        ...state,
+        category: action.payload.category,
         loading: false,
       };
     default:

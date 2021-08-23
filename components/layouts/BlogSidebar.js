@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { putLink } from "../../store/actions/profileAction";
@@ -12,7 +12,7 @@ const Sidebar = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.profile.profile);
   const posts = useSelector((state) => state.blog.posts);
-  const categories = useSelector((state) => state.blog.categories);
+  const category = useSelector((state) => state.blog.category);
   const link = useSelector((state) => state.profile.link);
   const [proOrBlog, setProOrBlog] = useState("blog");
   const [openCategory, setOpenCategory] = useState(true);
@@ -111,12 +111,10 @@ const Sidebar = () => {
                 See All ({posts.length})
               </p>
             </div>
-            {categories.map((category, idx) => (
-              <div
-                className="flex relative justify-between items-center"
-                key={user.username + idx + category}
-              >
+            {category &&
+              category.map((category, idx) => (
                 <div
+                  key={user.username + idx + category}
                   onClick={() => dispatch(putLink(category))}
                   className="flex gap-2 items-center cursor-pointer pl-2"
                 >
@@ -149,53 +147,38 @@ const Sidebar = () => {
                     )
                   </p>
                 </div>
-                {router.query.id === user.username && (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 p-1 rounded-full cursor-pointer hover:bg-gray-100"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M20 12H4"
-                    />
-                  </svg>
-                )}
-              </div>
-            ))}
+              ))}
 
-            <div
-              onClick={() => setOpenDialog(true)}
-              className="flex gap-2 items-center cursor-pointer pl-2 py-0.5 rounded-lg hover:bg-gray-100"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+            {router.query.id === user.username && (
+              <div
+                onClick={() => setOpenDialog(true)}
+                className="flex gap-2 items-center cursor-pointer pl-2 py-0.5 rounded-lg hover:bg-gray-100"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
-              <p
-                className={
-                  link === "Create Category"
-                    ? "font-semibold underline"
-                    : "font-normal"
-                }
-              >
-                Create Category
-              </p>
-            </div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+                <p
+                  className={
+                    link === "Create Category"
+                      ? "font-semibold underline"
+                      : "font-normal"
+                  }
+                >
+                  Create/Update Category
+                </p>
+              </div>
+            )}
           </div>
         )}
       </nav>

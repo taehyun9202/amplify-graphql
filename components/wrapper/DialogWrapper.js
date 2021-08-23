@@ -2,7 +2,6 @@ import React, { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 
 const DialogWrapper = ({ children, open, setOpen, title }) => {
-  console.log(open);
   return (
     <>
       <Transition appear show={open} as={Fragment}>

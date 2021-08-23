@@ -77,6 +77,7 @@ const Blog = () => {
 
   const fetchBlogData = async () => {
     try {
+      // post data
       await API.graphql(
         graphqlOperation(listPostsWithFilterAndDate, {
           filter: {
@@ -94,7 +95,7 @@ const Blog = () => {
           dispatch(getPosts(data));
         })
         .catch((err) => console.log(err));
-
+      // category data
       await API.graphql(
         graphqlOperation(listCategories, {
           filter: {
@@ -105,9 +106,10 @@ const Blog = () => {
         })
       )
         .then((res) => {
-          const data = res.data.listCategories.items[0].list;
-          console.log(data);
-          dispatch(getCategories(data));
+          console.log(res.data.listCategories.items[0]);
+          const list = res.data.listCategories.items[0].list;
+          const Id = res.data.listCategories.items[0].id;
+          dispatch(getCategories(list, Id));
         })
         .catch((err) => console.log(err));
     } catch (err) {

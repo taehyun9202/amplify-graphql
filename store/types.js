@@ -5,3 +5,4 @@ export const LOADING_POSTS = "LOADING_POSTS";
 export const GET_POSTS = "GET_POSTS";
 export const GET_CATEGORIES = "GET_CATEGORIES";
 export const PUT_CATEGORIES = "PUT_CATEGORIES";
+export const CLEAR_CATEGORIES = "CLEAR_CATEGORIES";

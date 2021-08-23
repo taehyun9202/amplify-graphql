@@ -10,7 +10,11 @@ import BlogHeader from "../../components/layouts/BlogHeader";
 import BlogSidebar from "../../components/layouts/BlogSidebar";
 import Link from "next/link";
 import BlogPost from "../../components/Blog/BlogPost";
-import { getCategories, getPosts } from "../../store/actions/blogAction";
+import {
+  clearCategories,
+  getCategories,
+  getPosts,
+} from "../../store/actions/blogAction";
 
 const Blog = () => {
   const posts = useSelector((state) => state.blog.posts);
@@ -21,11 +25,12 @@ const Blog = () => {
   const [selected, setSelected] = useState(null);
   const router = useRouter();
   const username = router.query.id;
+  const loggedInUser = useSelector((state) => state.profile.profile.username);
   const link = useSelector((state) => state.profile.link);
   const [openCategory, setOpenCategory] = useState(true);
 
   useEffect(() => {
-    if (myPosts.length < 1) {
+    if (myPosts.length < 1 || username !== loggedInUser) {
       console.log(
         "fetching blog data!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
       );
@@ -96,6 +101,7 @@ const Blog = () => {
         })
         .catch((err) => console.log(err));
       // category data
+      console.log("getting category data");
       await API.graphql(
         graphqlOperation(listCategories, {
           filter: {
@@ -106,14 +112,17 @@ const Blog = () => {
         })
       )
         .then((res) => {
-          console.log(res.data.listCategories.items[0]);
           const list = res.data.listCategories.items[0].list;
           const Id = res.data.listCategories.items[0].id;
           dispatch(getCategories(list, Id));
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          dispatch(clearCategories());
+          // console.log(err);
+        });
     } catch (err) {
-      console.log(JSON.stringify(err, null, 2));
+      dispatch(clearCategories());
+      // console.log(JSON.stringify(err, null, 2));
     }
   };
 

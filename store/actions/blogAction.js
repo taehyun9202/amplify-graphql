@@ -1,5 +1,6 @@
 import CategoryInput from "../../components/Input/CategoryInput";
 import {
+  CLEAR_CATEGORIES,
   GET_CATEGORIES,
   GET_POSTS,
   LOADING_POSTS,
@@ -24,6 +25,14 @@ export const getCategories = (category, id) => async (dispatch) => {
   dispatch({
     type: GET_CATEGORIES,
     payload: { category: category, categoryId: id },
+  });
+};
+
+export const clearCategories = () => async (dispatch) => {
+  console.log("clearing category");
+  dispatch({
+    type: CLEAR_CATEGORIES,
+    payload: { category: [], categoryId: [] },
   });
 };
 

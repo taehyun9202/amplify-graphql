@@ -1,4 +1,5 @@
 import {
+  CLEAR_CATEGORIES,
   GET_CATEGORIES,
   GET_POSTS,
   LOADING_POSTS,
@@ -25,6 +26,7 @@ export const blogReducer = (state = initialState, action) => {
         loading: false,
       };
     case GET_CATEGORIES:
+    case CLEAR_CATEGORIES:
       return {
         ...state,
         category: action.payload.category,

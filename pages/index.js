@@ -52,13 +52,33 @@ export default function Home() {
       <div>
         <HomeHeader />
         <div className="max-w-7xl mx-auto flex flex-col items-center justify-center min-h-screen -mt-16">
-          <div>
+          <div className="flex flex-col gap-2">
             <p className="text-lg font-semibold my-2">Current Blogger</p>
             <a
               className="cursor-pointer bg-gray-100 px-4 py-1 hover:bg-gray-200"
               onClick={() => router.push("/blog/tyler")}
             >
               - Tyler Blog
+            </a>
+            <a
+              className="cursor-pointer bg-gray-100 px-4 py-1 hover:bg-gray-200"
+              onClick={() => router.push("/blog/ntt9202")}
+            >
+              - ntt9202 Blog
+            </a>
+
+            <a
+              className="cursor-pointer bg-gray-100 px-4 py-1 hover:bg-gray-200"
+              onClick={() => router.push("/blog/tyler2")}
+            >
+              - tyler2 Blog
+            </a>
+
+            <a
+              className="cursor-pointer bg-gray-100 px-4 py-1 hover:bg-gray-200"
+              onClick={() => router.push("/blog/woojung.lee")}
+            >
+              - woojung.lee Blog
             </a>
           </div>
           {/* {posts.map((post) => (

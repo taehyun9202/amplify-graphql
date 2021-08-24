@@ -4,12 +4,15 @@ import { API, graphqlOperation } from "aws-amplify";
 import { useEffect, useState } from "react";
 import { listPosts, getPost, listUsers } from "../graphql/queries";
 import HomeHeader from "../components/layouts/HomeHeader";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { clearBlogger } from "../store/actions/blogAction";
 
 export default function Home() {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.profile.profile);
+  const blog = useSelector((state) => state.blog.profile);
   const [allUser, setAllUser] = useState([]);
   const [posts, setPosts] = useState([]);
   const router = useRouter();
@@ -18,6 +21,10 @@ export default function Home() {
     getData();
     getAllUser();
   }, [user]);
+
+  useEffect(() => {
+    if (blog.username) dispatch(clearBlogger());
+  }, [blog]);
 
   const getData = async () => {
     try {

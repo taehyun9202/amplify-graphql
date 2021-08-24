@@ -8,7 +8,7 @@ const SidebarWrapper = ({ children, open, setOpen }) => {
         <Dialog
           as="div"
           static
-          className="fixed inset-0 flex z-10 lg:hidden overflow-y-auto"
+          className="fixed inset-0 flex z-10 sm:hidden overflow-y-auto"
           open={open}
           onClose={setOpen}
         >

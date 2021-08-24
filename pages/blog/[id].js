@@ -32,7 +32,7 @@ const Blog = () => {
   const loggedInUser = useSelector((state) => state.profile.profile.username);
   const link = useSelector((state) => state.profile.link);
   const [openCategory, setOpenCategory] = useState(true);
-  const [openSidebar, setOpenSidebar] = useState(true);
+  const [openSidebar, setOpenSidebar] = useState(false);
 
   useEffect(() => {
     if (blog.username !== router.query.id) {
@@ -40,11 +40,14 @@ const Blog = () => {
         "fetching blog data!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
       );
       fetchBlogData();
+    } else {
+      console.log("refetch blog data");
+      clearBlogger();
     }
     setMyPosts(posts);
     setFiltered(posts.slice(posts.length - 5));
     setSelected(posts[posts.length - 1]);
-  }, [router, posts]);
+  }, [router, posts, blog]);
 
   useEffect(() => {
     if (link) {

@@ -2,6 +2,8 @@ import { GET_USER, LOG_OUT, PUT_LINK } from "../types";
 
 export const getProfile = (user, token) => async (dispatch) => {
   const profile = user;
+
+  console.log(profile);
   dispatch({
     type: GET_USER,
     payload: { profile, token },

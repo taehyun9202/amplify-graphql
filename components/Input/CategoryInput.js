@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { API, graphqlOperation } from "aws-amplify";
+import { API, Auth, graphqlOperation } from "aws-amplify";
 import { createCategory, updateCategory } from "../../graphql/mutations";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { getCategories } from "../../store/actions/blogAction";
+import { getBlogger } from "../../store/actions/blogAction";
+import { getUser } from "../../graphql/queries";
+import { getProfile } from "../../store/actions/profileAction";
 
 const CategoryInput = ({ id, open, setOpen }) => {
   const router = useRouter();
@@ -12,28 +14,39 @@ const CategoryInput = ({ id, open, setOpen }) => {
   const user = useSelector((state) => state.profile.profile);
   const [input, setInput] = useState("");
   const [categoryData, setCategoryData] = useState([]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    !categoryData.includes(input) &&
-      input &&
+    if ((input && categoryData.includes(input)) || !input) {
+      console.log("duplicate or no input");
+    } else {
       setCategoryData([...categoryData, input]);
-    setInput("");
+      setInput("");
+    }
   };
 
   const handleSave = (e) => {
-    if (blog.category.length < 1) {
+    if (!blog.category) {
       console.log("creating category");
       createCategoryData();
     } else {
       console.log("updating category");
       updateCategoryData();
     }
+    checkUser();
+
+    dispatch(getBlogger(user));
     setOpen(false);
   };
 
   useEffect(() => {
-    setCategoryData(blog.category);
+    if (blog.category) {
+      setCategoryData(blog.category);
+    } else {
+      return null;
+    }
   }, [blog.category]);
+  console.log(categoryData);
 
   const createCategoryData = async () => {
     try {
@@ -43,8 +56,7 @@ const CategoryInput = ({ id, open, setOpen }) => {
         })
       )
         .then((res) => {
-          const data = res.data.createCategory;
-          dispatch(getCategories(data.list, data.id));
+          console.log("created");
         })
         .catch((err) => {
           updateCategoryData();
@@ -64,34 +76,52 @@ const CategoryInput = ({ id, open, setOpen }) => {
         })
       )
         .then((res) => {
-          const data = res.data.updateCategory;
-          console.log(res.data.updateCategory);
-          dispatch(getCategories(data.list, data.id));
+          console.log("updated");
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+        });
     } catch (err) {
       console.log(JSON.stringify(err, null, 2));
+    }
+  };
+
+  const checkUser = async () => {
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+      const userData = await API.graphql(
+        graphqlOperation(getUser, { id: user.attributes.sub })
+      );
+      dispatch(
+        getProfile(
+          userData.data.getUser,
+          user.signInUserSession.accessToken.jwtToken
+        )
+      );
+    } catch (err) {
+      console.log(err);
     }
   };
 
   return (
     <div className="w-full">
       <div className="flex-grow py-4 px-2">
-        {categoryData.map((category) => (
-          <div key={category} className="py-1 px-1 inline-block">
-            <div
-              className="inline-block bg-dark text-white text-xs font-semibold px-2 py-1 rounded-lg cursor-pointer"
-              onClick={() => {
-                const newCategories = categoryData.filter(
-                  (c) => c !== category
-                );
-                setCategoryData(newCategories);
-              }}
-            >
-              {category}
+        {categoryData &&
+          categoryData.map((category) => (
+            <div key={category} className="py-1 px-1 inline-block">
+              <div
+                className="inline-block bg-dark text-white text-xs font-semibold px-2 py-1 rounded-lg cursor-pointer"
+                onClick={() => {
+                  const newCategories = categoryData.filter(
+                    (c) => c !== category
+                  );
+                  setCategoryData(newCategories);
+                }}
+              >
+                {category}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
       <form onSubmit={(e) => handleSubmit(e)} className="flex px-3 pb-6 gap-2">
         <input
@@ -104,10 +134,12 @@ const CategoryInput = ({ id, open, setOpen }) => {
         <p
           type="submit"
           onClick={() => {
-            !categoryData.includes(input) &&
-              input &&
+            if ((input && categoryData.includes(input)) || !input) {
+              return null;
+            } else {
               setCategoryData([...categoryData, input]);
-            setInput("");
+              setInput("");
+            }
           }}
           className="bg-dark text-white text-sm font-semibold px-4 py-1 max-w-max rounded cursor-pointer"
         >

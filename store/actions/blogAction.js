@@ -1,5 +1,6 @@
 import { API, graphqlOperation } from "aws-amplify";
-import { listPostsWithFilterAndDate } from "../../graphql/queries";
+import { createCategory } from "../../graphql/mutations";
+import { getCategory, listPostsWithFilterAndDate } from "../../graphql/queries";
 
 import {
   CLEAR_BLOGGER,
@@ -41,10 +42,69 @@ export const loadingPosts = () => async (dispatch) => {
 };
 
 export const getBlogger = (profile) => async (dispatch) => {
-  dispatch({
-    type: GET_BLOGGER,
-    payload: { profile: profile },
-  });
+  console.log(profile, profile.category);
+  try {
+    if (profile.category) {
+      await API.graphql(
+        graphqlOperation(getCategory, {
+          id: profile.id,
+        })
+      )
+        .then((res) => {
+          console.log("got category", profile);
+          const category = res.data.getCategory.list;
+          profile.category = category;
+          dispatch({
+            type: GET_BLOGGER,
+            payload: { profile: profile },
+          });
+        })
+        .catch((err) => {
+          console.log(JSON.stringify(err, null, 2));
+        });
+    } else {
+      await API.graphql(
+        graphqlOperation(createCategory, {
+          input: { id: profile.id, owner: profile.username, list: [] },
+        })
+      )
+        .then((res) => {
+          profile.category = [];
+          console.log("category data created", profile);
+          dispatch({
+            type: GET_BLOGGER,
+            payload: { profile: profile },
+          });
+        })
+        .catch(async (err) => {
+          await API.graphql(
+            graphqlOperation(getCategory, {
+              id: profile.id,
+            })
+          )
+            .then((res) => {
+              console.log("got category", profile);
+              const category = res.data.getCategory.list;
+              profile.category = category;
+              dispatch({
+                type: GET_BLOGGER,
+                payload: { profile: profile },
+              });
+            })
+            .catch((err) => {
+              console.log(JSON.stringify(err, null, 2));
+            });
+          // profile.category = [];
+          // console.log("user with no catecory data", profile);
+          // dispatch({
+          //   type: GET_BLOGGER,
+          //   payload: { profile: profile },
+          // });
+        });
+    }
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const clearBlogger = () => async (dispatch) => {

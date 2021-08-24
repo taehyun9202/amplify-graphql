@@ -66,7 +66,9 @@ const PostInput = ({ open, setOpen }) => {
             placeholder="Enter Title"
           />
           <div
-            onClick={(e) => updateCategory(e)}
+            onClick={() =>
+              setPostForm({ ...postForm, public: !postForm.public })
+            }
             className={`flex items-center justify-center text-xs py-1 w-14 text-white cursor-pointer rounded border-2 hover:bg-gray-100 ${
               postForm.public
                 ? "bg-dark border-dark hover:text-dark"
@@ -75,9 +77,6 @@ const PostInput = ({ open, setOpen }) => {
           >
             {postForm.public ? (
               <svg
-                onClick={() =>
-                  setPostForm({ ...postForm, public: !postForm.public })
-                }
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4"
                 fill="none"
@@ -93,9 +92,6 @@ const PostInput = ({ open, setOpen }) => {
               </svg>
             ) : (
               <svg
-                onClick={() =>
-                  setPostForm({ ...postForm, public: !postForm.public })
-                }
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4"
                 fill="none"

@@ -18,8 +18,11 @@ import {
 } from "../../store/actions/blogAction";
 import SidebarWrapper from "../../components/wrapper/SidebarWrapper";
 import Sidebar from "../../components/layouts/BlogSidebar";
+import DialogWrapper from "../../components/wrapper/DialogWrapper";
+import PostInput from "../../components/Input/PostInput";
 
 const Blog = () => {
+  const user = useSelector((state) => state.profile.profile);
   const posts = useSelector((state) => state.blog.posts);
   const blog = useSelector((state) => state.blog.profile);
   const dispatch = useDispatch();
@@ -33,6 +36,7 @@ const Blog = () => {
   const link = useSelector((state) => state.profile.link);
   const [openCategory, setOpenCategory] = useState(true);
   const [openSidebar, setOpenSidebar] = useState(false);
+  const [openTemplate, setOpenTemplate] = useState(false);
 
   useEffect(() => {
     if (blog.username !== router.query.id) {
@@ -260,10 +264,30 @@ const Blog = () => {
             </>
           )}
         </div>
-        <BlogPost post={selected} />
+        <div className="flex flex-col">
+          {user.username === router.query.id && (
+            <p
+              onClick={() => setOpenTemplate(true)}
+              className="bg-dark py-1 w-28 text-center text-white cursor-pointer rounded border-2 border-dark hover:bg-gray-100 hover:text-dark"
+            >
+              Add New Post
+            </p>
+          )}
+          <BlogPost post={selected} />
 
-        <p>Other posts from this category</p>
+          <p>Other posts from this category</p>
+        </div>
       </div>
+
+      {openTemplate && (
+        <DialogWrapper
+          open={openTemplate}
+          setOpen={setOpenTemplate}
+          title="New Post"
+        >
+          <PostInput />
+        </DialogWrapper>
+      )}
       {openSidebar && (
         <SidebarWrapper open={openSidebar} setOpen={setOpenSidebar}>
           <Sidebar />

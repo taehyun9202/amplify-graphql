@@ -8,6 +8,7 @@ import DialogWrapper from "../wrapper/DialogWrapper";
 
 import CategoryInput from "../Input/CategoryInput";
 import DescriptionInput from "../Input/DescriptionInput";
+import PostInput from "../Input/PostInput";
 
 const Sidebar = () => {
   const dispatch = useDispatch();
@@ -19,6 +20,7 @@ const Sidebar = () => {
   const [openCategory, setOpenCategory] = useState(true);
   const router = useRouter();
   const [openDialog, setOpenDialog] = useState(false);
+  const [openTemplate, setOpenTemplate] = useState(false);
 
   return (
     <div className="text-sm font-semibold pb-10 md:pb-80 bg-white">
@@ -38,10 +40,18 @@ const Sidebar = () => {
           </div>
           <p className="absolute text-xs top-32 mt-2">Add Profile Image</p>
         </div>
-        <div className="px-2 pb-10 pt-4">
+        <div className="relative px-2 pb-10 pt-4">
           <p className="font-bold">{router.query.id}</p>
           <p className="pb-4 text-xs font-normal">({blog.email})</p>
           <DescriptionInput />
+          {user.username === router.query.id && (
+            <p
+              onClick={() => setOpenTemplate(true)}
+              className="absolute bottom-2 right-3 text-red-600 hover:underline cursor-pointer"
+            >
+              New Post
+            </p>
+          )}
         </div>
       </div>
 
@@ -183,14 +193,25 @@ const Sidebar = () => {
       </nav>
 
       <SidebarFriends />
+      {openTemplate && (
+        <DialogWrapper
+          open={openTemplate}
+          setOpen={setOpenTemplate}
+          title="New Post"
+        >
+          <PostInput />
+        </DialogWrapper>
+      )}
 
-      <DialogWrapper
-        open={openDialog}
-        setOpen={setOpenDialog}
-        title="New Category"
-      >
-        <CategoryInput id={user.username} />
-      </DialogWrapper>
+      {openDialog && (
+        <DialogWrapper
+          open={openDialog}
+          setOpen={setOpenDialog}
+          title="New Category"
+        >
+          <CategoryInput id={user.username} />
+        </DialogWrapper>
+      )}
     </div>
   );
 };

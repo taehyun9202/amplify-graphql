@@ -7,6 +7,9 @@ module.exports = {
         dark: "#333333",
       },
     },
+    // minHeight: {
+    //   96: "384px",
+    // },
   },
   variants: {
     extend: {

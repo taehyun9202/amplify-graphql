@@ -14,18 +14,6 @@ export const createPost = /* GraphQL */ `
       public
       view
       like
-      type
-      comments {
-        items {
-          id
-          owner
-          content
-          like
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
       category
       createdAt
       updatedAt

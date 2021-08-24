@@ -69,7 +69,10 @@ const BlogPost = ({ post }) => {
           </svg>
         </div>
       </div>
-      <ReactMarkdown remarkPlugins={[[remarkGfm, { singleTilde: false }]]}>
+      <ReactMarkdown
+        className="min-h-96"
+        remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
+      >
         {post?.content}
       </ReactMarkdown>
       <div className="flex justify-between items-center mt-16">

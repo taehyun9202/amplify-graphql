@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@aws-amplify/ui-react": "^1.2.10",
-    "@headlessui/react": "^1.4.0",
+    "@headlessui/react": "0.0.0-b59c091",
     "aws-amplify": "^4.2.4",
     "next": "11.1.0",
     "next-redux-wrapper": "^7.0.2",

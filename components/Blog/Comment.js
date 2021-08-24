@@ -40,20 +40,20 @@ const Comment = ({ comment, type, lastComment }) => {
           />
         </svg>
       </div>
-      <p>{comment.content}</p>
+      <p className="py-1">{comment.content}</p>
       <p className="text-xs text-gray-500">{comment.updatedAt.split("T")[0]}</p>
       {type === "comment" && (
         <div className="flex justify-between items-center pt-2">
           <p
             onClick={() => setOpenReply(!openReply)}
-            className="text-xs border px-2 py-1 rounded cursor-pointer"
+            className="text-xs border px-2 py-1 rounded cursor-pointer hover:bg-white"
           >
             Reply {type === "comment" && `(${comment.reply.items.length})`}
           </p>
           <div className="flex items-center justify-center border px-2 py-1 rounded cursor-pointer gap-1">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4"
+              className="h-4 w-4 hover:text-pink-600"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -65,7 +65,7 @@ const Comment = ({ comment, type, lastComment }) => {
                 d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
               />
             </svg>
-            <p className="text-xs">{comment.like}</p>
+            <p className="text-xs">{comment.like ? comment.like : "0"}</p>
           </div>
         </div>
       )}

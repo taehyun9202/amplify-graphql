@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { API, graphqlOperation } from "aws-amplify";
-import { createComment } from "../../graphql/mutations";
+import { createComment, createReply } from "../../graphql/mutations";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { getPosts } from "../../store/actions/blogAction";
@@ -14,20 +14,46 @@ const CommentInput = ({ type, id }) => {
   const handleSubmit = async () => {
     console.log(id, user.username, input);
     try {
-      await API.graphql(
-        graphqlOperation(createComment, {
-          input: { commentPostId: id, owner: user.username, content: input },
-        })
-      )
-        .then((res) => {
-          const data = res.data.createComment;
-          console.log(data);
-          dispatch(getPosts(router.query.id));
-          setInput("");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      switch (type) {
+        case "comment":
+          return await API.graphql(
+            graphqlOperation(createComment, {
+              input: {
+                commentPostId: id,
+                owner: user.username,
+                content: input,
+              },
+            })
+          )
+            .then((res) => {
+              const data = res.data.createComment;
+              console.log(data);
+              dispatch(getPosts(router.query.id));
+              setInput("");
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        case "reply":
+          return await API.graphql(
+            graphqlOperation(createReply, {
+              input: {
+                replyCommentId: id,
+                owner: user.username,
+                content: input,
+              },
+            })
+          )
+            .then((res) => {
+              const data = res.data.createReply;
+              console.log(data);
+              dispatch(getPosts(router.query.id));
+              setInput("");
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+      }
     } catch (err) {
       console.log(err);
     }
@@ -103,7 +129,7 @@ const CommentInput = ({ type, id }) => {
           </div>
         </div>
         <p
-          onClick={() => handleSubmit()}
+          onClick={() => handleSubmit(type)}
           className="w-28 py-2 text-xs text-center cursor-pointer font-bold bg-dark text-white hover:bg-gray-200 hover:text-black capitalize"
         >
           {type}

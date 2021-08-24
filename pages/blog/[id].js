@@ -190,7 +190,7 @@ const Blog = () => {
                   <div
                     onClick={() => setSelected(post)}
                     key={post.id}
-                    className="group grid grid-cols-4 md:grid-cols-12 border-b py-1 cursor-pointer text-gray-400"
+                    className="group grid grid-cols-4 md:grid-cols-12 border-b py-1 cursor-pointer text-gray-400 text-xs"
                   >
                     <div className="flex gap-2 col-span-2 md:col-span-9">
                       {!post.public && (

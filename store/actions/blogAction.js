@@ -7,6 +7,7 @@ import {
   GET_BLOGGER,
   GET_POSTS,
   LOADING_POSTS,
+  PUT_BLOGGER,
 } from "../types";
 
 export const getPosts = (username) => async (dispatch) => {
@@ -54,9 +55,16 @@ export const clearBlogger = () => async (dispatch) => {
 };
 
 export const getCurrentPost = (id) => async (dispatch) => {
-  console.log(id);
   dispatch({
     type: CURRENT_POST,
     payload: { current },
   });
 };
+
+// export const putBloger = (update) => async (dispatch) => {
+//   console.log(update);
+//   dispatch({
+//     type: PUT_BLOGGER,
+//     payload: { current },
+//   });
+// };

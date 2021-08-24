@@ -7,6 +7,7 @@ import { useRouter } from "next/dist/client/router";
 import DialogWrapper from "../wrapper/DialogWrapper";
 
 import CategoryInput from "../Input/CategoryInput";
+import DescriptionInput from "../Input/DescriptionInput";
 
 const Sidebar = () => {
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ const Sidebar = () => {
   const [openDialog, setOpenDialog] = useState(false);
 
   return (
-    <div className="hidden sm:block text-sm font-semibold pb-80">
+    <div className="text-sm font-semibold pb-10 md:pb-80 bg-white">
       <div className="w-52 bg-dark pt-12 text-gray-400 ">
         <div className="px-2 flex gap-2 pb-36">
           <a className="cursor-pointer hover:underline hover:text-red-600">
@@ -39,9 +40,8 @@ const Sidebar = () => {
         </div>
         <div className="px-2 pb-10 pt-4">
           <p className="font-bold">{router.query.id}</p>
-          <p className="pb-4">(/user.email/)</p>
-          <p>Welcome to {router.query.id} blog</p>
-          <p>profile</p>
+          <p className="pb-4 text-xs font-normal">({blog.email})</p>
+          <DescriptionInput />
         </div>
       </div>
 

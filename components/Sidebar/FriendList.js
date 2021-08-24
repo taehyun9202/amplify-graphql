@@ -3,7 +3,7 @@ import Image from "next/image";
 const FriendList = ({ type }) => {
   const [dummy, setDummy] = useState(["tyler", "lena", "royce", "luke"]);
   return (
-    <div>
+    <div className="flex flex-col h-60">
       <div className="relative p-2">
         <input
           className="border-2 w-full outline-none pl-2 pr-6 h-8"
@@ -26,7 +26,7 @@ const FriendList = ({ type }) => {
         </svg>
       </div>
 
-      <div className="border-t border-b py-4 mx-2">
+      <div className="border-t border-b py-4 mx-2 flex-1">
         <div className="grid grid-cols-3 gap-2">
           {type === "Followings" &&
             dummy.map((friend, idx) => (

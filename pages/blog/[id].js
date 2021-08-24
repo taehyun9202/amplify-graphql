@@ -16,9 +16,12 @@ import {
   getBlogger,
   getPosts,
 } from "../../store/actions/blogAction";
+import SidebarWrapper from "../../components/wrapper/SidebarWrapper";
+import Sidebar from "../../components/layouts/BlogSidebar";
 
 const Blog = () => {
   const posts = useSelector((state) => state.blog.posts);
+  const blog = useSelector((state) => state.blog.profile);
   const dispatch = useDispatch();
   const [myPosts, setMyPosts] = useState([]);
   const [filtered, setFiltered] = useState([]);
@@ -29,9 +32,10 @@ const Blog = () => {
   const loggedInUser = useSelector((state) => state.profile.profile.username);
   const link = useSelector((state) => state.profile.link);
   const [openCategory, setOpenCategory] = useState(true);
+  const [openSidebar, setOpenSidebar] = useState(true);
 
   useEffect(() => {
-    if (myPosts.length < 1 || username !== loggedInUser) {
+    if (blog.username !== router.query.id) {
       console.log(
         "fetching blog data!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
       );
@@ -87,7 +91,6 @@ const Blog = () => {
   const fetchBlogData = async () => {
     try {
       dispatch(getPosts(router.query.id));
-
       // user data
       console.log("getting user data");
       await API.graphql(
@@ -115,7 +118,26 @@ const Blog = () => {
 
   return (
     <div className="w-full max-w-7xl mx-auto flex text-sm">
-      <BlogSidebar />
+      <div className="absolute group top-4 left-4 sm:hidden cursor-pointer">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          onClick={() => setOpenSidebar(true)}
+          className="h-8 w-8 border-2 border-dark text-dark rounded-full p-1 group-hover:bg-dark group-hover:text-white"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
+        </svg>
+      </div>
+      <div className="hidden sm:block">
+        <BlogSidebar />
+      </div>
       <div className="flex-1 pl-2 md:pl-8 pr-2">
         <BlogHeader />
         <div className="flex justify-between items-center pt-44">
@@ -175,10 +197,10 @@ const Blog = () => {
         <div className="pb-32">
           {openCategory && (
             <>
-              <div className="grid grid-cols-4 md:grid-cols-12 border-b-2 border-gray-400 pb-1 pt-6">
-                <p className="col-span-2 md:col-span-9">Post Title</p>
-                <p className="col-span-1 md:col-span-2 text-center">Likes</p>
-                <p className="col-span-1 text-right">Modified</p>
+              <div className="flex border-b-2 border-gray-400 pb-1 pt-6">
+                <p className="flex-1">Post Title</p>
+                <p className="w-14 text-center">Likes</p>
+                <p className="w-20 text-right">Modified</p>
               </div>
               <div className="flex flex-col-reverse">
                 {filtered.map((post) => (
@@ -190,9 +212,9 @@ const Blog = () => {
                   <div
                     onClick={() => setSelected(post)}
                     key={post.id}
-                    className="group grid grid-cols-4 md:grid-cols-12 border-b py-1 cursor-pointer text-gray-400 text-xs"
+                    className="group flex border-b py-1 cursor-pointer text-gray-400 text-xs"
                   >
-                    <div className="flex gap-2 col-span-2 md:col-span-9">
+                    <div className="flex gap-2 flex-1">
                       {!post.public && (
                         <span className="group-hover:no-underline rounded-full text-red-600">
                           [private]
@@ -202,10 +224,10 @@ const Blog = () => {
                         {post.title}
                       </p>
                     </div>
-                    <p className="col-span-1 md:col-span-2 text-center group-hover:text-black">
+                    <p className="w-14 text-center group-hover:text-black">
                       {post.like}
                     </p>
-                    <p className="col-span-1 text-right group-hover:text-black">
+                    <p className="w-20 text-right group-hover:text-black">
                       {post.updatedAt.split("T")[0]}
                     </p>
                   </div>
@@ -239,6 +261,11 @@ const Blog = () => {
 
         <p>Other posts from this category</p>
       </div>
+      {openSidebar && (
+        <SidebarWrapper open={openSidebar} setOpen={setOpenSidebar}>
+          <Sidebar />
+        </SidebarWrapper>
+      )}
     </div>
   );
 };

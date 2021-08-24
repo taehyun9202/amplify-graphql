@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { API, graphqlOperation } from "aws-amplify";
 import { createCategory, updateCategory } from "../../graphql/mutations";
 import { useDispatch, useSelector } from "react-redux";
-import { listCategories } from "../../graphql/queries";
 import { useRouter } from "next/router";
 import { getCategories } from "../../store/actions/blogAction";
 

@@ -42,7 +42,6 @@ const PostInput = ({ open, setOpen }) => {
   }, [selectedCategory]);
 
   const handleSave = async () => {
-    console.log(postForm);
     try {
       await API.graphql(graphqlOperation(createPost, { input: postForm }))
         .then((res) => {

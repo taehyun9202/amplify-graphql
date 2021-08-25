@@ -1,7 +1,25 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Transition } from "@headlessui/react";
+import { useDispatch } from "react-redux";
+import { clearNotification } from "../../store/actions/blogAction";
 
 const NotificationWrapper = ({ open, setOpen, title, message }) => {
+  const dispatch = useDispatch();
+  const [seconds, setSeconds] = useState(3);
+  useEffect(() => {
+    let myInterval = setInterval(() => {
+      if (seconds > 0) {
+        setSeconds(seconds - 1);
+      }
+      if (seconds === 0) {
+        dispatch(clearNotification());
+        setOpen(false);
+      }
+    }, 1000);
+    return () => {
+      clearInterval(myInterval);
+    };
+  });
   const color = () => {
     switch (title) {
       case "Notification":
@@ -34,7 +52,9 @@ const NotificationWrapper = ({ open, setOpen, title, message }) => {
             <div className="flex flex-1 flex-col ">
               <div className="flex justify-between items-center">
                 <p className="text-sm">{title}</p>
-                <p className="text-xs text-dark">disappear in 3 sec</p>
+                <p className="text-xs text-dark">
+                  disappear in {seconds} sec...
+                </p>
               </div>
               <p className="text-sm text-dark">{message}</p>
             </div>

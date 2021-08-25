@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import remarkGfm from "remark-gfm";
 import Image from "next/image";
 import { useRouter } from "next/dist/client/router";
 import PostComment from "./PostComment";
+import { putNotification } from "../../store/actions/blogAction";
 
 const BlogPost = ({ post }) => {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.profile.profile);
   const link = useSelector((state) => state.profile.link);
   const [openComment, setOpenComment] = useState(false);
@@ -40,9 +42,20 @@ const BlogPost = ({ post }) => {
                 .writeText(`http://localhost:3000${router.asPath}`)
                 .then(
                   function () {
-                    alert("Copying to clipboard was successful!");
+                    dispatch(
+                      putNotification({
+                        type: "Notification",
+                        message: "Copying to clipboard was successful!",
+                      })
+                    );
                   },
                   function (err) {
+                    dispatch(
+                      putNotification({
+                        type: "Notification",
+                        message: "Could not copy text",
+                      })
+                    );
                     console.error("Async: Could not copy text: ", err);
                   }
                 );

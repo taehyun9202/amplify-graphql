@@ -2,18 +2,13 @@ import { useRouter } from "next/dist/client/router";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { API, graphqlOperation } from "aws-amplify";
-import {
-  listCategories,
-  listUsers,
-  listPostsWithFilterAndDate,
-} from "../../graphql/queries";
+import { listUsers } from "../../graphql/queries";
 import BlogHeader from "../../components/layouts/BlogHeader";
 import BlogSidebar from "../../components/layouts/BlogSidebar";
 import Link from "next/link";
 import BlogPost from "../../components/Blog/BlogPost";
 import {
   clearBlogger,
-  clearNotification,
   getBlogger,
   getPosts,
 } from "../../store/actions/blogAction";
@@ -34,7 +29,6 @@ const Blog = () => {
   const [numberOfPosts, setNumberOfPosts] = useState(5);
   const [selected, setSelected] = useState(null);
   const router = useRouter();
-  const username = router.query.id;
   const loggedInUser = useSelector((state) => state.profile.profile.username);
   const link = useSelector((state) => state.profile.link);
   const [openCategory, setOpenCategory] = useState(true);
@@ -42,14 +36,11 @@ const Blog = () => {
   const [openTemplate, setOpenTemplate] = useState(false);
   const [openNotification, setOpenNotification] = useState(false);
 
+  console.log(filtered);
+
   useEffect(() => {
     if (notification && notification.message.length > 0) {
       setOpenNotification(true);
-      const timer = setTimeout(() => {
-        console.log("closing");
-        dispatch(clearNotification());
-      }, 3000);
-      return () => clearTimeout(timer);
     } else {
       setOpenNotification(false);
     }
@@ -68,7 +59,7 @@ const Blog = () => {
     setMyPosts(posts);
     setFiltered(posts.slice(posts.length - 5));
     setSelected(posts[posts.length - 1]);
-  }, [router, posts, blog]);
+  }, [router, posts]);
 
   useEffect(() => {
     if (link) {

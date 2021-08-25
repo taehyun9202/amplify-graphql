@@ -1,30 +1,9 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createPost = /* GraphQL */ `
-  mutation CreatePost(
-    $input: CreatePostInput!
-    $condition: ModelPostConditionInput
-  ) {
-    createPost(input: $input, condition: $condition) {
-      id
-      owner
-      title
-      content
-      public
-      view
-      like
-      category
-      createdAt
-    }
-  }
-`;
-export const updatePost = /* GraphQL */ `
-  mutation UpdatePost(
-    $input: UpdatePostInput!
-    $condition: ModelPostConditionInput
-  ) {
-    updatePost(input: $input, condition: $condition) {
+export const onCreatePost = /* GraphQL */ `
+  subscription OnCreatePost {
+    onCreatePost {
       id
       owner
       title
@@ -50,12 +29,9 @@ export const updatePost = /* GraphQL */ `
     }
   }
 `;
-export const deletePost = /* GraphQL */ `
-  mutation DeletePost(
-    $input: DeletePostInput!
-    $condition: ModelPostConditionInput
-  ) {
-    deletePost(input: $input, condition: $condition) {
+export const onUpdatePost = /* GraphQL */ `
+  subscription OnUpdatePost {
+    onUpdatePost {
       id
       owner
       title
@@ -81,12 +57,37 @@ export const deletePost = /* GraphQL */ `
     }
   }
 `;
-export const createComment = /* GraphQL */ `
-  mutation CreateComment(
-    $input: CreateCommentInput!
-    $condition: ModelCommentConditionInput
-  ) {
-    createComment(input: $input, condition: $condition) {
+export const onDeletePost = /* GraphQL */ `
+  subscription OnDeletePost {
+    onDeletePost {
+      id
+      owner
+      title
+      content
+      public
+      view
+      like
+      type
+      comments {
+        items {
+          id
+          owner
+          content
+          like
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      category
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateComment = /* GraphQL */ `
+  subscription OnCreateComment {
+    onCreateComment {
       id
       owner
       content
@@ -123,12 +124,9 @@ export const createComment = /* GraphQL */ `
     }
   }
 `;
-export const updateComment = /* GraphQL */ `
-  mutation UpdateComment(
-    $input: UpdateCommentInput!
-    $condition: ModelCommentConditionInput
-  ) {
-    updateComment(input: $input, condition: $condition) {
+export const onUpdateComment = /* GraphQL */ `
+  subscription OnUpdateComment {
+    onUpdateComment {
       id
       owner
       content
@@ -165,12 +163,9 @@ export const updateComment = /* GraphQL */ `
     }
   }
 `;
-export const deleteComment = /* GraphQL */ `
-  mutation DeleteComment(
-    $input: DeleteCommentInput!
-    $condition: ModelCommentConditionInput
-  ) {
-    deleteComment(input: $input, condition: $condition) {
+export const onDeleteComment = /* GraphQL */ `
+  subscription OnDeleteComment {
+    onDeleteComment {
       id
       owner
       content
@@ -207,12 +202,9 @@ export const deleteComment = /* GraphQL */ `
     }
   }
 `;
-export const createReply = /* GraphQL */ `
-  mutation CreateReply(
-    $input: CreateReplyInput!
-    $condition: ModelReplyConditionInput
-  ) {
-    createReply(input: $input, condition: $condition) {
+export const onCreateReply = /* GraphQL */ `
+  subscription OnCreateReply {
+    onCreateReply {
       id
       owner
       content
@@ -246,12 +238,9 @@ export const createReply = /* GraphQL */ `
     }
   }
 `;
-export const updateReply = /* GraphQL */ `
-  mutation UpdateReply(
-    $input: UpdateReplyInput!
-    $condition: ModelReplyConditionInput
-  ) {
-    updateReply(input: $input, condition: $condition) {
+export const onUpdateReply = /* GraphQL */ `
+  subscription OnUpdateReply {
+    onUpdateReply {
       id
       owner
       content
@@ -285,12 +274,9 @@ export const updateReply = /* GraphQL */ `
     }
   }
 `;
-export const deleteReply = /* GraphQL */ `
-  mutation DeleteReply(
-    $input: DeleteReplyInput!
-    $condition: ModelReplyConditionInput
-  ) {
-    deleteReply(input: $input, condition: $condition) {
+export const onDeleteReply = /* GraphQL */ `
+  subscription OnDeleteReply {
+    onDeleteReply {
       id
       owner
       content
@@ -324,12 +310,9 @@ export const deleteReply = /* GraphQL */ `
     }
   }
 `;
-export const createCategory = /* GraphQL */ `
-  mutation CreateCategory(
-    $input: CreateCategoryInput!
-    $condition: ModelCategoryConditionInput
-  ) {
-    createCategory(input: $input, condition: $condition) {
+export const onCreateCategory = /* GraphQL */ `
+  subscription OnCreateCategory {
+    onCreateCategory {
       id
       owner
       list
@@ -338,12 +321,9 @@ export const createCategory = /* GraphQL */ `
     }
   }
 `;
-export const updateCategory = /* GraphQL */ `
-  mutation UpdateCategory(
-    $input: UpdateCategoryInput!
-    $condition: ModelCategoryConditionInput
-  ) {
-    updateCategory(input: $input, condition: $condition) {
+export const onUpdateCategory = /* GraphQL */ `
+  subscription OnUpdateCategory {
+    onUpdateCategory {
       id
       owner
       list
@@ -352,12 +332,9 @@ export const updateCategory = /* GraphQL */ `
     }
   }
 `;
-export const deleteCategory = /* GraphQL */ `
-  mutation DeleteCategory(
-    $input: DeleteCategoryInput!
-    $condition: ModelCategoryConditionInput
-  ) {
-    deleteCategory(input: $input, condition: $condition) {
+export const onDeleteCategory = /* GraphQL */ `
+  subscription OnDeleteCategory {
+    onDeleteCategory {
       id
       owner
       list
@@ -366,12 +343,9 @@ export const deleteCategory = /* GraphQL */ `
     }
   }
 `;
-export const createUser = /* GraphQL */ `
-  mutation CreateUser(
-    $input: CreateUserInput!
-    $condition: ModelUserConditionInput
-  ) {
-    createUser(input: $input, condition: $condition) {
+export const onCreateUser = /* GraphQL */ `
+  subscription OnCreateUser {
+    onCreateUser {
       id
       username
       image
@@ -386,12 +360,9 @@ export const createUser = /* GraphQL */ `
     }
   }
 `;
-export const updateUser = /* GraphQL */ `
-  mutation UpdateUser(
-    $input: UpdateUserInput!
-    $condition: ModelUserConditionInput
-  ) {
-    updateUser(input: $input, condition: $condition) {
+export const onUpdateUser = /* GraphQL */ `
+  subscription OnUpdateUser {
+    onUpdateUser {
       id
       username
       image
@@ -406,12 +377,9 @@ export const updateUser = /* GraphQL */ `
     }
   }
 `;
-export const deleteUser = /* GraphQL */ `
-  mutation DeleteUser(
-    $input: DeleteUserInput!
-    $condition: ModelUserConditionInput
-  ) {
-    deleteUser(input: $input, condition: $condition) {
+export const onDeleteUser = /* GraphQL */ `
+  subscription OnDeleteUser {
+    onDeleteUser {
       id
       username
       image

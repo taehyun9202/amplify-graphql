@@ -4,7 +4,7 @@ import Comment from "./Comment";
 
 const PostComment = ({ comments, id }) => {
   return (
-    <div className="bg-gray-100 px-2 md:px-4 my-4 pb-6">
+    <div className="bg-gray-100 px-2 md:px-4 my-4 py-4">
       {comments.map((comment, idx) => (
         <Comment
           key={comment.id}

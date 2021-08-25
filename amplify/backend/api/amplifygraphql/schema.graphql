@@ -1,6 +1,6 @@
 type Post
   @model
-  @auth(rules: [{ allow: owner, queries: null }])
+  # @auth(rules: [{ allow: owner, queries: null }])
   @key(
     name: "postByDate"
     fields: ["type", "createdAt"]

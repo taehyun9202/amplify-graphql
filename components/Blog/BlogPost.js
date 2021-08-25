@@ -5,7 +5,6 @@ import remarkGfm from "remark-gfm";
 import Image from "next/image";
 import { useRouter } from "next/dist/client/router";
 import PostComment from "./PostComment";
-import Blog from "../../pages/blog/[id]";
 
 const BlogPost = ({ post }) => {
   const user = useSelector((state) => state.profile.profile);
@@ -96,7 +95,7 @@ const BlogPost = ({ post }) => {
               />
             </svg>
             <p className="text-xs">
-              Add Comment ({post?.comments.items.length})
+              Add Comment {`(${post?.comments.items.length})`}
             </p>
           </div>
           <div className="border border-l-0 px-1 py-1">

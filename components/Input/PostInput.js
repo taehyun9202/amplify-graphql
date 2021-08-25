@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { API, Auth, graphqlOperation } from "aws-amplify";
 import { createPost } from "../../graphql/mutations";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,6 +7,7 @@ import { getPosts } from "../../store/actions/blogAction";
 
 const PostInput = ({ open, setOpen }) => {
   const user = useSelector((state) => state.profile.profile);
+  const blog = useSelector((state) => state.blog.profile);
   const initialForm = {
     title: "",
     content: "",
@@ -19,6 +20,8 @@ const PostInput = ({ open, setOpen }) => {
   };
   const [postForm, setPostForm] = useState(initialForm);
   const [category, setCategory] = useState("");
+  const [tempCategory, setTempCategory] = useState(blog.category);
+  const [selectedCategory, setSelectedCategory] = useState([]);
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -26,16 +29,20 @@ const PostInput = ({ open, setOpen }) => {
     setPostForm({ ...postForm, [e.target.name]: e.target.value });
   };
 
-  const updateCategory = (e) => {
-    e.preventDefault();
-    if (!category || postForm.category.includes(category)) return;
-    const categoryList = [...postForm.category, category];
-    setPostForm({ ...postForm, category: categoryList });
+  const updateCategory = () => {
+    if (tempCategory.includes(category) || !category) {
+      return;
+    }
+    setTempCategory([...tempCategory, category]);
+    setSelectedCategory([...selectedCategory, category]);
     setCategory("");
   };
 
+  useEffect(() => {
+    setPostForm({ ...postForm, category: selectedCategory });
+  }, [selectedCategory]);
+
   const handleSave = async () => {
-    console.log(postForm);
     try {
       await API.graphql(graphqlOperation(createPost, { input: postForm }))
         .then((res) => {
@@ -108,25 +115,72 @@ const PostInput = ({ open, setOpen }) => {
             )}
           </div>
         </div>
-        {postForm.category && (
-          <div className="flex-grow">
-            {postForm.category.map((category) => (
-              <div key={category} className="py-1 px-1 inline-block">
-                <div
-                  className="inline-block bg-dark text-white text-xs font-semibold px-2 py-1 rounded-lg cursor-pointer"
-                  onClick={() => {
-                    const newCategories = postForm.category.filter(
-                      (c) => c !== category
+
+        <div className="flex justify-center items-center">
+          <div className="bg-gray-200 h-0.5 flex-1" />
+          <p className="text-xs text-center w-40">Select or Add Category</p>
+          <div className="bg-gray-200 h-0.5 flex-1" />
+        </div>
+        <div className="flex-grow">
+          {/* {blog.category?.map((category) => (
+            <div key={category} className="py-1 px-1 inline-block">
+              <div
+                className={`inline-block bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded-lg cursor-pointer ${
+                  postForm.category.includes(category)
+                    ? "bg-dark"
+                    : "bg-red-600"
+                }`}
+                onClick={() => {
+                  if (postForm.category.includes(category)) {
+                    let newCategory = postForm.category.filter(
+                      (item) => item !== category
                     );
-                    setPostForm({ ...postForm, category: newCategories });
-                  }}
-                >
-                  {category}
-                </div>
+                    console.log(newCategory);
+                    setPostForm({ ...postForm, category: newCategory });
+                  } else {
+                    let newCategory = [...postForm.category, category];
+                    console.log(newCategory);
+                    setPostForm({ ...postForm, category: newCategory });
+                  }
+                }}
+              >
+                {category}
               </div>
-            ))}
-          </div>
-        )}
+            </div>
+          ))} */}
+          {tempCategory.map((category) => (
+            <div key={category} className="py-1 px-1 inline-block">
+              <div
+                className={`inline-block text-white text-xs font-semibold px-2 py-1 rounded-lg cursor-pointer ${
+                  selectedCategory.includes(category) ? "bg-dark" : "bg-red-600"
+                }`}
+                onClick={() => {
+                  if (!selectedCategory.includes(category)) {
+                    setSelectedCategory([...selectedCategory, category]);
+                  } else {
+                    setSelectedCategory(
+                      selectedCategory.filter((item) => item !== category)
+                    );
+                  }
+                  // if (postForm.category.includes(category)) {
+                  //   let newCategory = postForm.category.filter(
+                  //     (item) => item !== category
+                  //   );
+                  //   console.log(newCategory);
+                  //   setPostForm({ ...postForm, category: newCategory });
+                  // } else {
+                  //   let newCategory = [...postForm.category, category];
+                  //   console.log(newCategory);
+                  //   setPostForm({ ...postForm, category: newCategory });
+                  // }
+                }}
+              >
+                {category}
+              </div>
+            </div>
+          ))}
+        </div>
+
         <div
           className="flex gap-4"
           // onSubmit={(e) => updateCategory(e)}
@@ -140,7 +194,9 @@ const PostInput = ({ open, setOpen }) => {
             placeholder="Enter Category"
           />
           <p
-            onClick={(e) => updateCategory(e)}
+            onClick={() => {
+              updateCategory();
+            }}
             className="bg-dark text-xs py-1 w-14 text-center text-white cursor-pointer rounded border-2 border-dark hover:bg-gray-100 hover:text-dark"
           >
             Add

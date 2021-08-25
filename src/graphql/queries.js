@@ -56,52 +56,6 @@ export const listPosts = /* GraphQL */ `
     }
   }
 `;
-export const listPostsWithFilterAndDate = /* GraphQL */ `
-  query postByDate(
-    $filter: ModelPostFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    postByDate(
-      type: "Post"
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        title
-        content
-        category
-        view
-        like
-        public
-        comments {
-          items {
-            id
-            content
-            owner
-            like
-            reply {
-              items {
-                id
-                content
-                owner
-                like
-                updatedAt
-              }
-            }
-            updatedAt
-          }
-        }
-        createdAt
-        updatedAt
-        owner
-      }
-      nextToken
-    }
-  }
-`;
 export const getComment = /* GraphQL */ `
   query GetComment($id: ID!) {
     getComment(id: $id) {
@@ -341,7 +295,6 @@ export const postByDate = /* GraphQL */ `
         category
         createdAt
         updatedAt
-        modified
       }
       nextToken
     }

@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import CommentInput from "../Input/CommentInput";
+import moment from "moment";
 
 const Comment = ({ comment, type, lastComment }) => {
+  var date = moment();
+
+  console.log(date.format());
   const [openReply, setOpenReply] = useState(false);
 
   return (
@@ -41,7 +45,8 @@ const Comment = ({ comment, type, lastComment }) => {
         </svg>
       </div>
       <p className="py-1">{comment.content}</p>
-      <p className="text-xs text-gray-500">{comment.updatedAt.split("T")[0]}</p>
+      <p className="text-xs text-gray-500">{comment.updatedAt.split(".")[0]}</p>
+
       {type === "comment" && (
         <div className="flex justify-between items-center pt-2">
           <p

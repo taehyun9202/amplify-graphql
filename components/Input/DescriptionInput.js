@@ -5,7 +5,11 @@ import { API, Auth, graphqlOperation } from "aws-amplify";
 import { updateUser } from "../../graphql/mutations";
 import { getUser, listUsers } from "../../graphql/queries";
 import { getProfile } from "../../store/actions/profileAction";
-import { clearBlogger, getBlogger } from "../../store/actions/blogAction";
+import {
+  clearBlogger,
+  getBlogger,
+  putNotification,
+} from "../../store/actions/blogAction";
 
 const DescriptionInput = () => {
   const dispatch = useDispatch();
@@ -46,10 +50,22 @@ const DescriptionInput = () => {
           dispatch(clearBlogger());
           console.log(err);
         });
+      dispatch(
+        putNotification({
+          type: "Notification",
+          message: "Blog Intro Updated",
+        })
+      );
       setEdit(false);
     } catch (err) {
       console.log(JSON.stringify(err, null, 2));
       console.log(err);
+      dispatch(
+        putNotification({
+          type: "Danger",
+          message: "Something Went Wrong",
+        })
+      );
     }
   };
 

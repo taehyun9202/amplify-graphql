@@ -4,11 +4,13 @@ import { getCategory, listPostsWithFilterAndDate } from "../../graphql/queries";
 
 import {
   CLEAR_BLOGGER,
+  CLEAR_NOTIFICATION,
   CURRENT_POST,
   GET_BLOGGER,
   GET_POSTS,
   LOADING_POSTS,
   PUT_BLOGGER,
+  PUT_NOTIFICATION,
 } from "../types";
 
 export const getPosts = (username) => async (dispatch) => {
@@ -119,6 +121,24 @@ export const getCurrentPost = (id) => async (dispatch) => {
   dispatch({
     type: CURRENT_POST,
     payload: { current },
+  });
+};
+
+export const putNotification =
+  ({ type, message }) =>
+  async (dispatch) => {
+    const notification = { type: type, message: message };
+    dispatch({
+      type: PUT_NOTIFICATION,
+      payload: { notification },
+    });
+  };
+
+export const clearNotification = () => async (dispatch) => {
+  const notification = { type: "", message: "" };
+  dispatch({
+    type: CLEAR_NOTIFICATION,
+    payload: { notification },
   });
 };
 

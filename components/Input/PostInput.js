@@ -3,7 +3,7 @@ import { API, Auth, graphqlOperation } from "aws-amplify";
 import { createPost } from "../../graphql/mutations";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { getPosts } from "../../store/actions/blogAction";
+import { getPosts, putNotification } from "../../store/actions/blogAction";
 
 const PostInput = ({ open, setOpen }) => {
   const user = useSelector((state) => state.profile.profile);
@@ -49,12 +49,30 @@ const PostInput = ({ open, setOpen }) => {
           console.log("created", res.data);
           dispatch(getPosts(router.query.id));
           setOpen(false);
+          dispatch(
+            putNotification({
+              type: "Notification",
+              message: "New Post Created",
+            })
+          );
         })
         .catch((err) => {
           console.log(err);
+          dispatch(
+            putNotification({
+              type: "Danger",
+              message: "Something Went Wrong",
+            })
+          );
         });
     } catch (err) {
       console.log(err);
+      dispatch(
+        putNotification({
+          type: "Danger",
+          message: "Something Went Wrong",
+        })
+      );
     }
   };
   return (

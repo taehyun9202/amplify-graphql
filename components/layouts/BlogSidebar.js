@@ -40,7 +40,7 @@ const Sidebar = () => {
           </div>
           <p className="absolute text-xs top-32 mt-2">Add Profile Image</p>
         </div>
-        <div className="relative px-2 pb-10 pt-4">
+        <div className="relative px-2 pb-14 pt-4">
           <p className="font-bold">{router.query.id}</p>
           <p className="pb-4 text-xs font-normal">({blog.email})</p>
           <DescriptionInput />

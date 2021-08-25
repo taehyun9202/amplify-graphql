@@ -1,16 +1,22 @@
 import {
   CLEAR_BLOGGER,
+  CLEAR_NOTIFICATION,
   CURRENT_POST,
   GET_BLOGGER,
   GET_POSTS,
   LOADING_POSTS,
   PUT_BLOGGER,
+  PUT_NOTIFICATION,
 } from "../types";
 
 const initialState = {
   posts: [],
   profile: {},
   current: {},
+  notification: {
+    type: "",
+    message: "",
+  },
   loading: false,
 };
 export const blogReducer = (state = initialState, action) => {
@@ -43,6 +49,12 @@ export const blogReducer = (state = initialState, action) => {
         profile: action.payload.profile,
         current: action.payload.current,
         loading: false,
+      };
+    case PUT_NOTIFICATION:
+    case CLEAR_NOTIFICATION:
+      return {
+        ...state,
+        notification: action.payload.notification,
       };
     default:
       return state;

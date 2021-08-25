@@ -13,6 +13,7 @@ import Link from "next/link";
 import BlogPost from "../../components/Blog/BlogPost";
 import {
   clearBlogger,
+  clearNotification,
   getBlogger,
   getPosts,
 } from "../../store/actions/blogAction";
@@ -20,11 +21,13 @@ import SidebarWrapper from "../../components/wrapper/SidebarWrapper";
 import Sidebar from "../../components/layouts/BlogSidebar";
 import DialogWrapper from "../../components/wrapper/DialogWrapper";
 import PostInput from "../../components/Input/PostInput";
+import NotificationWrapper from "../../components/wrapper/NotificationWrapper";
 
 const Blog = () => {
   const user = useSelector((state) => state.profile.profile);
   const posts = useSelector((state) => state.blog.posts);
   const blog = useSelector((state) => state.blog.profile);
+  const notification = useSelector((state) => state.blog.notification);
   const dispatch = useDispatch();
   const [myPosts, setMyPosts] = useState([]);
   const [filtered, setFiltered] = useState([]);
@@ -37,6 +40,20 @@ const Blog = () => {
   const [openCategory, setOpenCategory] = useState(true);
   const [openSidebar, setOpenSidebar] = useState(false);
   const [openTemplate, setOpenTemplate] = useState(false);
+  const [openNotification, setOpenNotification] = useState(false);
+
+  useEffect(() => {
+    if (notification && notification.message.length > 0) {
+      setOpenNotification(true);
+      const timer = setTimeout(() => {
+        console.log("closing");
+        dispatch(clearNotification());
+      }, 3000);
+      return () => clearTimeout(timer);
+    } else {
+      setOpenNotification(false);
+    }
+  }, [notification]);
 
   useEffect(() => {
     if (blog.username !== router.query.id) {
@@ -286,6 +303,14 @@ const Blog = () => {
         <SidebarWrapper open={openSidebar} setOpen={setOpenSidebar}>
           <Sidebar />
         </SidebarWrapper>
+      )}
+      {openNotification && (
+        <NotificationWrapper
+          open={openNotification}
+          setOpen={setOpenNotification}
+          title={notification.type}
+          message={notification.message}
+        />
       )}
     </div>
   );

@@ -3,7 +3,7 @@ import { API, Auth, graphqlOperation } from "aws-amplify";
 import { createCategory, updateCategory } from "../../graphql/mutations";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { getBlogger } from "../../store/actions/blogAction";
+import { getBlogger, putNotification } from "../../store/actions/blogAction";
 import { getUser } from "../../graphql/queries";
 import { getProfile } from "../../store/actions/profileAction";
 
@@ -32,6 +32,12 @@ const CategoryInput = ({ id, open, setOpen }) => {
     } else {
       console.log("updating category");
       updateCategoryData();
+      dispatch(
+        putNotification({
+          type: "Notification",
+          message: "Category Updated",
+        })
+      );
     }
     checkUser();
 
@@ -60,7 +66,6 @@ const CategoryInput = ({ id, open, setOpen }) => {
         })
         .catch((err) => {
           updateCategoryData();
-          // console.log(err);
         });
     } catch (err) {
       console.log(err);

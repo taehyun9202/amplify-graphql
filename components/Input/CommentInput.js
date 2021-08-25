@@ -3,7 +3,7 @@ import { API, graphqlOperation } from "aws-amplify";
 import { createComment, createReply } from "../../graphql/mutations";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { getPosts } from "../../store/actions/blogAction";
+import { getPosts, putNotification } from "../../store/actions/blogAction";
 
 const CommentInput = ({ type, id }) => {
   const dispatch = useDispatch();
@@ -30,6 +30,12 @@ const CommentInput = ({ type, id }) => {
               console.log(data);
               dispatch(getPosts(router.query.id));
               setInput("");
+              dispatch(
+                putNotification({
+                  type: "Notification",
+                  message: "Comment Added",
+                })
+              );
             })
             .catch((err) => {
               console.log(err);
@@ -49,6 +55,12 @@ const CommentInput = ({ type, id }) => {
               console.log(data);
               dispatch(getPosts(router.query.id));
               setInput("");
+              dispatch(
+                putNotification({
+                  type: "Notification",
+                  message: "Comment Added",
+                })
+              );
             })
             .catch((err) => {
               console.log(err);

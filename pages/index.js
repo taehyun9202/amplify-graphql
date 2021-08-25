@@ -18,8 +18,10 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    getData();
-    getAllUser();
+    if (user) {
+      getData();
+      getAllUser();
+    }
   }, [user]);
 
   useEffect(() => {

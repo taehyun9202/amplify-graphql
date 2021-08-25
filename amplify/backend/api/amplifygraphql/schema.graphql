@@ -13,8 +13,8 @@ type Post
   public: Boolean!
   view: Int
   like: Int
-  type: String!
   comments: [Comment] @connection(name: "PostComments", sortField: "createdAt")
+  type: String!
   category: [String]
   createdAt: String!
 }

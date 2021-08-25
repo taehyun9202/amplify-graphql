@@ -11,7 +11,6 @@ export const onCreatePost = /* GraphQL */ `
       public
       view
       like
-      type
       comments {
         items {
           id
@@ -23,6 +22,7 @@ export const onCreatePost = /* GraphQL */ `
         }
         nextToken
       }
+      type
       category
       createdAt
       updatedAt
@@ -39,7 +39,6 @@ export const onUpdatePost = /* GraphQL */ `
       public
       view
       like
-      type
       comments {
         items {
           id
@@ -51,6 +50,7 @@ export const onUpdatePost = /* GraphQL */ `
         }
         nextToken
       }
+      type
       category
       createdAt
       updatedAt
@@ -67,7 +67,6 @@ export const onDeletePost = /* GraphQL */ `
       public
       view
       like
-      type
       comments {
         items {
           id
@@ -79,6 +78,7 @@ export const onDeletePost = /* GraphQL */ `
         }
         nextToken
       }
+      type
       category
       createdAt
       updatedAt
@@ -101,10 +101,10 @@ export const onCreateComment = /* GraphQL */ `
         public
         view
         like
-        type
         comments {
           nextToken
         }
+        type
         category
         createdAt
         updatedAt
@@ -140,10 +140,10 @@ export const onUpdateComment = /* GraphQL */ `
         public
         view
         like
-        type
         comments {
           nextToken
         }
+        type
         category
         createdAt
         updatedAt
@@ -179,10 +179,10 @@ export const onDeleteComment = /* GraphQL */ `
         public
         view
         like
-        type
         comments {
           nextToken
         }
+        type
         category
         createdAt
         updatedAt

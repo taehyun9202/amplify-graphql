@@ -41,6 +41,7 @@ export const listPosts = /* GraphQL */ `
         owner
         title
         content
+        category
         public
         view
         like
@@ -48,7 +49,6 @@ export const listPosts = /* GraphQL */ `
         comments {
           nextToken
         }
-        category
         createdAt
         updatedAt
       }
@@ -70,12 +70,14 @@ export const listPostsWithFilterAndDate = /* GraphQL */ `
     ) {
       items {
         id
+        owner
         title
         content
         category
+        public
         view
         like
-        public
+        type
         comments {
           items {
             id
@@ -96,7 +98,6 @@ export const listPostsWithFilterAndDate = /* GraphQL */ `
         }
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -341,7 +342,6 @@ export const postByDate = /* GraphQL */ `
         category
         createdAt
         updatedAt
-        modified
       }
       nextToken
     }

@@ -12,6 +12,7 @@ import {
 } from "../types";
 
 export const getPosts = (username) => async (dispatch) => {
+  console.log("getting post");
   try {
     await API.graphql(
       graphqlOperation(listPostsWithFilterAndDate, {
@@ -31,7 +32,7 @@ export const getPosts = (username) => async (dispatch) => {
       })
       .catch((err) => console.log(JSON.stringify(err, null, 2)));
   } catch (err) {
-    console.log(err);
+    console.log(err, JSON.stringify(err, null, 2));
   }
 };
 

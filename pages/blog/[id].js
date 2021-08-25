@@ -211,11 +211,6 @@ const Blog = () => {
               </div>
               <div className="flex flex-col-reverse">
                 {filtered.map((post) => (
-                  // <Link
-                  //   href={`/blog/${username}?post=${post.id}`}
-                  //   key={post.id}
-                  //   passHref
-                  // >
                   <div
                     onClick={() => setSelected(post)}
                     key={post.id}
@@ -238,7 +233,6 @@ const Blog = () => {
                       {post.updatedAt.split("T")[0]}
                     </p>
                   </div>
-                  // </Link>
                 ))}
               </div>
 

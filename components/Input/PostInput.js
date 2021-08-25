@@ -16,7 +16,6 @@ const PostInput = ({ open, setOpen }) => {
     owner: user.username,
     like: 0,
     view: 0,
-    type: "Post",
   };
   const [postForm, setPostForm] = useState(initialForm);
   const [category, setCategory] = useState("");
@@ -43,6 +42,7 @@ const PostInput = ({ open, setOpen }) => {
   }, [selectedCategory]);
 
   const handleSave = async () => {
+    console.log(postForm);
     try {
       await API.graphql(graphqlOperation(createPost, { input: postForm }))
         .then((res) => {

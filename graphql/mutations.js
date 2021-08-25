@@ -14,8 +14,20 @@ export const createPost = /* GraphQL */ `
       public
       view
       like
+      comments {
+        items {
+          id
+          owner
+          content
+          like
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       category
       createdAt
+      updatedAt
     }
   }
 `;
@@ -32,7 +44,6 @@ export const updatePost = /* GraphQL */ `
       public
       view
       like
-      type
       comments {
         items {
           id
@@ -44,6 +55,7 @@ export const updatePost = /* GraphQL */ `
         }
         nextToken
       }
+      type
       category
       createdAt
       updatedAt
@@ -63,7 +75,6 @@ export const deletePost = /* GraphQL */ `
       public
       view
       like
-      type
       comments {
         items {
           id
@@ -75,6 +86,7 @@ export const deletePost = /* GraphQL */ `
         }
         nextToken
       }
+      type
       category
       createdAt
       updatedAt
@@ -100,10 +112,10 @@ export const createComment = /* GraphQL */ `
         public
         view
         like
-        type
         comments {
           nextToken
         }
+        type
         category
         createdAt
         updatedAt
@@ -142,10 +154,10 @@ export const updateComment = /* GraphQL */ `
         public
         view
         like
-        type
         comments {
           nextToken
         }
+        type
         category
         createdAt
         updatedAt
@@ -184,10 +196,10 @@ export const deleteComment = /* GraphQL */ `
         public
         view
         like
-        type
         comments {
           nextToken
         }
+        type
         category
         createdAt
         updatedAt

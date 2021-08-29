@@ -125,8 +125,6 @@ const Profile = () => {
 
   return (
     <>
-      <HomeHeader />
-
       <div className="-mt-16 max-w-7xl mx-auto">
         {uiState === "signUp" && (
           <SignUp

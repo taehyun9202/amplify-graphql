@@ -6,6 +6,7 @@ import store from "../store/store";
 import Amplify from "aws-amplify";
 import config from "../aws-exports";
 import { useRouter } from "next/router";
+import HomeHeader from "../components/layouts/HomeHeader";
 
 Amplify.configure(config);
 
@@ -14,6 +15,7 @@ function MyApp({ Component, pageProps }) {
   console.log(router);
   return (
     <Provider store={store}>
+      {!router.pathname.includes("blog") && <HomeHeader />}
       <Component {...pageProps} />
     </Provider>
   );

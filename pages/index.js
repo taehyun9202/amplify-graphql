@@ -69,7 +69,6 @@ export default function Home() {
   if (!user.username)
     return (
       <div>
-        <HomeHeader />
         <div className="max-w-7xl mx-auto flex flex-col items-center justify-center min-h-screen -mt-16">
           <p>Need to Sign up</p>
         </div>
@@ -85,7 +84,6 @@ export default function Home() {
       </Head>
 
       <div>
-        <HomeHeader />
         <div className="max-w-7xl mx-auto flex flex-col items-center justify-center min-h-screen -mt-16">
           <div className="flex flex-col gap-2">
             <p className="text-lg font-semibold my-2">Other Bloggers</p>

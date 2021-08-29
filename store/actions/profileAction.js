@@ -1,4 +1,10 @@
-import { GET_USER, LOG_OUT, PUT_LINK } from "../types";
+import {
+  CLEAR_SEARCH,
+  GET_USER,
+  LOG_OUT,
+  PUT_LINK,
+  PUT_SEARCH,
+} from "../types";
 
 export const getProfile = (user, token) => async (dispatch) => {
   const profile = user;
@@ -23,5 +29,21 @@ export const logOut = () => async (dispatch) => {
   dispatch({
     type: LOG_OUT,
     payload: { profile, token },
+  });
+};
+
+export const putSearch = (type, input) => async (dispatch) => {
+  const search = { type: type, input: input };
+  dispatch({
+    type: PUT_SEARCH,
+    payload: { search },
+  });
+};
+
+export const clearSearch = () => async (dispatch) => {
+  const search = { type: "", input: "" };
+  dispatch({
+    type: CLEAR_SEARCH,
+    payload: { search },
   });
 };

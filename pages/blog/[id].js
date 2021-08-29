@@ -131,6 +131,8 @@ const Blog = () => {
     }
   };
 
+  if (!user.username) router.push("/");
+
   return (
     <div className="w-full max-w-7xl mx-auto flex text-sm">
       <div className="absolute group top-4 left-4 sm:hidden cursor-pointer">

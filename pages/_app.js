@@ -5,10 +5,13 @@ import { createWrapper } from "next-redux-wrapper";
 import store from "../store/store";
 import Amplify from "aws-amplify";
 import config from "../aws-exports";
+import { useRouter } from "next/router";
 
 Amplify.configure(config);
 
 function MyApp({ Component, pageProps }) {
+  const router = useRouter();
+  console.log(router);
   return (
     <Provider store={store}>
       <Component {...pageProps} />

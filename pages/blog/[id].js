@@ -47,6 +47,9 @@ const Blog = () => {
   }, [notification]);
 
   useEffect(() => {
+    if (!user.username) {
+      router.push("/");
+    }
     if (blog.username !== router.query.id) {
       console.log(
         "fetching blog data!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
@@ -130,8 +133,6 @@ const Blog = () => {
       console.log(err);
     }
   };
-
-  if (!user.username) router.push("/");
 
   return (
     <div className="w-full max-w-7xl mx-auto flex text-sm">

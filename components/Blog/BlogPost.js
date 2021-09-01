@@ -11,6 +11,7 @@ import { Storage } from "aws-amplify";
 const BlogPost = ({ post }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.profile.profile);
+  const blogger = useSelector((state) => state.blog.profile);
   const link = useSelector((state) => state.profile.link);
   const [openComment, setOpenComment] = useState(false);
   const [fileURL, setFileURL] = useState(null);
@@ -26,7 +27,7 @@ const BlogPost = ({ post }) => {
   }, []);
 
   const getImage = async () => {
-    Storage.get(`${post?.title}-${user.username}.jpg`)
+    Storage.get(`${post?.title}-${blogger.username}.jpg`)
       .then((res) => {
         setFileURL(res);
       })

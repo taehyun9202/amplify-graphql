@@ -8,10 +8,10 @@ const NotificationWrapper = ({ open, setOpen, title, message }) => {
   const [seconds, setSeconds] = useState(3);
   useEffect(() => {
     let myInterval = setInterval(() => {
-      if (seconds > 0) {
+      if (open && seconds > 0) {
         setSeconds(seconds - 1);
       }
-      if (seconds === 0) {
+      if (open && seconds === 0) {
         dispatch(clearNotification());
         setOpen(false);
       }

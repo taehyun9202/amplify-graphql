@@ -59,7 +59,11 @@ const Blog = () => {
       clearBlogger();
     }
     setMyPosts(posts);
-    setFiltered(posts.slice(posts.length - 5));
+    if (posts.length > numberOfPosts) {
+      setFiltered(posts.slice(posts.length - 5));
+    } else {
+      setFiltered(posts);
+    }
     setSelected(posts[posts.length - 1]);
   }, [router, posts]);
 
@@ -107,6 +111,7 @@ const Blog = () => {
         setFiltered(myPosts.slice(myPosts.length - parseInt(numberOfPosts)));
       } else {
         setFiltered(myPosts);
+        console.log(filtered);
       }
     } else {
       const filterByLink = myPosts.filter((post) =>
@@ -177,7 +182,7 @@ const Blog = () => {
         <BlogHeader />
         <div className="flex justify-between items-center pt-44">
           <p>
-            4 Post(s) from{" "}
+            {filtered.length} Post(s) from{" "}
             <span
               onClick={() => setOpenCategory(!openCategory)}
               className="font-semibold cursor-pointer hover:underline"

@@ -11,6 +11,7 @@ type Post
   title: String!
   content: String!
   public: Boolean!
+  photo: S3Object
   view: Int
   like: Int
   comments: [Comment] @connection(name: "PostComments", sortField: "createdAt")
@@ -48,7 +49,7 @@ type Category @model {
 type User @model {
   id: ID!
   username: String!
-  image: String
+  image: S3Object
   blogname: String
   description: String
   category: [String!]
@@ -58,15 +59,8 @@ type User @model {
   createdAt: String!
 }
 
-# type Event
-#   @model
-#   @key(
-#     name: "queryName"
-#     fields: ["queryName", "createdAt"]
-#     queryField: "itemsByDate"
-#   ) {
-#   id: ID!
-#   name: String!
-#   createdAt: String!
-#   queryName: String!
-# }
+type S3Object {
+  bucket: String!
+  region: String!
+  key: String!
+}

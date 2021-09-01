@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { API, Auth, graphqlOperation } from "aws-amplify";
+import { API, Auth, graphqlOperation, Storage } from "aws-amplify";
 import { createPost } from "../../graphql/mutations";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { getPosts, putNotification } from "../../store/actions/blogAction";
-
+import awsmobile from "../../aws-exports";
+import Image from "next/image";
 const PostInput = ({ open, setOpen }) => {
   const user = useSelector((state) => state.profile.profile);
   const blog = useSelector((state) => state.blog.profile);
@@ -13,6 +14,7 @@ const PostInput = ({ open, setOpen }) => {
     content: "",
     category: [],
     public: true,
+    photo: { bucket: "", region: "", key: "" },
     owner: user.username,
     like: 0,
     view: 0,
@@ -21,12 +23,54 @@ const PostInput = ({ open, setOpen }) => {
   const [category, setCategory] = useState("");
   const [tempCategory, setTempCategory] = useState(blog.category);
   const [selectedCategory, setSelectedCategory] = useState([]);
+
+  const [image, setImage] = useState("");
+  const [preview, setPreview] = useState("");
+  const [imageType, setImageType] = useState("");
+  const [error, setError] = useState("");
+
   const dispatch = useDispatch();
   const router = useRouter();
 
   const handleChange = (e) => {
     setPostForm({ ...postForm, [e.target.name]: e.target.value });
   };
+
+  const imageHandler = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageType(file.name.split(".")[1]);
+      setImage(file);
+
+      // store image as preview
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onload = (e) => {
+        setPreview(e.target.result);
+      };
+    }
+  };
+
+  useEffect(() => {
+    if (imageType !== "jpg") {
+      setError("Only JPG file is allowed");
+    } else {
+      setError("");
+    }
+  }, [imageType]);
+
+  useEffect(() => {
+    setPostForm({
+      ...postForm,
+      photo: {
+        bucket: awsmobile.aws_user_files_s3_bucket,
+        region: awsmobile.aws_user_files_s3_bucket_region,
+        key: "public/" + postForm.title + "-" + postForm.owner,
+      },
+    });
+    console.log("image detected", postForm);
+  }, [image, preview]);
 
   const updateCategory = () => {
     if (tempCategory.includes(category) || !category) {
@@ -43,10 +87,22 @@ const PostInput = ({ open, setOpen }) => {
 
   const handleSave = async () => {
     try {
+      if (image.name) {
+        await Storage.put(
+          postForm.title + "-" + postForm.owner + "." + imageType,
+          image,
+          { contentType: "image/jpeg" }
+        )
+          .then(() => {
+            console.log("saved image", postForm);
+            setImage("");
+          })
+          .catch((err) => console.log(err));
+      }
+
       await API.graphql(graphqlOperation(createPost, { input: postForm }))
         .then((res) => {
           console.log("created", res.data);
-          dispatch(getPosts(router.query.id));
           setOpen(false);
           dispatch(
             putNotification({
@@ -54,6 +110,7 @@ const PostInput = ({ open, setOpen }) => {
               message: "New Post Created",
             })
           );
+          dispatch(getPosts(router.query.id));
         })
         .catch((err) => {
           console.log(err);
@@ -139,32 +196,6 @@ const PostInput = ({ open, setOpen }) => {
           <div className="bg-gray-200 h-0.5 flex-1" />
         </div>
         <div className="flex-grow">
-          {/* {blog.category?.map((category) => (
-            <div key={category} className="py-1 px-1 inline-block">
-              <div
-                className={`inline-block bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded-lg cursor-pointer ${
-                  postForm.category.includes(category)
-                    ? "bg-dark"
-                    : "bg-red-600"
-                }`}
-                onClick={() => {
-                  if (postForm.category.includes(category)) {
-                    let newCategory = postForm.category.filter(
-                      (item) => item !== category
-                    );
-                    console.log(newCategory);
-                    setPostForm({ ...postForm, category: newCategory });
-                  } else {
-                    let newCategory = [...postForm.category, category];
-                    console.log(newCategory);
-                    setPostForm({ ...postForm, category: newCategory });
-                  }
-                }}
-              >
-                {category}
-              </div>
-            </div>
-          ))} */}
           {tempCategory.map((category) => (
             <div key={category} className="py-1 px-1 inline-block">
               <div
@@ -179,17 +210,6 @@ const PostInput = ({ open, setOpen }) => {
                       selectedCategory.filter((item) => item !== category)
                     );
                   }
-                  // if (postForm.category.includes(category)) {
-                  //   let newCategory = postForm.category.filter(
-                  //     (item) => item !== category
-                  //   );
-                  //   console.log(newCategory);
-                  //   setPostForm({ ...postForm, category: newCategory });
-                  // } else {
-                  //   let newCategory = [...postForm.category, category];
-                  //   console.log(newCategory);
-                  //   setPostForm({ ...postForm, category: newCategory });
-                  // }
                 }}
               >
                 {category}
@@ -227,6 +247,18 @@ const PostInput = ({ open, setOpen }) => {
           type="text"
           placeholder="Enter Content"
         />
+        {preview && (
+          <div className="relative w-96 h-60 m-auto">
+            <Image
+              src={preview}
+              alt="post image"
+              layout="fill"
+              className="object-contain"
+            />
+          </div>
+        )}
+        <input type="file" onChange={(e) => imageHandler(e)} />
+        {error.length > 0 && <p className="text-red-600">{error}</p>}
       </div>
       <div className="text-lg font-semibold leading-6 text-white bg-dark p-4 text-center cursor-pointer">
         <p onClick={() => handleSave()}>Save</p>

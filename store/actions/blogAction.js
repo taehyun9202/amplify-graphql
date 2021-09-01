@@ -14,7 +14,6 @@ import {
 } from "../types";
 
 export const getPosts = (username) => async (dispatch) => {
-  console.log("getting post");
   try {
     await API.graphql(
       graphqlOperation(listPostsWithFilterAndDate, {
@@ -45,7 +44,6 @@ export const loadingPosts = () => async (dispatch) => {
 };
 
 export const getBlogger = (profile) => async (dispatch) => {
-  console.log(profile, profile.category);
   try {
     if (profile.category) {
       await API.graphql(
@@ -54,7 +52,6 @@ export const getBlogger = (profile) => async (dispatch) => {
         })
       )
         .then((res) => {
-          console.log("got category", profile);
           const category = res.data.getCategory.list;
           profile.category = category;
           dispatch({
@@ -73,7 +70,6 @@ export const getBlogger = (profile) => async (dispatch) => {
       )
         .then((res) => {
           profile.category = [];
-          console.log("category data created", profile);
           dispatch({
             type: GET_BLOGGER,
             payload: { profile: profile },
@@ -86,7 +82,6 @@ export const getBlogger = (profile) => async (dispatch) => {
             })
           )
             .then((res) => {
-              console.log("got category", profile);
               const category = res.data.getCategory.list;
               profile.category = category;
               dispatch({

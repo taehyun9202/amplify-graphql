@@ -6,18 +6,34 @@ import Image from "next/image";
 import { useRouter } from "next/dist/client/router";
 import PostComment from "./PostComment";
 import { putNotification } from "../../store/actions/blogAction";
+import { Storage } from "aws-amplify";
 
 const BlogPost = ({ post }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.profile.profile);
   const link = useSelector((state) => state.profile.link);
   const [openComment, setOpenComment] = useState(false);
+  const [fileURL, setFileURL] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
     setOpenComment(false);
+    getImage();
   }, [post]);
 
+  useEffect(() => {
+    getImage();
+  }, []);
+
+  const getImage = async () => {
+    Storage.get(`${post?.title}-${user.username}.jpg`)
+      .then((res) => {
+        setFileURL(res);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  console.log(post, fileURL);
   return (
     <div className="pb-40">
       <p className="text-lg text-gray-200">{link}</p>
@@ -87,6 +103,7 @@ const BlogPost = ({ post }) => {
       >
         {post?.content}
       </ReactMarkdown>
+      {fileURL && <img src={fileURL} alt={"post image"} />}
       <div className="flex justify-between items-center mt-16">
         <div
           onClick={() => setOpenComment(!openComment)}

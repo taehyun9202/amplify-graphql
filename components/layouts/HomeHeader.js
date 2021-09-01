@@ -67,7 +67,7 @@ const HomeHeader = () => {
 
       <div>
         <Link href="/profile">
-          <a>Login / Register</a>
+          <a>{user.username ? `Hello ${user.username}` : "Login / Register"}</a>
         </Link>
       </div>
     </header>

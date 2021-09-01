@@ -193,25 +193,22 @@ const Sidebar = () => {
       </nav>
 
       <SidebarFriends />
-      {openTemplate && (
-        <DialogWrapper
-          open={openTemplate}
-          setOpen={setOpenTemplate}
-          title="New Post"
-        >
-          <PostInput />
-        </DialogWrapper>
-      )}
 
-      {openDialog && (
-        <DialogWrapper
-          open={openDialog}
-          setOpen={setOpenDialog}
-          title="New Category"
-        >
-          <CategoryInput id={user.username} />
-        </DialogWrapper>
-      )}
+      <DialogWrapper
+        open={openTemplate}
+        setOpen={setOpenTemplate}
+        title="New Post"
+      >
+        <PostInput />
+      </DialogWrapper>
+
+      <DialogWrapper
+        open={openDialog}
+        setOpen={setOpenDialog}
+        title="New Category"
+      >
+        <CategoryInput id={user.username} />
+      </DialogWrapper>
     </div>
   );
 };

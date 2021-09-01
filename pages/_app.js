@@ -12,7 +12,6 @@ Amplify.configure(config);
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
-  console.log(router);
   return (
     <Provider store={store}>
       {!router.pathname.includes("blog") && <HomeHeader />}

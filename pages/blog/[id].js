@@ -36,8 +36,6 @@ const Blog = () => {
   const [openTemplate, setOpenTemplate] = useState(false);
   const [openNotification, setOpenNotification] = useState(false);
 
-  console.log(filtered);
-
   useEffect(() => {
     if (notification && notification.message.length > 0) {
       setOpenNotification(true);
@@ -56,7 +54,6 @@ const Blog = () => {
       );
       fetchBlogData();
     } else {
-      console.log("refetch blog data");
       clearBlogger();
     }
     setMyPosts(posts);
@@ -284,28 +281,24 @@ const Blog = () => {
         </div>
       </div>
 
-      {openTemplate && (
-        <DialogWrapper
-          open={openTemplate}
-          setOpen={setOpenTemplate}
-          title="New Post"
-        >
-          <PostInput />
-        </DialogWrapper>
-      )}
-      {openSidebar && (
-        <SidebarWrapper open={openSidebar} setOpen={setOpenSidebar}>
-          <Sidebar />
-        </SidebarWrapper>
-      )}
-      {openNotification && (
-        <NotificationWrapper
-          open={openNotification}
-          setOpen={setOpenNotification}
-          title={notification.type}
-          message={notification.message}
-        />
-      )}
+      <DialogWrapper
+        open={openTemplate}
+        setOpen={setOpenTemplate}
+        title="New Post"
+      >
+        <PostInput />
+      </DialogWrapper>
+
+      <SidebarWrapper open={openSidebar} setOpen={setOpenSidebar}>
+        <Sidebar />
+      </SidebarWrapper>
+
+      <NotificationWrapper
+        open={openNotification}
+        setOpen={setOpenNotification}
+        title={notification.type}
+        message={notification.message}
+      />
     </div>
   );
 };

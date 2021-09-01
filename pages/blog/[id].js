@@ -2,10 +2,12 @@ import { useRouter } from "next/dist/client/router";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { API, graphqlOperation } from "aws-amplify";
-import { listUsers } from "../../graphql/queries";
+import { listUsers, getUser } from "../../graphql/queries";
 import BlogHeader from "../../components/layouts/BlogHeader";
 import BlogSidebar from "../../components/layouts/BlogSidebar";
 import Link from "next/link";
+import { getProfile } from "../../store/actions/profileAction";
+import { Auth } from "aws-amplify";
 import BlogPost from "../../components/Blog/BlogPost";
 import {
   clearBlogger,
@@ -46,7 +48,7 @@ const Blog = () => {
 
   useEffect(() => {
     if (!user.username) {
-      router.push("/");
+      checkUser();
     }
     if (blog.username !== router.query.id) {
       console.log(
@@ -60,6 +62,24 @@ const Blog = () => {
     setFiltered(posts.slice(posts.length - 5));
     setSelected(posts[posts.length - 1]);
   }, [router, posts]);
+
+  const checkUser = async () => {
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+      const userData = await API.graphql(
+        graphqlOperation(getUser, { id: user.attributes.sub })
+      );
+      dispatch(
+        getProfile(
+          userData.data.getUser,
+          user.signInUserSession.accessToken.jwtToken
+        )
+      );
+    } catch (err) {
+      console.log(err);
+      router.push("/");
+    }
+  };
 
   useEffect(() => {
     if (link) {
@@ -277,7 +297,7 @@ const Blog = () => {
           )}
           <BlogPost post={selected} />
 
-          <p>Other posts from this category</p>
+          {/* <p>Other posts from this category</p> */}
         </div>
       </div>
 

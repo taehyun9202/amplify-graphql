@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { putSearch } from "../../store/actions/profileAction";
+import { getProfile, putSearch } from "../../store/actions/profileAction";
 import { useRouter } from "next/router";
+import { Auth, graphqlOperation } from "aws-amplify";
+import { getUser } from "../../graphql/queries";
 
 const HomeHeader = () => {
   const dispatch = useDispatch();
@@ -15,6 +17,27 @@ const HomeHeader = () => {
     e.preventDefault();
     dispatch(putSearch(type, input));
     router.push(`/search/${input}`);
+  };
+
+  useEffect(() => {
+    if (!user.username) checkUser();
+  }, []);
+
+  const checkUser = async () => {
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+      const userData = await API.graphql(
+        graphqlOperation(getUser, { id: user.attributes.sub })
+      );
+      dispatch(
+        getProfile(
+          userData.data.getUser,
+          user.signInUserSession.accessToken.jwtToken
+        )
+      );
+    } catch (err) {
+      console.log(err);
+    }
   };
   return (
     <header className="flex items-center bg-theme h-16 px-2 justify-between text-white font-extrabold">

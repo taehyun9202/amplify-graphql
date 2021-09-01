@@ -34,7 +34,7 @@ const BlogPost = ({ post }) => {
       .catch((err) => console.log(err));
   };
 
-  console.log(post, fileURL);
+  if (!post) return null;
   return (
     <div className="pb-40">
       <p className="text-lg text-gray-200">{link}</p>

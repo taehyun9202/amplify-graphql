@@ -7,6 +7,8 @@ import { useRouter } from "next/dist/client/router";
 import PostComment from "./PostComment";
 import { putNotification } from "../../store/actions/blogAction";
 import { Storage } from "aws-amplify";
+import PostInput from "../Input/PostInput";
+import DialogWrapper from "../wrapper/DialogWrapper";
 
 const BlogPost = ({ post }) => {
   const dispatch = useDispatch();
@@ -15,6 +17,7 @@ const BlogPost = ({ post }) => {
   const link = useSelector((state) => state.profile.link);
   const [openComment, setOpenComment] = useState(false);
   const [fileURL, setFileURL] = useState(null);
+  const [openTemplate, setOpenTemplate] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -50,7 +53,6 @@ const BlogPost = ({ post }) => {
           </div>
           <p>{user.username}</p>
           <p>{post?.updatedAt.split("T")[0]}</p>
-          <p>{post?.public ? "Public" : "Private"}</p>
         </div>
         <div className="flex gap-4 items-center">
           <p
@@ -82,20 +84,6 @@ const BlogPost = ({ post }) => {
             Copy URL
           </p>
           <p className="text-xs border px-2 py-1 cursor-pointer">Stats</p>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
-            />
-          </svg>
         </div>
       </div>
       <ReactMarkdown
@@ -164,7 +152,12 @@ const BlogPost = ({ post }) => {
           </div>
         </div>
         <div className="flex justify-center items-center">
-          <p className="text-xs border px-2 py-1 cursor-pointer">Edit</p>
+          <p
+            onClick={() => setOpenTemplate(true)}
+            className="text-xs border px-2 py-1 cursor-pointer"
+          >
+            Edit
+          </p>
           <p className="text-xs border px-2 py-1 cursor-pointer">Delete</p>
           <p className="text-xs border px-2 py-1 cursor-pointer">Settings</p>
         </div>
@@ -173,6 +166,14 @@ const BlogPost = ({ post }) => {
       {openComment && (
         <PostComment comments={post.comments.items} id={post.id} />
       )}
+
+      <DialogWrapper
+        open={openTemplate}
+        setOpen={setOpenTemplate}
+        title="New Post"
+      >
+        <PostInput post={post} />
+      </DialogWrapper>
     </div>
   );
 };

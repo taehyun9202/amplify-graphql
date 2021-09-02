@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
-import { putLink } from "../../store/actions/profileAction";
+import { getProfile, putLink } from "../../store/actions/profileAction";
 import SidebarFriends from "../Sidebar/SidebarFriends";
 import { useRouter } from "next/dist/client/router";
 import DialogWrapper from "../wrapper/DialogWrapper";
@@ -9,6 +9,10 @@ import DialogWrapper from "../wrapper/DialogWrapper";
 import CategoryInput from "../Input/CategoryInput";
 import DescriptionInput from "../Input/DescriptionInput";
 import PostInput from "../Input/PostInput";
+import { API, graphqlOperation, Storage } from "aws-amplify";
+import { updateUser } from "../../graphql/mutations";
+import awsmobile from "../../aws-exports";
+import { putNotification } from "../../store/actions/blogAction";
 
 const Sidebar = () => {
   const dispatch = useDispatch();
@@ -22,6 +26,87 @@ const Sidebar = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [openTemplate, setOpenTemplate] = useState(false);
 
+  const [image, setImage] = useState("");
+  const [fileURL, setFileURL] = useState(null);
+  const [imageType, setImageType] = useState("");
+
+  const hiddenFileInput = useRef(null);
+  const handleClick = (event) => {
+    hiddenFileInput.current.click();
+  };
+
+  useEffect(() => {
+    if (blog.username && blog.image?.key) getProfileImage();
+  }, [blog]);
+
+  const getProfileImage = async () => {
+    try {
+      await Storage.get(`${blog.username}-profile.jpg`)
+        .then((res) => {
+          setFileURL(res);
+        })
+        .catch((err) => setFileURL(null));
+    } catch (err) {
+      setFileURL(null);
+    }
+  };
+
+  const imageHandler = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageType(file.name.split(".")[1]);
+      setImage(file);
+    }
+    Storage.put(user.username + "-profile." + imageType, image, {
+      contentType: "image/jpeg",
+    })
+      .then(() => {
+        console.log("saved image", image);
+        setImage("");
+      })
+      .catch((err) => console.log(err));
+
+    const newUser = {
+      id: user.id,
+      blogname: user.blogname,
+      category: user.category,
+      description: user.description,
+      email: user.email,
+      follower: user.follower,
+      following: user.following,
+      username: user.username,
+      image: {
+        bucket: awsmobile.aws_user_files_s3_bucket,
+        region: awsmobile.aws_user_files_s3_bucket_region,
+        key: "public/" + user.username,
+      },
+    };
+    API.graphql(
+      graphqlOperation(updateUser, {
+        input: newUser,
+        condition: { email: { eq: user.email } },
+      })
+    )
+      .then((res) => {
+        console.log("updated", res.data);
+        dispatch(
+          putNotification({
+            type: "Notification",
+            message: "Profile Image Updated",
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch(
+          putNotification({
+            type: "Danger",
+            message: "Something Went Wrong",
+          })
+        );
+      });
+  };
+
   return (
     <div className="text-sm font-semibold pb-10 md:pb-80 bg-white">
       <div className="w-52 bg-dark pt-12 text-gray-400 ">
@@ -34,12 +119,50 @@ const Sidebar = () => {
             Blog
           </a>
         </div>
-        <div className="relative bg-white w-48 h-48 mx-2 flex flex-col justify-center items-center cursor-pointer">
-          <div className="relative w-16 mx-2 h-16">
-            <Image src="/create-user-image.jpg" alt="Add Image" layout="fill" />
+
+        {user.username === router.query.id ? (
+          <div
+            onClick={() => handleClick()}
+            className="relative bg-white w-48 h-48 mx-2 flex flex-col justify-center items-center cursor-pointer overflow-hidden"
+          >
+            <input
+              type="file"
+              ref={hiddenFileInput}
+              onChange={(e) => imageHandler(e)}
+              className="hidden"
+            />
+
+            {fileURL ? (
+              <img
+                src={fileURL}
+                alt="Add Image"
+                className="object-contain w-48 h-48 z-20"
+              />
+            ) : (
+              <img
+                src="/create-user-image.jpg"
+                alt="Add Image"
+                className="object-contain w-48 h-48 z-20"
+              />
+            )}
           </div>
-          <p className="absolute text-xs top-32 mt-2">Add Profile Image</p>
-        </div>
+        ) : (
+          <div className="relative bg-white w-48 h-48 mx-2 flex flex-col justify-center items-center overflow-hidden">
+            {fileURL ? (
+              <img
+                src={fileURL}
+                alt="Add Image"
+                className="object-contain w-48 h-48 z-20"
+              />
+            ) : (
+              <img
+                src="/create-user-image.jpg"
+                alt="Add Image"
+                className="object-contain w-48 h-48 z-20"
+              />
+            )}
+          </div>
+        )}
         <div className="relative px-2 pb-14 pt-4">
           <p className="font-bold">{router.query.id}</p>
           <p className="pb-4 text-xs font-normal">({blog.email})</p>

@@ -66,7 +66,6 @@ export const updatePost = /* GraphQL */ `
         }
         nextToken
       }
-      type
       category
       createdAt
       updatedAt

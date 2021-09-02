@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { API, Auth, graphqlOperation, Storage } from "aws-amplify";
-import { createPost } from "../../graphql/mutations";
+import { createPost, updatePost } from "../../graphql/mutations";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { getPosts, putNotification } from "../../store/actions/blogAction";
 import awsmobile from "../../aws-exports";
 import Image from "next/image";
-const PostInput = ({ open, setOpen }) => {
+const PostInput = ({ open, setOpen, post = null }) => {
   const user = useSelector((state) => state.profile.profile);
   const blog = useSelector((state) => state.blog.profile);
   const initialForm = {
@@ -19,10 +19,26 @@ const PostInput = ({ open, setOpen }) => {
     like: 0,
     view: 0,
   };
-  const [postForm, setPostForm] = useState(initialForm);
+  const [postForm, setPostForm] = useState(
+    post
+      ? {
+          id: post.id,
+          title: post.title,
+          content: post.content,
+          category: post.category,
+          public: post.public,
+          photo: post.photo,
+          owner: post.owner,
+          like: post.like,
+          view: post.view,
+        }
+      : initialForm
+  );
   const [category, setCategory] = useState("");
   const [tempCategory, setTempCategory] = useState(blog.category);
-  const [selectedCategory, setSelectedCategory] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(
+    post ? post.category : []
+  );
 
   const [image, setImage] = useState("");
   const [preview, setPreview] = useState("");
@@ -69,7 +85,6 @@ const PostInput = ({ open, setOpen }) => {
         key: "public/" + postForm.title + "-" + postForm.owner,
       },
     });
-    console.log("image detected", postForm);
   }, [image, preview]);
 
   const updateCategory = () => {
@@ -84,6 +99,8 @@ const PostInput = ({ open, setOpen }) => {
   useEffect(() => {
     setPostForm({ ...postForm, category: selectedCategory });
   }, [selectedCategory]);
+
+  console.log(post);
 
   const handleSave = async () => {
     try {
@@ -100,27 +117,57 @@ const PostInput = ({ open, setOpen }) => {
           .catch((err) => console.log(err));
       }
 
-      await API.graphql(graphqlOperation(createPost, { input: postForm }))
-        .then((res) => {
-          console.log("created", res.data);
-          setOpen(false);
-          dispatch(
-            putNotification({
-              type: "Notification",
-              message: "New Post Created",
-            })
-          );
-          dispatch(getPosts(router.query.id));
-        })
-        .catch((err) => {
-          console.log(err);
-          dispatch(
-            putNotification({
-              type: "Danger",
-              message: "Something Went Wrong",
-            })
-          );
-        });
+      if (!post) {
+        await API.graphql(graphqlOperation(createPost, { input: postForm }))
+          .then((res) => {
+            console.log("created", res.data);
+            setOpen(false);
+            dispatch(
+              putNotification({
+                type: "Notification",
+                message: "New Post Created",
+              })
+            );
+            dispatch(getPosts(router.query.id));
+          })
+          .catch((err) => {
+            console.log(err);
+            dispatch(
+              putNotification({
+                type: "Danger",
+                message: "Something Went Wrong",
+              })
+            );
+          });
+      } else {
+        console.log(postForm);
+        await API.graphql(
+          graphqlOperation(updatePost, {
+            input: postForm,
+            condition: { owner: { eq: user.username } },
+          })
+        )
+          .then((res) => {
+            console.log("updated", res.data);
+            setOpen(false);
+            dispatch(
+              putNotification({
+                type: "Notification",
+                message: "Post Updated",
+              })
+            );
+            dispatch(getPosts(router.query.id));
+          })
+          .catch((err) => {
+            console.log(err);
+            dispatch(
+              putNotification({
+                type: "Danger",
+                message: "Something Went Wrong",
+              })
+            );
+          });
+      }
     } catch (err) {
       console.log(err);
       dispatch(
@@ -139,12 +186,15 @@ const PostInput = ({ open, setOpen }) => {
       >
         <div className="flex gap-4">
           <input
-            className="w-full outline-none bg-gray-100 rounded px-2"
+            className={`w-full outline-none rounded px-2 ${
+              post ? "bg-gray-400 cursor-not-allowed" : "bg-gray-100"
+            }`}
             name="title"
             value={postForm.title}
             onChange={(e) => handleChange(e)}
             type="text"
             placeholder="Enter Title"
+            disabled={post ? true : false}
           />
           <div
             onClick={() =>

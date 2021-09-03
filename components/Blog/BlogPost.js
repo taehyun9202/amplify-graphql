@@ -151,16 +151,18 @@ const BlogPost = ({ post }) => {
             )}
           </div>
         </div>
-        <div className="flex justify-center items-center">
-          <p
-            onClick={() => setOpenTemplate(true)}
-            className="text-xs border px-2 py-1 cursor-pointer"
-          >
-            Edit
-          </p>
-          <p className="text-xs border px-2 py-1 cursor-pointer">Delete</p>
-          <p className="text-xs border px-2 py-1 cursor-pointer">Settings</p>
-        </div>
+        {user.username === blogger.username && (
+          <div className="flex justify-center items-center">
+            <p
+              onClick={() => setOpenTemplate(true)}
+              className="text-xs border px-2 py-1 cursor-pointer"
+            >
+              Edit
+            </p>
+            <p className="text-xs border px-2 py-1 cursor-pointer">Delete</p>
+            <p className="text-xs border px-2 py-1 cursor-pointer">Settings</p>
+          </div>
+        )}
       </div>
 
       {openComment && (

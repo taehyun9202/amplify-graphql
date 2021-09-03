@@ -28,7 +28,10 @@ const Blog = () => {
   const dispatch = useDispatch();
   const [myPosts, setMyPosts] = useState([]);
   const [filtered, setFiltered] = useState([]);
+  const [categorized, setCategorized] = useState([]);
   const [numberOfPosts, setNumberOfPosts] = useState(5);
+  const [numberOfPage, setNumberOfPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [selected, setSelected] = useState(null);
   const router = useRouter();
   const loggedInUser = useSelector((state) => state.profile.profile.username);
@@ -59,6 +62,9 @@ const Blog = () => {
       clearBlogger();
     }
     setMyPosts(posts);
+    setCategorized(posts);
+    setNumberOfPage(Math.ceil(categorized.length / numberOfPosts));
+
     if (posts.length > numberOfPosts) {
       setFiltered(posts.slice(posts.length - 5));
     } else {
@@ -91,21 +97,27 @@ const Blog = () => {
         post.category.includes(link)
       );
       setFiltered(filterByLink);
+      setCategorized(filterByLink);
+      setNumberOfPage(Math.ceil(categorized.length / numberOfPosts));
+
       if (filterByLink.length >= numberOfPosts) {
         setFiltered(
           filterByLink.slice(filterByLink.length - parseInt(numberOfPosts))
         );
       }
     } else {
+      setCategorized(posts);
+      setNumberOfPage(Math.ceil(categorized.length / numberOfPosts));
       if (myPosts.length >= numberOfPosts) {
         setFiltered(myPosts.slice(myPosts.length - parseInt(numberOfPosts)));
       } else {
         setFiltered(myPosts);
       }
     }
-  }, [link]);
+  }, [link, categorized]);
 
   useEffect(() => {
+    setNumberOfPage(Math.ceil(categorized.length / numberOfPosts));
     if (!link) {
       if (myPosts.length >= numberOfPosts) {
         setFiltered(myPosts.slice(myPosts.length - parseInt(numberOfPosts)));
@@ -128,11 +140,18 @@ const Blog = () => {
     }
   }, [numberOfPosts]);
 
+  useEffect(() => {
+    const filteredPost = categorized.slice(
+      (currentPage - 1) * numberOfPosts,
+      currentPage * numberOfPosts
+    );
+    setFiltered(filteredPost);
+  }, [currentPage]);
+
   const fetchBlogData = async () => {
     try {
       dispatch(getPosts(router.query.id));
       // user data
-      console.log("getting user data");
       await API.graphql(
         graphqlOperation(listUsers, {
           filter: {
@@ -275,6 +294,23 @@ const Blog = () => {
                     Posts Manager
                   </p>
                 </div>
+
+                {categorized.length > numberOfPosts - 1 && (
+                  <div className="flex flex-1 justify-center items-center gap-2">
+                    {[...Array(numberOfPage)].map((a, i) => (
+                      <p
+                        onClick={() => setCurrentPage(i + 1)}
+                        className={`${
+                          i + 1 === currentPage &&
+                          "text-red-600 font-bold underline text-base"
+                        } cursor-pointer`}
+                        key={`pagination ${i + 1}`}
+                      >
+                        {i + 1}
+                      </p>
+                    ))}
+                  </div>
+                )}
 
                 <div>
                   <select

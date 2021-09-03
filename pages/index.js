@@ -65,7 +65,6 @@ export default function Home() {
     }
   };
 
-  console.log(allUser);
   if (!user.username)
     return (
       <div>

@@ -117,6 +117,7 @@ const Blog = () => {
   }, [link, categorized]);
 
   useEffect(() => {
+    setCurrentPage(1);
     setNumberOfPage(Math.ceil(categorized.length / numberOfPosts));
     if (!link) {
       if (myPosts.length >= numberOfPosts) {

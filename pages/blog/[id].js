@@ -262,7 +262,7 @@ const Blog = () => {
                 <p className="w-14 text-center">Likes</p>
                 <p className="w-20 text-right">Modified</p>
               </div>
-              <div className="flex flex-col-reverse">
+              <div className="flex flex-col">
                 {filtered.map((post) => (
                   <div
                     onClick={() => setSelected(post)}

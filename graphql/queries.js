@@ -68,12 +68,14 @@ export const listPosts = /* GraphQL */ `
 `;
 export const listPostsWithFilterAndDate = /* GraphQL */ `
   query postByDate(
+    $sortDirection: ModelSortDirection
     $filter: ModelPostFilterInput
     $limit: Int
     $nextToken: String
   ) {
     postByDate(
       type: "Post"
+      sortDirection: $sortDirection
       filter: $filter
       limit: $limit
       nextToken: $nextToken
@@ -331,48 +333,6 @@ export const listUsers = /* GraphQL */ `
         following
         follower
         email
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const postByDate = /* GraphQL */ `
-  query PostByDate(
-    $type: String
-    $createdAt: ModelStringKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelPostFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    postByDate(
-      type: $type
-      createdAt: $createdAt
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        owner
-        title
-        content
-        public
-        photo {
-          bucket
-          region
-          key
-        }
-        view
-        like
-        comments {
-          nextToken
-        }
-        type
-        category
         createdAt
         updatedAt
       }

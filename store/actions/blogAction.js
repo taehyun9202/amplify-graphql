@@ -17,6 +17,7 @@ export const getPosts = (username) => async (dispatch) => {
   try {
     await API.graphql(
       graphqlOperation(listPostsWithFilterAndDate, {
+        sortDirection: "DESC",
         filter: {
           owner: {
             eq: username,

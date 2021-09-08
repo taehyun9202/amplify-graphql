@@ -66,11 +66,11 @@ const Blog = () => {
     setNumberOfPage(Math.ceil(categorized.length / numberOfPosts));
 
     if (posts.length > numberOfPosts) {
-      setFiltered(posts.slice(posts.length - 5));
+      setFiltered(posts.slice(0, numberOfPosts));
     } else {
       setFiltered(posts);
     }
-    setSelected(posts[posts.length - 1]);
+    setSelected(posts[0]);
   }, [router, posts]);
 
   const checkUser = async () => {
@@ -92,29 +92,30 @@ const Blog = () => {
   };
 
   useEffect(() => {
+    setCurrentPage(1);
     if (link) {
-      const filterByLink = myPosts.filter((post) =>
-        post.category.includes(link)
-      );
-      setFiltered(filterByLink);
+      const filterByLink = posts.filter((post) => post.category.includes(link));
       setCategorized(filterByLink);
-      setNumberOfPage(Math.ceil(categorized.length / numberOfPosts));
-
       if (filterByLink.length >= numberOfPosts) {
+        setNumberOfPage(Math.ceil(filterByLink.length / numberOfPosts));
         setFiltered(
           filterByLink.slice(filterByLink.length - parseInt(numberOfPosts))
         );
+      } else {
+        setFiltered(filterByLink);
       }
     } else {
       setCategorized(posts);
-      setNumberOfPage(Math.ceil(categorized.length / numberOfPosts));
-      if (myPosts.length >= numberOfPosts) {
-        setFiltered(myPosts.slice(myPosts.length - parseInt(numberOfPosts)));
+      setNumberOfPage(Math.ceil(posts.length / numberOfPosts));
+      if (posts.length >= numberOfPosts) {
+        console.log(filtered);
+        setFiltered(posts.slice(0, numberOfPosts));
       } else {
-        setFiltered(myPosts);
+        setFiltered(posts);
+        console.log(filtered);
       }
     }
-  }, [link, categorized]);
+  }, [link]);
 
   useEffect(() => {
     setCurrentPage(1);

@@ -92,7 +92,7 @@ const BlogPost = ({ post }) => {
       >
         {post?.content}
       </ReactMarkdown>
-      {fileURL && <img src={fileURL} alt={"post image"} />}
+      {post.photo.key && <img src={fileURL} alt={"post image"} />}
       <div className="flex justify-between items-center mt-16">
         <div
           onClick={() => setOpenComment(!openComment)}

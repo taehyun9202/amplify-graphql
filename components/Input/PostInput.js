@@ -77,14 +77,16 @@ const PostInput = ({ open, setOpen, post = null }) => {
   }, [imageType]);
 
   useEffect(() => {
-    setPostForm({
-      ...postForm,
-      photo: {
-        bucket: awsmobile.aws_user_files_s3_bucket,
-        region: awsmobile.aws_user_files_s3_bucket_region,
-        key: "public/" + postForm.title + "-" + postForm.owner,
-      },
-    });
+    if (image) {
+      setPostForm({
+        ...postForm,
+        photo: {
+          bucket: awsmobile.aws_user_files_s3_bucket,
+          region: awsmobile.aws_user_files_s3_bucket_region,
+          key: "public/" + postForm.title + "-" + postForm.owner,
+        },
+      });
+    }
   }, [image, preview]);
 
   const updateCategory = () => {

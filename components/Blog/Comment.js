@@ -8,6 +8,7 @@ import {
   clearBlogger,
   getBlogger,
   getPosts,
+  putNotification,
 } from "../../store/actions/blogAction";
 import { listUsers } from "../../graphql/queries";
 import { deleteComment, deleteReply } from "../../graphql/mutations";
@@ -21,20 +22,25 @@ const Comment = ({ comment, type, lastComment }) => {
   console.log(type);
   const deleteCommentHandler = async () => {
     try {
-      switch (type) {
-        case "comment":
-          if (confirm("You are about to delete the current comment.")) {
-            await API.graphql(
-              graphqlOperation(deleteComment, { input: { id: comment.id } })
-            );
-          }
-        case "reply":
-          if (confirm("You are about to delete the current reply.")) {
-            await API.graphql(
-              graphqlOperation(deleteReply, { input: { id: comment.id } })
-            );
-          }
+      if (type === "comment") {
+        if (confirm("You are about to delete the current comment.")) {
+          await API.graphql(
+            graphqlOperation(deleteComment, { input: { id: comment.id } })
+          );
+        }
+      } else {
+        if (confirm("You are about to delete the current reply.")) {
+          await API.graphql(
+            graphqlOperation(deleteReply, { input: { id: comment.id } })
+          );
+        }
       }
+      dispatch(
+        putNotification({
+          type: "Danger",
+          message: "Comment Deleted...",
+        })
+      );
       fetchBlogData();
     } catch (err) {
       console.log(err);

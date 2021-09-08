@@ -14,7 +14,7 @@ import {
 import PostInput from "../Input/PostInput";
 import DialogWrapper from "../wrapper/DialogWrapper";
 import { deletePost } from "../../graphql/mutations";
-import { API, Auth, graphqlOperation, Storage } from "aws-amplify";
+import { API, graphqlOperation, Storage } from "aws-amplify";
 import { listUsers } from "../../graphql/queries";
 
 const BlogPost = ({ post }) => {
@@ -49,6 +49,12 @@ const BlogPost = ({ post }) => {
       if (confirm("You are about to delete the current post.")) {
         await API.graphql(
           graphqlOperation(deletePost, { input: { id: post.id } })
+        );
+        dispatch(
+          putNotification({
+            type: "Danger",
+            message: "Post Deleted...",
+          })
         );
         fetchBlogData();
       }

@@ -50,6 +50,7 @@ const Blog = () => {
   }, [notification]);
 
   useEffect(() => {
+    setCurrentPage(1);
     if (!user.username) {
       checkUser();
     }

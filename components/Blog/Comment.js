@@ -1,13 +1,72 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import CommentInput from "../Input/CommentInput";
-import moment from "moment";
+import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import { API, graphqlOperation, Storage } from "aws-amplify";
+import {
+  clearBlogger,
+  getBlogger,
+  getPosts,
+} from "../../store/actions/blogAction";
+import { listUsers } from "../../graphql/queries";
+import { deleteComment, deleteReply } from "../../graphql/mutations";
 
 const Comment = ({ comment, type, lastComment }) => {
-  var date = moment();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.profile.profile);
+  const router = useRouter();
 
-  console.log(date.format());
   const [openReply, setOpenReply] = useState(false);
+  console.log(type);
+  const deleteCommentHandler = async () => {
+    try {
+      switch (type) {
+        case "comment":
+          if (confirm("You are about to delete the current comment.")) {
+            await API.graphql(
+              graphqlOperation(deleteComment, { input: { id: comment.id } })
+            );
+          }
+        case "reply":
+          if (confirm("You are about to delete the current reply.")) {
+            await API.graphql(
+              graphqlOperation(deleteReply, { input: { id: comment.id } })
+            );
+          }
+      }
+      fetchBlogData();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const fetchBlogData = async () => {
+    try {
+      dispatch(getPosts(router.query.id));
+      // user data
+      await API.graphql(
+        graphqlOperation(listUsers, {
+          filter: {
+            username: {
+              eq: router.query.id,
+            },
+          },
+        })
+      )
+        .then((res) => {
+          const user = res.data.listUsers.items[0];
+          dispatch(getBlogger(user));
+        })
+        .catch((err) => {
+          dispatch(clearBlogger());
+          console.log(err);
+        });
+    } catch (err) {
+      dispatch(clearBlogger());
+      console.log(err);
+    }
+  };
 
   return (
     <div
@@ -27,22 +86,15 @@ const Comment = ({ comment, type, lastComment }) => {
           </div>
           <p className="text-red-600">{comment.owner}</p>
         </div>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className={`h-5 w-5 cursor-pointer p-0.5 rounded-full hover:${
-            type === "comment" ? "bg-gray-200" : "bg-gray-100"
-          }`}
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
-          />
-        </svg>
+        {(user.username === router.query.id ||
+          user.username === comment.owner) && (
+          <p
+            onClick={() => deleteCommentHandler()}
+            className="text-xs border px-2 py-1 rounded cursor-pointer hover:bg-white"
+          >
+            Delete
+          </p>
+        )}
       </div>
       <p className="py-1">{comment.content}</p>
       <p className="text-xs text-gray-500">{comment.updatedAt.split(".")[0]}</p>

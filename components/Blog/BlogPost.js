@@ -5,10 +5,17 @@ import remarkGfm from "remark-gfm";
 import Image from "next/image";
 import { useRouter } from "next/dist/client/router";
 import PostComment from "./PostComment";
-import { putNotification } from "../../store/actions/blogAction";
-import { Storage } from "aws-amplify";
+import {
+  clearBlogger,
+  getBlogger,
+  getPosts,
+  putNotification,
+} from "../../store/actions/blogAction";
 import PostInput from "../Input/PostInput";
 import DialogWrapper from "../wrapper/DialogWrapper";
+import { deletePost } from "../../graphql/mutations";
+import { API, Auth, graphqlOperation, Storage } from "aws-amplify";
+import { listUsers } from "../../graphql/queries";
 
 const BlogPost = ({ post }) => {
   const dispatch = useDispatch();
@@ -35,6 +42,46 @@ const BlogPost = ({ post }) => {
         setFileURL(res);
       })
       .catch((err) => console.log(err));
+  };
+
+  const deletePostHandler = async () => {
+    try {
+      if (confirm("You are about to delete the current post.")) {
+        await API.graphql(
+          graphqlOperation(deletePost, { input: { id: post.id } })
+        );
+        fetchBlogData();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const fetchBlogData = async () => {
+    try {
+      dispatch(getPosts(router.query.id));
+      // user data
+      await API.graphql(
+        graphqlOperation(listUsers, {
+          filter: {
+            username: {
+              eq: router.query.id,
+            },
+          },
+        })
+      )
+        .then((res) => {
+          const user = res.data.listUsers.items[0];
+          dispatch(getBlogger(user));
+        })
+        .catch((err) => {
+          dispatch(clearBlogger());
+          console.log(err);
+        });
+    } catch (err) {
+      dispatch(clearBlogger());
+      console.log(err);
+    }
   };
 
   if (!post) return null;
@@ -157,10 +204,14 @@ const BlogPost = ({ post }) => {
               onClick={() => setOpenTemplate(true)}
               className="text-xs border px-2 py-1 cursor-pointer"
             >
-              Edit
+              Edit Post
             </p>
-            <p className="text-xs border px-2 py-1 cursor-pointer">Delete</p>
-            <p className="text-xs border px-2 py-1 cursor-pointer">Settings</p>
+            <p
+              onClick={() => deletePostHandler()}
+              className="text-xs border px-2 py-1 cursor-pointer"
+            >
+              Delete Post
+            </p>
           </div>
         )}
       </div>

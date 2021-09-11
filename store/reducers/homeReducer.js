@@ -30,7 +30,7 @@ export const homeReducer = (state = initialState, action) => {
     case PUT_LINK:
       return {
         ...state,
-        link: action.payload,
+        link: action.payload.id,
       };
     default:
       return state;

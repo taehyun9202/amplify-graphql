@@ -5,7 +5,6 @@ import { API, graphqlOperation } from "aws-amplify";
 import { listUsers, getUser } from "../../graphql/queries";
 import BlogHeader from "../../components/layouts/BlogHeader";
 import BlogSidebar from "../../components/layouts/BlogSidebar";
-import Link from "next/link";
 import { getProfile } from "../../store/actions/profileAction";
 import { Auth } from "aws-amplify";
 import BlogPost from "../../components/Blog/BlogPost";
@@ -19,6 +18,7 @@ import Sidebar from "../../components/layouts/BlogSidebar";
 import DialogWrapper from "../../components/wrapper/DialogWrapper";
 import PostInput from "../../components/Input/PostInput";
 import NotificationWrapper from "../../components/wrapper/NotificationWrapper";
+import { putLink } from "../../store/actions/homeAction";
 
 const Blog = () => {
   const user = useSelector((state) => state.profile.profile);
@@ -34,8 +34,8 @@ const Blog = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selected, setSelected] = useState(null);
   const router = useRouter();
-  const loggedInUser = useSelector((state) => state.profile.profile.username);
-  const link = useSelector((state) => state.profile.link);
+  const link = useSelector((state) => state.home.link);
+  const category = useSelector((state) => state.blog.category);
   const [openCategory, setOpenCategory] = useState(true);
   const [openSidebar, setOpenSidebar] = useState(false);
   const [openTemplate, setOpenTemplate] = useState(false);
@@ -71,7 +71,12 @@ const Blog = () => {
     } else {
       setFiltered(posts);
     }
-    setSelected(posts[0]);
+    if (link) {
+      const linkedPost = posts.filter((p) => p.id === link)[0];
+      setSelected(linkedPost);
+    } else {
+      setSelected(posts[0]);
+    }
   }, [router, posts]);
 
   const checkUser = async () => {
@@ -94,8 +99,10 @@ const Blog = () => {
 
   useEffect(() => {
     setCurrentPage(1);
-    if (link) {
-      const filterByLink = posts.filter((post) => post.category.includes(link));
+    if (category) {
+      const filterByLink = posts.filter((post) =>
+        post.category.includes(category)
+      );
       setCategorized(filterByLink);
       if (filterByLink.length >= numberOfPosts) {
         setNumberOfPage(Math.ceil(filterByLink.length / numberOfPosts));
@@ -116,12 +123,12 @@ const Blog = () => {
         console.log(filtered);
       }
     }
-  }, [link]);
+  }, [category]);
 
   useEffect(() => {
     setCurrentPage(1);
     setNumberOfPage(Math.ceil(categorized.length / numberOfPosts));
-    if (!link) {
+    if (!category) {
       if (myPosts.length >= numberOfPosts) {
         setFiltered(myPosts.slice(myPosts.length - parseInt(numberOfPosts)));
       } else {
@@ -130,7 +137,7 @@ const Blog = () => {
       }
     } else {
       const filterByLink = myPosts.filter((post) =>
-        post.category.includes(link)
+        post.category.includes(category)
       );
 
       if (filterByLink.length >= numberOfPosts) {
@@ -209,7 +216,7 @@ const Blog = () => {
               onClick={() => setOpenCategory(!openCategory)}
               className="font-semibold cursor-pointer hover:underline"
             >
-              {link ? link : "All Posts"}
+              {category ? category : "All Posts"}
             </span>
           </p>
           {openCategory ? (

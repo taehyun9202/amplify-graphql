@@ -21,7 +21,6 @@ const BlogPost = ({ post }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.profile.profile);
   const blogger = useSelector((state) => state.blog.profile);
-  const link = useSelector((state) => state.profile.link);
   const [openComment, setOpenComment] = useState(false);
   const [fileURL, setFileURL] = useState(null);
   const [openTemplate, setOpenTemplate] = useState(false);
@@ -93,7 +92,6 @@ const BlogPost = ({ post }) => {
   if (!post) return null;
   return (
     <div className="pb-40">
-      <p className="text-lg text-gray-200">{link}</p>
       <p className="text-4xl py-4">{post?.title}</p>
       <div className="flex justify-between pt-4 pb-2 mb-6 border-b">
         <div className="flex gap-4 justify-center items-center">

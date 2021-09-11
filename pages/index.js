@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { clearBlogger } from "../store/actions/blogAction";
-import { getUsers, getAllPosts } from "../store/actions/homeAction";
+import { getUsers, getAllPosts, putLink } from "../store/actions/homeAction";
 import TopPost from "../components/Home/TopPost";
 
 export default function Home() {
@@ -17,7 +17,9 @@ export default function Home() {
   const blog = useSelector((state) => state.blog.profile);
   const posts = useSelector((state) => state.home.posts);
   const users = useSelector((state) => state.home.users);
-  const [topFive, setTopFive] = useState([]);
+  const link = useSelector((state) => state.home.link);
+  const [hotTopicPosts, setHotTopicPosts] = useState([]);
+  const [hotTopic, setHotTopic] = useState("Travel");
   const router = useRouter();
 
   useEffect(() => {
@@ -57,14 +59,20 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const postList = posts
+    const topicList = posts
+      .filter((p) => p.category.includes(hotTopic))
       .sort(function (a, b) {
         return b.like - a.like;
       })
       .slice(0, 5);
-    setTopFive(postList);
-  }, [posts]);
-  console.log(topFive);
+    setHotTopicPosts(topicList);
+  }, [posts, hotTopic]);
+
+  useEffect(() => {
+    if (link) {
+      dispatch(putLink(""));
+    }
+  }, []);
 
   if (!user.username)
     return (
@@ -84,12 +92,88 @@ export default function Home() {
       </Head>
 
       <div>
-        <div className="max-w-7xl mx-auto flex flex-col min-h-screen -mt-16 pt-16">
-          <div className="flex gap-10">
-            {topFive.map((post) => (
-              <TopPost key={post.id} post={post} />
-            ))}
+        <div className="bg-gray-100 py-4 my-10 h-72  px-2 md:px-4">
+          <div className="pb-4 flex justify-between max-w-7xl mx-auto">
+            <p>Hot Topic > {hotTopic}</p>
+            <div className="flex gap-1.5">
+              <div
+                onClick={() => {
+                  setHotTopic("Travel");
+                }}
+                className={`p-0.5 px-2 cursor-pointer bg-white border hover:bg-gray-200 ${
+                  hotTopic === "Travel" && "text-red-600"
+                }`}
+              >
+                <p>1</p>
+              </div>
+              <div
+                onClick={() => {
+                  setHotTopic("Foods");
+                }}
+                className={`p-0.5 px-2 cursor-pointer bg-white border hover:bg-gray-200 ${
+                  hotTopic === "Foods" && "text-red-600"
+                }`}
+              >
+                <p>2</p>
+              </div>
+              <div
+                onClick={() => {
+                  setHotTopic("Sports");
+                }}
+                className={`p-0.5 px-2 cursor-pointer bg-white border hover:bg-gray-200 ${
+                  hotTopic === "Sports" && "text-red-600"
+                }`}
+              >
+                <p>3</p>
+              </div>
+              <div
+                onClick={() => {
+                  setHotTopic("Music");
+                }}
+                className={`p-0.5 px-2 cursor-pointer bg-white border hover:bg-gray-200 ${
+                  hotTopic === "Music" && "text-red-600"
+                }`}
+              >
+                <p>4</p>
+              </div>
+              <div
+                onClick={() => {
+                  setHotTopic("Tennis");
+                }}
+                className={`p-0.5 px-2 cursor-pointer bg-white border hover:bg-gray-200 ${
+                  hotTopic === "Tennis" && "text-red-600"
+                }`}
+              >
+                <p>5</p>
+              </div>
+            </div>
           </div>
+          {hotTopicPosts.length > 0 && (
+            <>
+              <div className="hidden xl:flex gap-10 max-w-7xl mx-auto">
+                {hotTopicPosts.slice(0, 5).map((post) => (
+                  <TopPost key={post.id} post={post} />
+                ))}
+              </div>
+              <div className="hidden lg:flex xl:hidden gap-10 max-w-7xl mx-auto">
+                {hotTopicPosts.slice(0, 4).map((post) => (
+                  <TopPost key={post.id} post={post} />
+                ))}
+              </div>
+              <div className="hidden md:flex lg:hidden gap-10 max-w-7xl mx-auto">
+                {hotTopicPosts.slice(0, 3).map((post) => (
+                  <TopPost key={post.id} post={post} />
+                ))}
+              </div>
+              <div className="flex md:hidden gap-2 max-w-7xl mx-auto">
+                {hotTopicPosts.slice(0, 2).map((post) => (
+                  <TopPost key={post.id} post={post} />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+        <div className="max-w-7xl mx-auto flex flex-col min-h-screen -mt-16 pt-16">
           <div className="flex flex-col gap-2">
             <p className="text-lg font-semibold my-2">Other Bloggers</p>
             {users.map((user) => (

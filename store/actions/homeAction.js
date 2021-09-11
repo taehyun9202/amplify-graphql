@@ -14,10 +14,11 @@ export const getAllPosts = (posts) => async (dispatch) => {
   });
 };
 
-export const putLink = (page) => async (dispatch) => {
+export const putLink = (id) => async (dispatch) => {
+  console.log(id);
   dispatch({
     type: PUT_LINK,
-    payload: page,
+    payload: { id },
   });
 };
 

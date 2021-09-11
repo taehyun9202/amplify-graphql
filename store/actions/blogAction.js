@@ -5,11 +5,11 @@ import { getCategory, listPostsWithFilterAndDate } from "../../graphql/queries";
 import {
   CLEAR_BLOGGER,
   CLEAR_NOTIFICATION,
-  CURRENT_POST,
   GET_BLOGGER,
   GET_POSTS,
   LOADING_POSTS,
   PUT_BLOGGER,
+  PUT_CATEGORY,
   PUT_NOTIFICATION,
 } from "../types";
 
@@ -113,13 +113,6 @@ export const clearBlogger = () => async (dispatch) => {
   });
 };
 
-export const getCurrentPost = (id) => async (dispatch) => {
-  dispatch({
-    type: CURRENT_POST,
-    payload: { current },
-  });
-};
-
 export const putNotification =
   ({ type, message }) =>
   async (dispatch) => {
@@ -129,6 +122,13 @@ export const putNotification =
       payload: { notification },
     });
   };
+
+export const putCategory = (category) => async (dispatch) => {
+  dispatch({
+    type: PUT_CATEGORY,
+    payload: { category },
+  });
+};
 
 export const clearNotification = () => async (dispatch) => {
   const notification = { type: "", message: "" };

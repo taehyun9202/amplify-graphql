@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
-import { getProfile, putLink } from "../../store/actions/profileAction";
+import { getProfile } from "../../store/actions/profileAction";
 import SidebarFriends from "../Sidebar/SidebarFriends";
 import { useRouter } from "next/dist/client/router";
 import DialogWrapper from "../wrapper/DialogWrapper";
@@ -12,7 +12,7 @@ import PostInput from "../Input/PostInput";
 import { API, graphqlOperation, Storage } from "aws-amplify";
 import { updateUser } from "../../graphql/mutations";
 import awsmobile from "../../aws-exports";
-import { putNotification } from "../../store/actions/blogAction";
+import { putCategory, putNotification } from "../../store/actions/blogAction";
 
 const Sidebar = () => {
   const dispatch = useDispatch();
@@ -219,7 +219,7 @@ const Sidebar = () => {
         {openCategory && (
           <div className="flex flex-col py-2 gap-2">
             <div
-              onClick={() => dispatch(putLink(""))}
+              onClick={() => dispatch(putCategory(""))}
               className="flex gap-2 items-center cursor-pointer pl-2"
             >
               <svg
@@ -249,7 +249,7 @@ const Sidebar = () => {
               blog.category.map((item, idx) => (
                 <div
                   key={user.username + idx + item}
-                  onClick={() => dispatch(putLink(item))}
+                  onClick={() => dispatch(putCategory(item))}
                   className="flex gap-2 items-center cursor-pointer pl-2"
                 >
                   <svg

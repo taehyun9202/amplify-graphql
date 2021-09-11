@@ -1,7 +1,12 @@
 import { Storage } from "@aws-amplify/storage";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { putLink } from "../../store/actions/homeAction";
 
 const TopPost = ({ post }) => {
+  const dispatch = useDispatch();
+  const router = useRouter();
   const [fileURL, setFileURL] = useState(null);
   const [profileURL, setProfileURL] = useState(null);
   const [onHover, setOnHover] = useState(false);
@@ -30,21 +35,28 @@ const TopPost = ({ post }) => {
     getProfileImage();
   }, [post]);
 
+  const linkToBlog = () => {
+    dispatch(putLink(post.id));
+    router.push(`/blog/${post.owner}`);
+  };
+
   return (
-    <div>
+    <div className="cursor-pointer" onClick={() => linkToBlog()}>
       {post.photo.key && (
         <img
           onMouseEnter={() => setOnHover(true)}
           onMouseLeave={() => setOnHover(false)}
           src={fileURL}
           alt={"post image"}
-          className="w-60 h-52 object-fill"
+          className="w-52 lg:w-56 h-52 object-fill"
         />
       )}
       <div
-        className={`relative transform transition duration-500 w-60 -top-52 ${
+        className={`relative transform transition duration-500 w-52 lg:w-56 -top-52 ${
           onHover ? "h-52" : "h-0"
         }`}
+        onMouseEnter={() => setOnHover(true)}
+        onMouseLeave={() => setOnHover(false)}
       >
         <div className="absolute w-full h-full bg-gray-800 opacity-70 z-10 " />
         <div

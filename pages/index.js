@@ -8,13 +8,16 @@ import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { clearBlogger } from "../store/actions/blogAction";
+import { getUsers, getAllPosts } from "../store/actions/homeAction";
+import TopPost from "../components/Home/TopPost";
 
 export default function Home() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.profile.profile);
   const blog = useSelector((state) => state.blog.profile);
-  const [allUser, setAllUser] = useState([]);
-  const [posts, setPosts] = useState([]);
+  const posts = useSelector((state) => state.home.posts);
+  const users = useSelector((state) => state.home.users);
+  const [topFive, setTopFive] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -31,23 +34,11 @@ export default function Home() {
   const getData = async () => {
     try {
       const postData = await API.graphql(graphqlOperation(listPosts));
-      setPosts(postData.data.listPosts.items);
+      dispatch(getAllPosts(postData.data.listPosts.items));
     } catch (err) {
       console.log(err);
     }
   };
-
-  // const getSinglePost = async () => {
-  //   try {
-  //     const postData = await API.graphql({
-  //       query: getPost,
-  //       variables: { id: "05405894-f366-4a58-a5c4-eb06ea673918" },
-  //     });
-  //     setPost(postData.data.getPost);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
 
   const getAllUser = async () => {
     try {
@@ -57,13 +48,23 @@ export default function Home() {
         })
       )
         .then((res) => {
-          setAllUser(res.data.listUsers.items);
+          dispatch(getUsers(res.data.listUsers.items));
         })
         .catch((err) => console.log(err));
     } catch (err) {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    const postList = posts
+      .sort(function (a, b) {
+        return b.like - a.like;
+      })
+      .slice(0, 5);
+    setTopFive(postList);
+  }, [posts]);
+  console.log(topFive);
 
   if (!user.username)
     return (
@@ -83,12 +84,17 @@ export default function Home() {
       </Head>
 
       <div>
-        <div className="max-w-7xl mx-auto flex flex-col items-center justify-center min-h-screen -mt-16">
+        <div className="max-w-7xl mx-auto flex flex-col min-h-screen -mt-16 pt-16">
+          <div className="flex gap-10">
+            {topFive.map((post) => (
+              <TopPost key={post.id} post={post} />
+            ))}
+          </div>
           <div className="flex flex-col gap-2">
             <p className="text-lg font-semibold my-2">Other Bloggers</p>
-            {allUser.map((user) => (
+            {users.map((user) => (
               <Link key={user.id} href={`/blog/${user.username}`}>
-                <a className="cursor-pointer bg-gray-100 px-4 py-1 hover:bg-gray-200 capitalize">
+                <a className="cursor-pointer bg-gray-100 px-4 py-1 hover:bg-gray-200 capitalize w-52">
                   - {user.username} Blog
                 </a>
               </Link>

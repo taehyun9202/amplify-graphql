@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { getProfile, putSearch } from "../../store/actions/profileAction";
+import { getProfile, putSearch } from "../../store/actions/homeAction";
 import { useRouter } from "next/router";
 import { API, Auth, graphqlOperation } from "aws-amplify";
 import { getUser } from "../../graphql/queries";
@@ -17,6 +17,7 @@ const HomeHeader = () => {
     e.preventDefault();
     dispatch(putSearch(type, input));
     router.push(`/search/${input}`);
+    setInput("");
   };
 
   useEffect(() => {

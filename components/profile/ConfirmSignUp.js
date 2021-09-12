@@ -62,7 +62,7 @@ const ConfirmSignUp = ({ onChangeHandler, setUiState, confirmSignUp }) => {
               <input type="text" className="h-8 border-b-2 outline-none px-2" />
             </div> */}
             <button
-              className="col-span-2 mt-4 text-lg font-bold flex gap-4 justify-center items-center bg-pink-400 rounded px-4 py-2"
+              className="col-span-2 mt-4 text-lg font-bold flex gap-4 justify-center items-center bg-theme rounded px-4 py-2"
               onClick={() => {
                 confirmSignUp();
                 setUiState("signUp");

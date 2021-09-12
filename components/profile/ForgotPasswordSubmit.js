@@ -22,7 +22,7 @@ const ForgotPasswordSubmit = ({
               />
             </div>
             <button
-              className="mt-4 text-lg font-bold flex gap-4 justify-center items-center bg-pink-400 rounded px-4 py-2"
+              className="mt-4 text-lg font-bold flex gap-4 justify-center items-center bg-theme rounded px-4 py-2"
               onClick={() => {
                 forgotPasswordSubmit();
               }}

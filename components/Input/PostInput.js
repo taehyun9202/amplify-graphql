@@ -15,7 +15,7 @@ const PostInput = ({ open, setOpen, post = null }) => {
     category: [],
     public: true,
     photo: { bucket: "", region: "", key: "" },
-    owner: user.username,
+    owner: blog.username,
     like: 0,
     view: 0,
   };

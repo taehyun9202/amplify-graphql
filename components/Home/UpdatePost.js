@@ -1,6 +1,8 @@
 import { Storage } from "@aws-amplify/storage";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { useDispatch } from "react-redux";
 import { putLink } from "../../store/actions/homeAction";
 
@@ -42,14 +44,26 @@ const UpdatePost = ({ post }) => {
     router.push(`/blog/${post.owner}`);
   };
   return (
-    <article className="px-2 pt-8 border-b">
+    <article className="px-2 py-auto my-4 border-b h-52">
       <div className="flex justify-between items-center gap-10">
         <div>
           <div
             onClick={() => linkToBlog()}
             className="flex justify-start ites-center gap-4 cursor-pointer max-w-max"
           >
-            <img src={profileURL} className="w-10 h-10 rounded-full" />
+            {profileURL ? (
+              <img
+                src={profileURL}
+                alt="user profile image"
+                className="object-fill w-10 h-10 z-20 rounded-full"
+              />
+            ) : (
+              <img
+                src="/create-user-image.jpg"
+                alt="Add Image"
+                className="object-fill w-10 h-10 z-20 rounded-full"
+              />
+            )}
             <div className="flex flex-col justify-center">
               <p className="text-sm">{post.owner}</p>
               <p className="text-xs">{post.createdAt.split("T")[0]}</p>
@@ -62,14 +76,16 @@ const UpdatePost = ({ post }) => {
             >
               {post.title}
             </p>
-            <p
+            <ReactMarkdown
               onClick={() => linkToBlog(true)}
               className="text-sm line-clamp-3 hover:underline cursor-pointer max-w-max"
+              remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
             >
               {post.content}
-            </p>
+            </ReactMarkdown>
           </div>
         </div>
+
         <img
           onClick={() => linkToBlog(true)}
           src={fileURL}

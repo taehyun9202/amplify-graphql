@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { putLink } from "../../store/actions/homeAction";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const TopPost = ({ post }) => {
   const dispatch = useDispatch();
@@ -79,7 +81,12 @@ const TopPost = ({ post }) => {
           )}
           <p className="text-center line-clamp-1">{post.owner}</p>
           <p className="text-center line-clamp-1 text-sm">{post.title}</p>
-          <p className="line-clamp-2 text-center text-sm">{post.content}</p>
+          <ReactMarkdown
+            className="line-clamp-2 text-center text-sm"
+            remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
+          >
+            {post.content}
+          </ReactMarkdown>
         </div>
       </div>
     </article>

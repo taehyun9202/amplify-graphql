@@ -44,6 +44,8 @@ const PostInput = ({ open, setOpen, post = null }) => {
   const [preview, setPreview] = useState("");
   const [imageType, setImageType] = useState("");
   const [error, setError] = useState("");
+  const [titleError, setTitleError] = useState("");
+  const [contentError, setContentError] = useState("");
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -105,6 +107,15 @@ const PostInput = ({ open, setOpen, post = null }) => {
   console.log(post);
 
   const handleSave = async () => {
+    if (!postForm.title || !postForm.content) {
+      if (!postForm.title) {
+        setTitleError("Title Required");
+      } else if (!postForm.content) {
+        setContentError("Content Required");
+      }
+
+      return;
+    }
     try {
       if (image.name) {
         await Storage.put(
@@ -180,6 +191,7 @@ const PostInput = ({ open, setOpen, post = null }) => {
       );
     }
   };
+
   return (
     <div className="w-full">
       <div
@@ -311,6 +323,10 @@ const PostInput = ({ open, setOpen, post = null }) => {
         )}
         <input type="file" onChange={(e) => imageHandler(e)} />
         {error.length > 0 && <p className="text-red-600">{error}</p>}
+        {titleError.length > 0 && <p className="text-red-600">{titleError}</p>}
+        {contentError.length > 0 && (
+          <p className="text-red-600">{contentError}</p>
+        )}
       </div>
       <div className="text-lg font-semibold leading-6 text-white bg-dark p-4 text-center cursor-pointer">
         <p onClick={() => handleSave()}>Save</p>

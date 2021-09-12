@@ -20,7 +20,7 @@ const HotTopic = () => {
   return (
     <section className="bg-gray-100 py-4 my-10 h-72  px-2 md:px-4">
       <div className="pb-4 flex justify-between max-w-7xl mx-auto z-30">
-        <p>Hot Topic > {hotTopic}</p>
+        <p>Hot Topic &gt {hotTopic}</p>
         <nav className="flex gap-1.5 z-30">
           <div
             onClick={() => {

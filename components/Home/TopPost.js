@@ -41,7 +41,7 @@ const TopPost = ({ post }) => {
   };
 
   return (
-    <div className="cursor-pointer" onClick={() => linkToBlog()}>
+    <article className="cursor-pointer" onClick={() => linkToBlog()}>
       {post.photo.key && (
         <img
           onMouseEnter={() => setOnHover(true)}
@@ -77,12 +77,12 @@ const TopPost = ({ post }) => {
               className="object-fill w-12 h-12 z-20 rounded-full"
             />
           )}
-          <p>{post.owner}</p>
-          <p>{post.title}</p>
-          <p className="">{post.content}</p>
+          <p className="text-center line-clamp-1">{post.owner}</p>
+          <p className="text-center line-clamp-1 text-sm">{post.title}</p>
+          <p className="line-clamp-2 text-center text-sm">{post.content}</p>
         </div>
       </div>
-    </div>
+    </article>
   );
 };
 

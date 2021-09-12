@@ -11,6 +11,7 @@
   "dependencies": {
     "@aws-amplify/ui-react": "^1.2.10",
     "@headlessui/react": "0.0.0-b59c091",
+    "@tailwindcss/line-clamp": "^0.2.1",
     "aws-amplify": "^4.2.4",
     "moment": "^2.29.1",
     "next": "11.1.0",

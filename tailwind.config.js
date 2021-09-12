@@ -8,14 +8,11 @@ module.exports = {
         theme: "#00c73c",
       },
     },
-    // minHeight: {
-    //   96: "384px",
-    // },
   },
   variants: {
     extend: {
       fontWeight: ["hover", "focus", "group-hover"],
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/line-clamp")],
 };

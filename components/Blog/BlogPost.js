@@ -20,7 +20,7 @@ import { listUsers } from "../../graphql/queries";
 const BlogPost = ({ post }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.profile.profile);
-  const blogger = useSelector((state) => state.blog.profile);
+  const blog = useSelector((state) => state.blog.profile);
   const [openComment, setOpenComment] = useState(false);
   const [fileURL, setFileURL] = useState(null);
   const [openTemplate, setOpenTemplate] = useState(false);
@@ -36,7 +36,7 @@ const BlogPost = ({ post }) => {
   }, []);
 
   const getImage = async () => {
-    Storage.get(`${post?.title}-${blogger.username}.jpg`)
+    Storage.get(`${post?.title}-${blog.username}.jpg`)
       .then((res) => {
         setFileURL(res);
       })
@@ -102,7 +102,7 @@ const BlogPost = ({ post }) => {
               layout="fill"
             />
           </div>
-          <p>{user.username}</p>
+          <p>{blog.username}</p>
           <p>{post?.updatedAt.split("T")[0]}</p>
         </div>
         <div className="flex gap-4 items-center">
@@ -202,7 +202,7 @@ const BlogPost = ({ post }) => {
             )}
           </div>
         </div>
-        {user.username === blogger.username && (
+        {user.username === blog.username && (
           <div className="flex justify-center items-center">
             <p
               onClick={() => setOpenTemplate(true)}

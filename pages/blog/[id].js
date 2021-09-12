@@ -185,6 +185,15 @@ const Blog = () => {
     }
   };
 
+  useEffect(() => {
+    if (link) {
+      const timer = setTimeout(() => {
+        dispatch(putLink(""));
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [selected]);
+
   return (
     <div className="w-full max-w-7xl mx-auto flex text-sm">
       <div className="absolute group top-4 left-4 sm:hidden cursor-pointer">

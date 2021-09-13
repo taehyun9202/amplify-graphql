@@ -50,12 +50,12 @@ const TopPost = ({ post }) => {
           onMouseLeave={() => setOnHover(false)}
           src={fileURL}
           alt={"post image"}
-          className="w-52 lg:w-56 h-52 object-fill"
+          className="w-48 md:w-52 lg:w-56 h-48 md:h-52 object-fill"
         />
       )}
       <div
-        className={`relative transform transition duration-500 w-52 lg:w-56 -top-52 ${
-          onHover ? "h-52" : "h-0"
+        className={`relative transform transition duration-500 w-48 md:w-52 lg:w-56 -top-52 ${
+          onHover ? "h-48 md:h-52" : "h-0"
         }`}
         onMouseEnter={() => setOnHover(true)}
         onMouseLeave={() => setOnHover(false)}

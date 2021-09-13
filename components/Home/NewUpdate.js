@@ -50,7 +50,7 @@ const NewUpdate = () => {
           </p>
           <p
             onClick={() => setSelected("Foods")}
-            className={`hover:underline cursor-pointer ${
+            className={`hidden sm:block hover:underline cursor-pointer ${
               selected === "Foods" && "text-red-600"
             }`}
           >

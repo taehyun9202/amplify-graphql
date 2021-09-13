@@ -81,17 +81,22 @@ const HotTopic = () => {
               <TopPost key={post.id} post={post} />
             ))}
           </section>
-          <section className="hidden lg:flex xl:hidden gap-10 max-w-7xl mx-auto">
+          <section className="hidden lg:flex xl:hidden gap-7 max-w-7xl mx-auto">
             {hotTopicPosts.slice(0, 4).map((post) => (
               <TopPost key={post.id} post={post} />
             ))}
           </section>
-          <section className="hidden md:flex lg:hidden gap-10 max-w-7xl mx-auto">
+          <section className="hidden md:flex lg:hidden gap-4 max-w-7xl mx-auto">
             {hotTopicPosts.slice(0, 3).map((post) => (
               <TopPost key={post.id} post={post} />
             ))}
           </section>
-          <section className="flex md:hidden gap-2 max-w-7xl mx-auto">
+          <section className="hidden sm:flex md:hidden gap-2 max-w-7xl mx-auto">
+            {hotTopicPosts.slice(0, 3).map((post) => (
+              <TopPost key={post.id} post={post} />
+            ))}
+          </section>
+          <section className="flex sm:hidden gap-2 max-w-7xl mx-auto">
             {hotTopicPosts.slice(0, 2).map((post) => (
               <TopPost key={post.id} post={post} />
             ))}

@@ -6,7 +6,7 @@ const UserList = ({ users }) => {
   return (
     <section className="w-full">
       {users.slice(0, 20).map((user) => (
-        <UserInfo user={user} />
+        <UserInfo key={user.id} user={user} />
       ))}
     </section>
   );

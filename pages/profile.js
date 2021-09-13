@@ -173,7 +173,7 @@ const Profile = () => {
             </p>
             <p>{user.email}</p>
             <button
-              className="text-white w-80 mt-10 bg-pink-400 p-3 rounded"
+              className="text-white w-80 mt-10 bg-theme p-3 rounded"
               onClick={() => {
                 setUiState("signIn");
                 Auth.signOut();

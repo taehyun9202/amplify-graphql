@@ -19,7 +19,7 @@ const Sidebar = () => {
   const user = useSelector((state) => state.profile.profile);
   const posts = useSelector((state) => state.blog.posts);
   const blog = useSelector((state) => state.blog.profile);
-  const link = useSelector((state) => state.profile.link);
+  const category = useSelector((state) => state.blog.category);
   const [proOrBlog, setProOrBlog] = useState("blog");
   const [openCategory, setOpenCategory] = useState(true);
   const router = useRouter();
@@ -238,7 +238,7 @@ const Sidebar = () => {
               </svg>
               <p
                 className={
-                  link === "" ? "font-semibold underline" : "font-normal"
+                  category === "" ? "font-semibold underline" : "font-normal"
                 }
               >
                 See All ({posts.length})
@@ -268,7 +268,9 @@ const Sidebar = () => {
                   </svg>
                   <p
                     className={
-                      item === link ? "font-semibold underline" : "font-normal"
+                      item === category
+                        ? "font-semibold underline"
+                        : "font-normal"
                     }
                   >
                     {item} (
@@ -302,7 +304,7 @@ const Sidebar = () => {
                 </svg>
                 <p
                   className={
-                    link === "Create Category"
+                    category === "Create Category"
                       ? "font-semibold underline"
                       : "font-normal"
                   }
